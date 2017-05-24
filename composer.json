@@ -1,0 +1,17 @@
+{
+    "name": "circle314/circle314",
+    "type": "library",
+    "description": "Circle314 Framework",
+    "keywords": ["circle314", "framework"],
+    "homepage": "http://www.circle314.com/",
+    "license": "Apache",
+    "autoload": {
+        "psr-4": {
+            "Circle314\\": "src/Circle314/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "minimum-stability": "stable"
+}
