@@ -49,7 +49,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
     {
         $call = new NativeDatabaseCall();
         $call->setAccessor($this->databaseAccessor());
-        $call->setTableName($this->generateDelimitedTableName($databaseTableSchema, self::WRITE));
+        $call->setTableName($this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE));
         $call->setQuery($this->generateDeleteQuery($databaseTableSchema));
         $call->setParameters($this->generateParameters($databaseTableSchema));
         $this->operationMediator()->clearInvalidatedOperationResults($call);
@@ -64,7 +64,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
     {
         $call = new NativeDatabaseCall();
         $call->setAccessor($this->databaseAccessor());
-        $call->setTableName($this->generateDelimitedTableName($databaseTableSchema, self::WRITE));
+        $call->setTableName($this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE));
         $call->setQuery($this->generateGetQuery($databaseTableSchema));
         $call->setParameters($this->generateParameters($databaseTableSchema));
         return $this->operationMediator()->getCallResponse($call);
@@ -78,7 +78,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
     {
         $call = new NativeDatabaseCall();
         $call->setAccessor($this->databaseAccessor());
-        $call->setTableName($this->generateDelimitedTableName($databaseTableSchema, self::WRITE));
+        $call->setTableName($this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE));
         $call->setQuery($this->generateSaveQuery($databaseTableSchema));
         $call->setParameters($this->generateParameters($databaseTableSchema));
         $this->operationMediator()->clearInvalidatedOperationResults($call);
@@ -134,7 +134,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
         if(!$databaseTableSchema->deleteQueriesAllowed()) {
             throw new DatabaseDataPersistenceException(
                 'SQL DELETE queries forbidden on table '
-                . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+                . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
             );
         }
 
@@ -144,7 +144,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
 
         $query =
             'DELETE FROM '
-            . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+            . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
             . $this->generateWhereClauses($databaseTableSchema)
             . ';'
         ;
@@ -157,7 +157,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
      * @return string
      * @throws DatabaseDataPersistenceException
      */
-    final protected function generateDelimitedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
+    final protected function generateFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
     {
         switch($readWrite)
         {
@@ -168,17 +168,27 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
                 $tableName = $databaseTableSchema->tableNameForWrites();
                 break;
             default:
-                throw new DatabaseDataPersistenceException('Calls to ' . __METHOD__ . ' must have context of either self::READ or self::WRITE');
+                throw new DatabaseDataPersistenceException('Calls to ' . __METHOD__ . ' must have context of either READ or WRITE');
         }
-        return
-            $this->identityDelimiter()
+        $database = $this->databaseAccessor()->configuration()->supportsCrossDatabaseReferences()
+            ? (
+                $this->openingIdentityDelimiter()
+                . $databaseTableSchema->databaseName()
+                . $this->closingIdentityDelimiter()
+                . '.'
+            )
+            : ''
+        ;
+        $schema = $this->openingIdentityDelimiter()
             . $databaseTableSchema->databaseSchemaName()
-            . $this->identityDelimiter()
+            . $this->closingIdentityDelimiter()
             . '.'
-            . $this->identityDelimiter()
+        ;
+        $table = $this->openingIdentityDelimiter()
             . $tableName
-            . $this->identityDelimiter()
-            ;
+            . $this->closingIdentityDelimiter()
+        ;
+        return $database . $schema . $table;
     }
 
     /**
@@ -192,13 +202,13 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
         {
             throw new DatabaseDataPersistenceException(
                 'SQL SELECT queries forbidden on table '
-                . $this->generateDelimitedTableName($databaseTableSchema, self::READ)
+                . $this->generateFullyQualifiedTableName($databaseTableSchema, self::READ)
             );
         }
 
         $query =
             'SELECT * FROM '
-            . $this->generateDelimitedTableName($databaseTableSchema, self::READ)
+            . $this->generateFullyQualifiedTableName($databaseTableSchema, self::READ)
             . $this->generateWhereClauses($databaseTableSchema)
             . ';'
         ;
@@ -216,7 +226,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
         {
             throw new DatabaseDataPersistenceException(
                 'SQL INSERT queries forbidden on table '
-                . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+                . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
             );
         }
 
@@ -227,16 +237,16 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
 
         $query =
             'INSERT INTO '
-            . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+            . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
         ;
         $columnNames = [];
         $boundValueNames = [];
         foreach($databaseTableSchema->fieldsMarkedForUpdate() as $column)
         {
             $columnNames[] =
-                $this->identityDelimiter()
+                $this->openingIdentityDelimiter()
                 . $column->fieldName()
-                . $this->identityDelimiter()
+                . $this->closingIdentityDelimiter()
             ;
             $boundValueNames[] =
                 ':'
@@ -277,7 +287,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
         {
             throw new DatabaseDataPersistenceException(
                 'SQL UPDATE queries forbidden on table '
-                . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+                . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
             );
         }
 
@@ -293,16 +303,16 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
 
         $query =
             'UPDATE '
-            . $this->generateDelimitedTableName($databaseTableSchema, self::WRITE)
+            . $this->generateFullyQualifiedTableName($databaseTableSchema, self::WRITE)
             . ' SET '
         ;
         $updateFields = [];
         foreach($databaseTableSchema->fieldsMarkedForUpdate() as $column)
         {
             $updateFields[] =
-                $this->identityDelimiter()
+                $this->openingIdentityDelimiter()
                 . $column->fieldName()
-                . $this->identityDelimiter()
+                . $this->closingIdentityDelimiter()
                 . '=:'
                 . $column->fieldName()
             ;
@@ -326,9 +336,9 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
             foreach($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column)
             {
                 $whereClauses[] =
-                    $this->identityDelimiter()
+                    $this->openingIdentityDelimiter()
                     . $column->fieldName()
-                    . $this->identityDelimiter()
+                    . $this->closingIdentityDelimiter()
                     . '=:'
                     . $column->fieldName();
             }
@@ -340,9 +350,17 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
     /**
      * @return string
      */
-    final protected function identityDelimiter()
+    final protected function closingIdentityDelimiter()
     {
-        return $this->databaseAccessor()->configuration()->identityDelimiter();
+        return $this->databaseAccessor()->configuration()->getClosingIdentityDelimiter();
+    }
+
+    /**
+     * @return string
+     */
+    final protected function openingIdentityDelimiter()
+    {
+        return $this->databaseAccessor()->configuration()->getOpeningIdentityDelimiter();
     }
 
     /**

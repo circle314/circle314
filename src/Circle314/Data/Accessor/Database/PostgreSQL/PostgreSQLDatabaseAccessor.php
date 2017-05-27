@@ -34,29 +34,23 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
 
         // Only attempt to connect if a connection does not already exist
         if($this->PDO() === null) {
-            // Manual try-catch block
-            // REASON: In order to return false on an exception
-            try {
-                // Attempt to connect
-                $dsn = 'PostgreSQL:host=' . $this->configuration()->getServerIP() . ';dbname=' . $this->configuration()->getDatabaseName();
-                $this->setPDO(
-                        new PDO(
-                        $dsn,
-                        $this->configuration()->getUsername(),
-                        $this->configuration()->getPassword(),
-                        [
-                            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                            PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
-                            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
-                            PDO::ATTR_EMULATE_PREPARES => true,
-                            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
-                        ]
-                    )
-                );
-                $this->setIsConnectionEstablished(true);
-            } catch (PDOException $pdo) {
-                return false;
-            }
+            // Attempt to connect
+            $dsn = 'pgsql:host=' . $this->configuration()->getServerIP() . ';dbname=' . $this->configuration()->getDatabaseName();
+            $this->setPDO(
+                new PDO(
+                    $dsn,
+                    $this->configuration()->getUsername(),
+                    $this->configuration()->getPassword(),
+                    [
+                        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                        PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
+                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+                        PDO::ATTR_EMULATE_PREPARES => true,
+                        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+                    ]
+                )
+            );
+            $this->setIsConnectionEstablished(true);
         }
 
         if(!$this->isInTransaction()) {

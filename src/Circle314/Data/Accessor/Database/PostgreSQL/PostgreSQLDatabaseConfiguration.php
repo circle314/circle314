@@ -14,9 +14,25 @@ class PostgreSQLDatabaseConfiguration extends AbstractDatabaseConfiguration
     /**
      * @return string
      */
-    final public function identityDelimiter()
+    final public function getClosingIdentityDelimiter()
     {
         return '"';
+    }
+
+    /**
+     * @return string
+     */
+    final public function getOpeningIdentityDelimiter()
+    {
+        return '"';
+    }
+
+    /**
+     * @return bool
+     */
+    final public function supportsCrossDatabaseReferences()
+    {
+        return false;
     }
     #endregion
 }
