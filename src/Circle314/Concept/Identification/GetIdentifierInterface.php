@@ -3,12 +3,12 @@
 namespace Circle314\Concept\Identification;
 
 /**
- * # Interface RetrievableIdentifierInterface
+ * # Interface GetIdentifierInterface
  * @package Circle314\Identification
  * @author Kjartan Johansen <kjartan@artofwar.cc>
  * @since 0.1
  */
-interface GetIdentifiableInterface
+interface GetIdentifierInterface
 {
     /**
      * # Retrieves by ID

@@ -3,17 +3,17 @@
 namespace Circle314\Concept\Identification;
 
 /**
- * # Interface StorableIdentifierInterface
+ * # Interface DoesIdentifiableExistInterface
  * @package Circle314\Identification
  * @author Kjartan Johansen <kjartan@artofwar.cc>
  * @since 0.1
  */
-interface SaveIdentifiableInterface
+interface HasIdentifierInterface
 {
     /**
-     * # Stores by ID
+     * # Queries existence of the ID
      * @param $ID mixed
-     * @param $storageItem mixed
+     * @return bool
      */
-    public function saveID($ID, $storageItem);
+    public function hasID($ID);
 }

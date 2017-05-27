@@ -62,7 +62,7 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
      */
     protected function getResponse(CallInterface $call)
     {
-        if(!$this->getResponseParent($call)->getResponseCollection()->doesIDExist($this->getResponseName($call))) {
+        if(!$this->getResponseParent($call)->getResponseCollection()->hasID($this->getResponseName($call))) {
             return NullConstants::NO_RESPONSE_EXISTS;
         } else {
             return $this->getResponseParent($call)->getResponseCollection()->getID($this->getResponseName($call));

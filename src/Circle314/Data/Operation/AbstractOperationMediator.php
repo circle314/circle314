@@ -54,7 +54,7 @@ abstract class AbstractOperationMediator implements OperationMediatorInterface
      */
     protected function ensureAccessorBranchExistsInOperationRepository(CallInterface $call)
     {
-        if(!$this->operationRepository->doesIDExist($this->getAccessorBranchName($call))) {
+        if(!$this->operationRepository->hasID($this->getAccessorBranchName($call))) {
             $this->operationRepository->saveID($this->getAccessorBranchName($call), $this->generateNewAccessorBranch($call));
         }
     }
@@ -94,7 +94,7 @@ abstract class AbstractOperationMediator implements OperationMediatorInterface
      */
     protected function getResponse(CallInterface $call)
     {
-        if(!$this->getResponseParent($call)->doesIDExist($this->getResponseName($call))) {
+        if(!$this->getResponseParent($call)->hasID($this->getResponseName($call))) {
             return NullConstants::NO_RESPONSE_EXISTS;
         } else {
             return $this->getResponseParent($call)->getID($this->getResponseName($call));

@@ -3,17 +3,17 @@
 namespace Circle314\Concept\Identification;
 
 /**
- * # Interface DoesIdentifiableExistInterface
+ * # Interface DeleteIdentifierInterface
  * @package Circle314\Identification
  * @author Kjartan Johansen <kjartan@artofwar.cc>
  * @since 0.1
  */
-interface DoesIdentifiableExistInterface
+interface DeleteIdentifierInterface
 {
     /**
-     * # Queries existence of the ID
+     * # Deletes by ID
      * @param $ID mixed
-     * @return bool
+     * @return mixed
      */
-    public function doesIDExist($ID);
+    public function deleteID($ID);
 }

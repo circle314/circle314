@@ -61,7 +61,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
      */
     public function getModelByID($ID)
     {
-        if(!$this->repository()->doesIDExist($ID)) {
+        if(!$this->repository()->hasID($ID)) {
             $model = $this->factory()->retrieveModelUsingPreparedSchema(
                 $this->prepareSchemaForIDRetrieval($ID)
             );
@@ -72,22 +72,26 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
 
     /**
      * @param DatabaseTableSchemaInterface $schema
-     * @return ModelInterface
+     * @return ModelInterface|bool
      * @throws Exception
      */
     public function getModelBySchema(DatabaseTableSchemaInterface $schema)
     {
         $modelCollection = $this->factory()->retrieveModelCollectionUsingPreparedSchema($schema);
 
-        if($modelCollection->count() !== 1) {
-            throw new Exception(__METHOD__ . ' expects only one model to be generated, multiple models generated');
+        if($modelCollection->count() === 0) {
+            return false;
+        }
+
+        if($modelCollection->count() > 1) {
+            throw new Exception(__METHOD__ . ' expects at most one model to be generated, multiple models generated');
         }
 
         $model = $modelCollection[0];
 
         // Override using the repository for models already retrieved
         $ID = $model->ID();
-        if($this->repository()->doesIDExist($ID)) {
+        if($this->repository()->hasID($ID)) {
             $modelCollection->offsetSet($ID, $this->repository()->getID($ID));
         }
         return $model;
@@ -103,7 +107,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $model) {
             // Override using the repository for models already retrieved
             $ID = $model->ID();
-            if($this->repository()->doesIDExist($ID)) {
+            if($this->repository()->hasID($ID)) {
                 $modelCollection->offsetSet($ID, $this->repository()->getID($ID));
             }
         }

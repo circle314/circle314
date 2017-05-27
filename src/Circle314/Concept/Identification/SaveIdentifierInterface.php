@@ -3,17 +3,17 @@
 namespace Circle314\Concept\Identification;
 
 /**
- * # Interface RemovableIdentifierInterface
+ * # Interface StorableIdentifierInterface
  * @package Circle314\Identification
  * @author Kjartan Johansen <kjartan@artofwar.cc>
  * @since 0.1
  */
-interface DeleteIdentifiableInterface
+interface SaveIdentifierInterface
 {
     /**
-     * # Deletes by ID
+     * # Stores by ID
      * @param $ID mixed
-     * @return mixed
+     * @param $storageItem mixed
      */
-    public function deleteID($ID);
+    public function saveID($ID, $storageItem);
 }

@@ -80,7 +80,7 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
      * @param mixed $ID
      * @return bool
      */
-    public function doesIDExist($ID)
+    public function hasID($ID)
     {
         return $this->offsetExists($ID);
     }

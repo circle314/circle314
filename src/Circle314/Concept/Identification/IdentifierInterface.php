@@ -2,7 +2,7 @@
 
 namespace Circle314\Concept\Identification;
 
-interface IdentifierInterface extends DoesIdentifiableExistInterface, DeleteIdentifiableInterface, GetIdentifiableInterface, SaveIdentifiableInterface
+interface IdentifierInterface extends HasIdentifierInterface, DeleteIdentifierInterface, GetIdentifierInterface, SaveIdentifierInterface
 {
 
 }
