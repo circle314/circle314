@@ -5,6 +5,7 @@ namespace Circle314\Modelling;
 use \Exception;
 use Circle314\Data\Operation\Response\ResponseInterface;
 use Circle314\Data\Mediator\DataMediatorInterface;
+use Circle314\Modelling\Native\NativeModelCollection;
 use Circle314\Schema\SchemaInterface;
 
 abstract class AbstractModelFactory implements ModelFactoryInterface
@@ -125,6 +126,19 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
     {
         return $this->dataMediator;
     }
+
+    /**
+     * Builds a collection of models.
+     *
+     * Feel free to override this method if you need the return type to be a specifically typed Collection object
+     *
+     * @param array $models
+     * @return NativeModelCollection
+     */
+    protected function buildModelCollection(Array $models = [])
+    {
+        return new NativeModelCollection($models);
+    }
     #endregion
 
     #region Abstract Methods
@@ -133,12 +147,6 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      * @return ModelInterface
      */
     abstract protected function buildModel(SchemaInterface $schema);
-
-    /**
-     * @param ModelInterface[] $models
-     * @return ModelCollectionInterface
-     */
-    abstract protected function buildModelCollection(Array $models = []);
 
     /**
      * @param SchemaInterface $schema
