@@ -5,7 +5,7 @@ namespace Circle314\Type\Primitive;
 use \Exception;
 use Circle314\Type\TypeInterface\StringTypeInterface;
 
-class AbstractPrimitiveStringType extends AbstractPrimitiveType implements StringTypeInterface
+abstract class AbstractPrimitiveStringType extends AbstractPrimitiveType implements StringTypeInterface
 {
     /** @var int */
     private $maxLength;
@@ -59,12 +59,12 @@ class AbstractPrimitiveStringType extends AbstractPrimitiveType implements Strin
         return strtoupper($this->value);
     }
 
-    final public function valueInBounds($value)
+    final protected function valueInBounds($value)
     {
-        return
+        return is_null($value) || (
             (is_null($this->getMinLength()) || $value >= $this->getMinLength())
             &&
             (is_null($this->getMaxLength()) || $value <= $this->getMaxLength())
-            ;
+        );
     }
 }

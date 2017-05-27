@@ -6,7 +6,7 @@ use \Exception;
 use Circle314\Type\TypeInterface\NumericTypeInterface;
 use Circle314\Type\TypeTrait\NumericTypeTrait;
 
-class AbstractPrimitiveNumericType extends AbstractPrimitiveType implements NumericTypeInterface
+abstract class AbstractPrimitiveNumericType extends AbstractPrimitiveType implements NumericTypeInterface
 {
     use NumericTypeTrait;
     
@@ -50,13 +50,13 @@ class AbstractPrimitiveNumericType extends AbstractPrimitiveType implements Nume
         }
     }
 
-    final public function valueInBounds($value)
+    final protected function valueInBounds($value)
     {
-        return
+        return is_null($value) || (
             (is_null($this->getMinValue()) || $value >= $this->getMinValue())
             &&
             (is_null($this->getMaxValue()) || $value <= $this->getMaxValue())
-        ;
+        );
     }
 }
 

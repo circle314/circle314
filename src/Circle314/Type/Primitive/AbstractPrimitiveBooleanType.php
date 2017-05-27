@@ -46,7 +46,7 @@ abstract class AbstractPrimitiveBooleanType extends AbstractPrimitiveType implem
         return $this->value ? 'Yes' : 'No';
     }
 
-    final public function valueInBounds($value)
+    final protected function valueInBounds($value)
     {
         return true;
     }

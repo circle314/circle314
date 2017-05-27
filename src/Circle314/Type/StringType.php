@@ -9,9 +9,9 @@ class StringType extends AbstractPrimitiveStringType
 {
     use NonNullableTypeTrait;
     
-    public function __construct($value)
+    public function __construct($value, $minLength = null, $maxLength = null)
     {
         $this->validateNonNullable($value);
-        parent::__construct($value);
+        parent::__construct($value, $minLength, $maxLength);
     }
 }
