@@ -9,6 +9,11 @@ interface DatabaseTableSchemaInterface extends SchemaInterface
     /**
      * @return string
      */
+    public function databaseName();
+
+    /**
+     * @return string
+     */
     public function databaseSchemaName();
 
     /**

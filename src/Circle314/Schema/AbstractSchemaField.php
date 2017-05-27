@@ -47,14 +47,14 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
 
     /**
      * @param $value mixed
-     * @return mixed
+     * @return $this
      * @throws TypeTraitException
      */
     final public function setValue($value)
     {
         try {
             $this->value = $this->refreshTypedValue($value);
-            return true;
+            return $this;
         } catch (TypeTraitException $e) {
             throw new TypeTraitException('Could not cast value ' . $value . ' to new typed value in ' . __CLASS__);
         }
@@ -89,8 +89,6 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
      */
     public function typedValue()
     {
-        // Refreshing the typed value ensures type hinting correctly picks up the specific TypeInterface (e.g. IntegerTypeInterface) of the concretion
-        $this->value = $this->refreshTypedValue($this->value->getValue());
         return $this->value;
     }
     #endregion

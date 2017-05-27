@@ -57,13 +57,11 @@ abstract class AbstractDatabaseTableSchema extends AbstractSchema implements Dat
     #endregion
 
     #region Protected Methods
-    final protected function fieldAccessor(DatabaseColumnInterface $field, $value, $markForUpdate)
+    final protected function accessField(DatabaseColumnInterface $field, $value = NullConstants::NON_EXISTENT_PARAMETER)
     {
         if($value !== NullConstants::NON_EXISTENT_PARAMETER) {
             $field->setValue($value);
-            if($markForUpdate) {
-                $this->markFieldAsUpdated($field);
-            }
+            $this->markFieldAsUpdated($field);
         }
         return $field;
     }
@@ -76,6 +74,7 @@ abstract class AbstractDatabaseTableSchema extends AbstractSchema implements Dat
     #endregion
 
     #region Abstract Methods
+    abstract public function databaseName();
     abstract public function databaseSchemaName();
     abstract public function deleteQueriesAllowed();
     abstract public function insertQueriesAllowed();
