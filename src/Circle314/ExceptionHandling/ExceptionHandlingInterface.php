@@ -2,15 +2,13 @@
 
 namespace Circle314\ExceptionHandling;
 
-use \Exception;
+use \Throwable;
 
 interface ExceptionHandlingInterface
 {
     /**
-     * @param Exception $e
+     * @param Throwable $e
      * @return mixed
      */
-    public function handleException(Exception $e);
+    public function handleException(Throwable $e);
 }
-
-?>

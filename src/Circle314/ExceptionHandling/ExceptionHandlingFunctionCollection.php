@@ -21,5 +21,3 @@ class ExceptionHandlingFunctionCollection extends AbstractUnkeyedCollection
     }
     #endregion
 }
-
-?>

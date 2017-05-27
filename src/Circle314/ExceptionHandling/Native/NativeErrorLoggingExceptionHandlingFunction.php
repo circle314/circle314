@@ -2,9 +2,9 @@
 
 namespace Circle314\ExceptionHandling\Native;
 
+use \Throwable;
 use Circle314\ErrorLogging\Native\NativeErrorLogEntry;
 use Circle314\ExceptionHandling\AbstractExceptionHandlingFunction;
-use Exception;
 use Circle314\ErrorLogging\ErrorLoggerInterface;
 
 class NativeErrorLoggingExceptionHandlingFunction extends AbstractExceptionHandlingFunction
@@ -23,13 +23,13 @@ class NativeErrorLoggingExceptionHandlingFunction extends AbstractExceptionHandl
     #endregion
 
     #region Public Methods
-    public function handleException(Exception $e)
+    public function handleException(Throwable $e)
     {
-        $this->errorLogger()->addErrorLogEntry($this->getExceptionMessageAsErrorLegEntry($e));
+        $this->errorLogger()->addErrorLogEntry($this->getExceptionMessageAsErrorLogEntry($e));
         $currentException = $e;
         while($currentException->getPrevious())
         {
-            $this->errorLogger()->addErrorLogEntry($this->getExceptionMessageAsErrorLegEntry($currentException->getPrevious()));
+            $this->errorLogger()->addErrorLogEntry($this->getExceptionMessageAsErrorLogEntry($currentException->getPrevious()));
             $currentException = $currentException->getPrevious();
         }
     }
@@ -41,7 +41,7 @@ class NativeErrorLoggingExceptionHandlingFunction extends AbstractExceptionHandl
         return $this->errorLogger;
     }
 
-    protected function getExceptionMessageAsErrorLegEntry(Exception $e)
+    protected function getExceptionMessageAsErrorLogEntry(Throwable $e)
     {
         $code         = $e->getCode();
         $message      = $e->getMessage();

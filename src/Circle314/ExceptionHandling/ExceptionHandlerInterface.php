@@ -6,5 +6,3 @@ interface ExceptionHandlerInterface extends ExceptionHandlingInterface
 {
     public function registerExceptionHandlingFunction(ExceptionHandlingFunctionInterface $exceptionHandlingFunction);
 }
-
-?>

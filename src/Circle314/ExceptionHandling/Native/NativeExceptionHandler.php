@@ -8,5 +8,3 @@ class NativeExceptionHandler extends AbstractExceptionHandler
 {
 
 }
-
-?>

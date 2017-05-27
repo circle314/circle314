@@ -2,7 +2,7 @@
 
 namespace Circle314\ExceptionHandling;
 
-use \Exception;
+use \Throwable;
 
 abstract class AbstractExceptionHandlingFunction implements ExceptionHandlingFunctionInterface
 {
@@ -15,11 +15,9 @@ abstract class AbstractExceptionHandlingFunction implements ExceptionHandlingFun
 
     #region Abstract Methods
     /**
-     * @param Exception $e
+     * @param Throwable $e
      * @return mixed
      */
-    abstract public function handleException(Exception $e);
+    abstract public function handleException(Throwable $e);
     #endregion
 }
-
-?>

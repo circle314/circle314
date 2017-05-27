@@ -2,8 +2,8 @@
 
 namespace Circle314\ExceptionHandling\Native;
 
+use \Throwable;
 use Circle314\ExceptionHandling\AbstractExceptionHandlingFunction;
-use Exception;
 use Circle314\ErrorLogging\ErrorLoggerInterface;
 
 class NativeErrorLogSubmittingExceptionHandlingFunction extends AbstractExceptionHandlingFunction
@@ -22,7 +22,7 @@ class NativeErrorLogSubmittingExceptionHandlingFunction extends AbstractExceptio
     #endregion
 
     #region Public Methods
-    public function handleException(Exception $e)
+    public function handleException(Throwable $e)
     {
         $this->errorLogger()->processErrorLog();
     }
@@ -35,5 +35,3 @@ class NativeErrorLogSubmittingExceptionHandlingFunction extends AbstractExceptio
     }
     #endregion
 }
-
-?>
