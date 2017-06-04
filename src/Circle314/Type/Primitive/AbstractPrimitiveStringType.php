@@ -62,9 +62,9 @@ abstract class AbstractPrimitiveStringType extends AbstractPrimitiveType impleme
     final protected function valueInBounds($value)
     {
         return is_null($value) || (
-            (is_null($this->getMinLength()) || $value >= $this->getMinLength())
+            (is_null($this->getMinLength()) || strlen($value) >= $this->getMinLength())
             &&
-            (is_null($this->getMaxLength()) || $value <= $this->getMaxLength())
+            (is_null($this->getMaxLength()) || strlen($value) <= $this->getMaxLength())
         );
     }
 }
