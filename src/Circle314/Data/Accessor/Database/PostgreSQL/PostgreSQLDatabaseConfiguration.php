@@ -36,5 +36,3 @@ class PostgreSQLDatabaseConfiguration extends AbstractDatabaseConfiguration
     }
     #endregion
 }
-
-?>

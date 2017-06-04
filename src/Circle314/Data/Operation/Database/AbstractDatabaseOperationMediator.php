@@ -21,7 +21,9 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
     #region Public Methods
     public function clearInvalidatedOperationResults(CallInterface $call)
     {
-        $this->getTableBranch($call)->clearCollection();
+        if($this->operationRepository()->hasID($this->getTableBranchName($call))) {
+            $this->getTableBranch($call)->clearCollection();
+        }
     }
 
     /**

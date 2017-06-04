@@ -40,5 +40,3 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
      */
     public function supportsCrossDatabaseReferences();
 }
-
-?>

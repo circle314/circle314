@@ -177,5 +177,3 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     abstract public function supportsCrossDatabaseReferences();
     #endregion
 }
-
-?>

@@ -67,5 +67,3 @@ interface DatabaseAccessorInterface extends AccessorInterface
      */
     public function getPDOParamType(TypeInterface $type);
 }
-
-?>

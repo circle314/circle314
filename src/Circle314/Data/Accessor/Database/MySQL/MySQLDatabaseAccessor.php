@@ -4,7 +4,6 @@ namespace Circle314\Data\Accessor\Database\MySQL;
 
 use \Exception;
 use \PDO;
-use \PDOException;
 use Circle314\Data\Accessor\Database\AbstractDatabaseAccessor;
 
 /**
@@ -61,5 +60,3 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
     #endregion
 }
-
-?>

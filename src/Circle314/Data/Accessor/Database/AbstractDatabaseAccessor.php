@@ -75,7 +75,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
      *
      */
     public function dropConnections() {
-        $this->setPDO(null);
+        $this->PDO = null;
     }
 
     public function errorInfo() {
@@ -154,7 +154,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
             /** @var DateTimeTypeInterface $type */
             $value = $type->format($this->configuration()->dateTimeFormat());
         } else {
-            $value = (string)$type;
+            $value = $type->getValue();
         }
         return $value;
     }
@@ -214,5 +214,3 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     abstract public function connect();
     #endregion
 }
-
-?>
