@@ -14,5 +14,3 @@ class SchemaFieldCollection extends AbstractKeyedCollection
         parent::__construct($array);
     }
 }
-
-?>

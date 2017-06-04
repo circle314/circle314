@@ -8,5 +8,3 @@ abstract class AbstractDatabaseColumn extends AbstractSchemaField implements Dat
 {
 
 }
-
-?>

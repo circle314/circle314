@@ -99,5 +99,3 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     abstract protected function refreshTypedValue($value);
     #endregion
 }
-
-?>

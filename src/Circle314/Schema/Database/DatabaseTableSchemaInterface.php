@@ -22,25 +22,9 @@ interface DatabaseTableSchemaInterface extends SchemaInterface
     public function deleteQueriesAllowed();
 
     /**
-     * @return DatabaseColumnCollection
-     */
-    public function fieldsMarkedAsIdentifiers();
-
-    /**
-     * @return DatabaseColumnCollection
-     */
-    public function fieldsMarkedForUpdate();
-
-    /**
      * @return bool
      */
     public function insertQueriesAllowed();
-
-    /**
-     * @param DatabaseColumnInterface $databaseColumnColumn
-     * @return mixed
-     */
-    public function markFieldAsIdentifier(DatabaseColumnInterface $databaseColumnColumn);
 
     /**
      * @return bool
