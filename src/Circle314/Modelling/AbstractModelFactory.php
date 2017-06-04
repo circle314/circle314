@@ -32,7 +32,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      */
     public function buildBlankModelFromSchema(SchemaInterface $schema)
     {
-        return $this->buildModel($schema);
+        return $this->buildCompleteModel($schema);
     }
 
     /**
@@ -43,7 +43,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
     {
         $this->populateSchemaPublicFieldsFromArray($schema, [], false);
         $this->populateSchemaProtectedFieldsFromArray($schema, [], false);
-        return $this->buildModel($schema);
+        return $this->buildCompleteModel($schema);
     }
 
     /**
@@ -54,7 +54,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
     public function buildNewModelFromSchemaAndArray(SchemaInterface $schema, Array $array = [])
     {
         $this->populateSchemaPublicFieldsFromArray($schema, $array);
-        return $this->buildModel($schema);
+        return $this->buildCompleteModel($schema);
     }
 
     /**
@@ -92,7 +92,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
         $newSchema = clone $schema;
         $this->populateSchemaProtectedFieldsFromArray($newSchema, $data);
         $this->populateSchemaPublicFieldsFromArray($newSchema, $data);
-        return $this->buildModel($newSchema);
+        return $this->buildCompleteModel($newSchema);
     }
 
     /**
@@ -112,7 +112,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
             $newSchema = clone $schema;
             $this->populateSchemaProtectedFieldsFromArray($newSchema, $data);
             $this->populateSchemaPublicFieldsFromArray($newSchema, $data);
-            $models[] = $this->buildModel($newSchema);
+            $models[] = $this->buildCompleteModel($newSchema);
         }
         return $this->buildModelCollection($models);
     }
@@ -139,6 +139,17 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
     {
         return new NativeModelCollection($models);
     }
+
+    protected function buildCompleteModel(SchemaInterface $schema)
+    {
+        $model = $this->buildModel($schema);
+        if($model) {
+            $this->establishRelationships($model);
+        }
+        $model->schema()->clearFieldsMarkedForIdentification();
+        $model->schema()->clearFieldsMarkedForUpdate();
+        return $model;
+    }
     #endregion
 
     #region Abstract Methods
@@ -147,6 +158,12 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      * @return ModelInterface
      */
     abstract protected function buildModel(SchemaInterface $schema);
+
+    /**
+     * @param ModelInterface $model
+     * @return mixed
+     */
+    abstract protected function establishRelationships(ModelInterface $model);
 
     /**
      * @param SchemaInterface $schema
