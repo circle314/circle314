@@ -2,41 +2,23 @@
 
 namespace Circle314\Schema\Database;
 
-use Circle314\Concept\Null\NullConstants;
 use Circle314\Schema\AbstractSchema;
+use Circle314\Schema\SchemaFieldInterface;
 
 abstract class AbstractDatabaseTableSchema extends AbstractSchema implements DatabaseTableSchemaInterface
 {
-    #region Properties
-    /** @var DatabaseColumnCollection */
-    private $fieldsMarkedAsIdentifiers;
-
-    /** @var DatabaseColumnCollection */
-    private $fieldsMarkedForUpdate;
-    #endregion
-
-    #region Constructor
-    public function __construct()
-    {
-        $this->fieldsMarkedAsIdentifiers    = new DatabaseColumnCollection();
-        $this->fieldsMarkedForUpdate        = new DatabaseColumnCollection();
-    }
-    #endregion
-
     #region Public Methods
-    public function fieldsMarkedAsIdentifiers()
+    final public function markFieldAsIdentifier(SchemaFieldInterface $databaseColumn)
     {
-        return $this->fieldsMarkedAsIdentifiers;
-    }
-
-    public function fieldsMarkedForUpdate()
-    {
-        return $this->fieldsMarkedForUpdate;
-    }
-
-    final public function markFieldAsIdentifier(DatabaseColumnInterface $databaseColumn)
-    {
+        /** @var DatabaseColumnInterface $databaseColumn */
         $this->fieldsMarkedAsIdentifiers()->addCollectionItem($databaseColumn);
+        return $this;
+    }
+
+    final public function setFieldValue(DatabaseColumnInterface $databaseColumn, $value)
+    {
+        $databaseColumn->setValue($value);
+        $this->markFieldAsUpdated($databaseColumn);
         return $this;
     }
 
@@ -57,19 +39,14 @@ abstract class AbstractDatabaseTableSchema extends AbstractSchema implements Dat
     #endregion
 
     #region Protected Methods
-    final protected function accessField(DatabaseColumnInterface $field, $value = NullConstants::NON_EXISTENT_PARAMETER)
+    final protected function getBlankFieldCollection()
     {
-        if($value !== NullConstants::NON_EXISTENT_PARAMETER) {
-            $field->setValue($value);
-            $this->markFieldAsUpdated($field);
-        }
-        return $field;
+        return new DatabaseColumnCollection();
     }
 
     final protected function markFieldAsUpdated(DatabaseColumnInterface $databaseColumn)
     {
         $this->fieldsMarkedForUpdate()->addCollectionItem($databaseColumn);
-        return $this;
     }
     #endregion
 
@@ -84,5 +61,3 @@ abstract class AbstractDatabaseTableSchema extends AbstractSchema implements Dat
     abstract public function tableNameForWrites();
     #endregion
 }
-
-?>
