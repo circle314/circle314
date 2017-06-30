@@ -3,6 +3,7 @@
 namespace Circle314\Modelling;
 
 use \Exception;
+use Circle314\Schema\SchemaInterface;
 use Circle314\Schema\Database\DatabaseTableSchemaInterface;
 
 abstract class AbstractModelMediator implements ModelMediatorInterface
@@ -36,11 +37,20 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     }
 
     /**
+     * @param SchemaInterface $schema
+     * @return bool
+     */
+    public function deleteSchema(SchemaInterface $schema)
+    {
+        return $this->factory()->desistSchema($schema);
+    }
+
+    /**
      * @return ModelInterface
      */
     public function getBlankModel()
     {
-        return $this->factory()->buildBlankModelFromSchema(
+        return $this->factory()->newBlankModel(
             $this->getBasicSchema()
         );
     }
@@ -50,7 +60,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
      */
     public function getDefaultModel()
     {
-        return $this->factory()->buildDefaultModelFromSchema(
+        return $this->factory()->newDefaultModel(
             $this->getBasicSchema()
         );
     }
@@ -71,11 +81,11 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $schema
+     * @param SchemaInterface $schema
      * @return ModelInterface|bool
      * @throws Exception
      */
-    public function getModelBySchema(DatabaseTableSchemaInterface $schema)
+    public function getModelBySchema(SchemaInterface $schema)
     {
         $modelCollection = $this->factory()->retrieveModelCollectionUsingPreparedSchema($schema);
 
@@ -98,11 +108,12 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $schema
+     * @param SchemaInterface $schema
      * @return ModelCollectionInterface
      */
-    public function getModelsBySchema(DatabaseTableSchemaInterface $schema)
+    public function getModelsBySchema(SchemaInterface $schema)
     {
+        /** @var ModelCollectionInterface $modelCollection */
         $modelCollection = $this->factory()->retrieveModelCollectionUsingPreparedSchema($schema);
         foreach($modelCollection as $model) {
             // Override using the repository for models already retrieved
@@ -116,7 +127,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
 
     public function newModelFromArray(Array $array = [])
     {
-        return $this->factory()->buildNewModelFromSchemaAndArray(
+        return $this->factory()->newPartlyConstitutedModel(
             $this->getBasicSchema(),
             $array
         );
@@ -124,11 +135,22 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
 
     /**
      * @param ModelInterface $model
-     * @return bool
+     * @return ModelInterface
      */
     public function saveModel(ModelInterface $model)
     {
-        return $this->factory()->persistModel($model);
+        $model = $this->factory()->persistModel($model);
+        $this->repository()->saveID($model->ID(), $model);
+        return $model;
+    }
+
+    /**
+     * @param SchemaInterface $schema
+     * @return SchemaInterface
+     */
+    public function saveSchema(SchemaInterface $schema)
+    {
+        return $this->factory()->persistSchema($schema);
     }
     #endregion
 

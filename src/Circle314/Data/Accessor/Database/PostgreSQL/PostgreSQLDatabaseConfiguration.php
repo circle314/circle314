@@ -14,15 +14,20 @@ class PostgreSQLDatabaseConfiguration extends AbstractDatabaseConfiguration
     /**
      * @return string
      */
-    final public function getClosingIdentityDelimiter()
+    final public function closingIdentityDelimiter()
     {
         return '"';
+    }
+
+    final public function insertParameterPrefix()
+    {
+        return ':i_';
     }
 
     /**
      * @return string
      */
-    final public function getOpeningIdentityDelimiter()
+    final public function openingIdentityDelimiter()
     {
         return '"';
     }
@@ -33,6 +38,11 @@ class PostgreSQLDatabaseConfiguration extends AbstractDatabaseConfiguration
     final public function supportsCrossDatabaseReferences()
     {
         return false;
+    }
+
+    final public function updateParameterPrefix()
+    {
+        return ':u_';
     }
     #endregion
 }

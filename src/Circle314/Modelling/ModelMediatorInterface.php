@@ -2,7 +2,7 @@
 
 namespace Circle314\Modelling;
 
-use Circle314\Schema\Database\DatabaseTableSchemaInterface;
+use Circle314\Schema\SchemaInterface;
 
 interface ModelMediatorInterface
 {
@@ -23,22 +23,28 @@ interface ModelMediatorInterface
     public function deleteModel(ModelInterface $model);
 
     /**
+     * @param SchemaInterface $schema
+     * @return mixed
+     */
+    public function deleteSchema(SchemaInterface $schema);
+
+    /**
      * @param $ID mixed
      * @return ModelInterface
      */
     public function getModelByID($ID);
 
     /**
-     * @param DatabaseTableSchemaInterface $schema
+     * @param SchemaInterface $schema
      * @return ModelInterface
      */
-    public function getModelBySchema(DatabaseTableSchemaInterface $schema);
+    public function getModelBySchema(SchemaInterface $schema);
 
     /**
-     * @param DatabaseTableSchemaInterface $schema
+     * @param SchemaInterface $schema
      * @return ModelCollectionInterface
      */
-    public function getModelsBySchema(DatabaseTableSchemaInterface $schema);
+    public function getModelsBySchema(SchemaInterface $schema);
 
     /**
      * @param array $array
@@ -48,9 +54,15 @@ interface ModelMediatorInterface
 
     /**
      * @param ModelInterface $model
-     * @return void
+     * @return ModelInterface
      */
     public function saveModel(ModelInterface $model);
+
+    /**
+     * @param SchemaInterface $schema
+     * @return SchemaInterface
+     */
+    public function saveSchema(SchemaInterface $schema);
 }
 
 ?>

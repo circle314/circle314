@@ -3,6 +3,11 @@
 namespace Circle314\Data\Accessor\Database;
 
 use \PDO;
+use Circle314\Collection\CollectionInterface;
+use Circle314\Concept\Persistence\PersistenceConstants;
+use Circle314\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
+use Circle314\Schema\Database\DatabaseColumnCollection;
+use Circle314\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Type\TypeInterface\BooleanTypeInterface;
 use Circle314\Type\TypeInterface\DateTimeTypeInterface;
 use Circle314\Type\TypeInterface\DateTypeInterface;
@@ -78,8 +83,67 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
         $this->PDO = null;
     }
 
+    /**
+     * @return array
+     */
     public function errorInfo() {
         return $this->PDO()->errorInfo();
+    }
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return DatabaseColumnCollection
+     */
+    final public function generateParameters(DatabaseTableSchemaInterface $databaseTableSchema)
+    {
+        $parameters = new DatabaseColumnCollection();
+        foreach ($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column) {
+            $parameters->saveID($this->configuration()->insertParameterPrefix() . $column->fieldName(), $column);
+        }
+        foreach ($databaseTableSchema->fieldsMarkedForUpdate() as $column) {
+            $parameters->saveID($this->configuration()->updateParameterPrefix() . $column->fieldName(), $column);
+        }
+        return $parameters;
+    }
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param string $readWrite
+     * @return string
+     * @throws DatabaseDataPersistenceException
+     */
+    final public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
+    {
+        switch($readWrite)
+        {
+            case PersistenceConstants::READ:
+                $tableName = $databaseTableSchema->tableNameForReads();
+                break;
+            case PersistenceConstants::WRITE:
+                $tableName = $databaseTableSchema->tableNameForWrites();
+                break;
+            default:
+                throw new DatabaseDataPersistenceException('Calls to ' . __METHOD__ . ' must have context of either READ or WRITE');
+        }
+        $database = $this->configuration()->supportsCrossDatabaseReferences()
+            ? (
+                $this->configuration()->openingIdentityDelimiter()
+                . $databaseTableSchema->databaseName()
+                . $this->configuration()->closingIdentityDelimiter()
+                . '.'
+            )
+            : ''
+        ;
+        $schema = $this->configuration()->openingIdentityDelimiter()
+            . $databaseTableSchema->databaseSchemaName()
+            . $this->configuration()->closingIdentityDelimiter()
+            . '.'
+        ;
+        $table = $this->configuration()->openingIdentityDelimiter()
+            . $tableName
+            . $this->configuration()->closingIdentityDelimiter()
+        ;
+        return $database . $schema . $table;
     }
 
     /**
@@ -90,40 +154,9 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @return mixed
+     * @param TypeInterface $type
+     * @return int
      */
-    public function ID() {
-        return $this->configuration()->ID();
-    }
-
-    // Prepare a PDO Statement from a SQL query string
-    /**
-     * @param string $sql
-     * @return \PDOStatement
-     * @throws \Exception
-     */
-    public function prepareStatement($sql) {
-        if(is_null($this->PDO())) {
-            $this->connect();
-        }
-        return $this->PDO()->prepare($sql);
-    }
-
-    /**
-     * @return bool
-     * @throws \Exception
-     */
-    public function rollbackTransaction() {
-        if(is_null($this->PDO())) {
-            $this->connect();
-        }
-        if($this->isInTransaction()) {
-            $this->setIsInTransaction(false);
-            return $this->PDO()->rollBack();
-        }
-        return true;
-    }
-
     public function getPDOParamType(TypeInterface $type)
     {
         if(is_null($type->getValue())) {
@@ -158,9 +191,71 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
         }
         return $value;
     }
+
+    /**
+     * @return mixed
+     */
+    public function ID() {
+        return $this->configuration()->ID();
+    }
+
+    /**
+     * Prepare a PDO Statement from a SQL query string
+     *
+     * @param string $sql
+     * @return \PDOStatement
+     * @throws \Exception
+     */
+    public function prepareStatement($sql) {
+        if(is_null($this->PDO())) {
+            $this->connect();
+        }
+        return $this->PDO()->prepare($sql);
+    }
+
+    /**
+     * @return bool
+     * @throws \Exception
+     */
+    public function rollbackTransaction() {
+        if(is_null($this->PDO())) {
+            $this->connect();
+        }
+        if($this->isInTransaction()) {
+            $this->setIsInTransaction(false);
+            return $this->PDO()->rollBack();
+        }
+        return true;
+    }
     #endregion
 
     #region Protected Methods
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
+    final protected function generateWhereClauses(DatabaseTableSchemaInterface $databaseTableSchema)
+    {
+        $query = '';
+        if($databaseTableSchema->fieldsMarkedAsIdentifiers()->count())
+        {
+            $query .= ' WHERE ';
+            $whereClauses = [];
+            foreach($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column)
+            {
+                $whereClauses[] =
+                    $this->configuration->openingIdentityDelimiter()
+                    . $column->fieldName()
+                    . $this->configuration->closingIdentityDelimiter()
+                    . '='
+                    . $this->configuration()->insertParameterPrefix()
+                    . $column->fieldName();
+            }
+            $query .= implode(' AND ', $whereClauses);
+        }
+        return $query;
+    }
+
     /**
      * @return bool
      */
@@ -212,5 +307,29 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 
     #region Abstract Methods
     abstract public function connect();
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return bool
+     */
+    abstract public function generateDeleteQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return CollectionInterface
+     */
+    abstract public function generateInsertQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return CollectionInterface
+     */
+    abstract public function generateSelectQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return CollectionInterface
+     */
+    abstract public function generateUpdateQuery(DatabaseTableSchemaInterface $databaseTableSchema);
     #endregion
 }

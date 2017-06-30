@@ -40,11 +40,20 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
         // Generate response if not yet done
         if($this->getResponse($call) === NullConstants::NO_RESPONSE_EXISTS) {
             foreach($call->getParameters() as $parameter) {
-                $PDOStatement->bindValue(
-                    ':' . $parameter->fieldName(),
-                    $call->getAccessor()->getPDOParamValue($parameter->typedValue()),
-                    $call->getAccessor()->getPDOParamType($parameter->typedValue())
-                );
+                if($parameter->isMarkedAsIdentifier()) {
+                    $PDOStatement->bindValue(
+                        $call->getAccessor()->configuration()->insertParameterPrefix() . $parameter->fieldName(),
+                        $call->getAccessor()->getPDOParamValue($parameter->identifiedValue()),
+                        $call->getAccessor()->getPDOParamType($parameter->identifiedValue())
+                    );
+                }
+                if($parameter->isMarkedAsUpdated()) {
+                    $PDOStatement->bindValue(
+                        $call->getAccessor()->configuration()->updateParameterPrefix() . $parameter->fieldName(),
+                        $call->getAccessor()->getPDOParamValue($parameter->typedValue()),
+                        $call->getAccessor()->getPDOParamType($parameter->typedValue())
+                    );
+                }
             }
             $PDOStatement->execute();
             $this->getQueryBranch($call)->getResponseCollection()->saveID(

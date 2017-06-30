@@ -27,10 +27,28 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
 
     #region Public Methods
     /**
+     * @param ModelInterface $model
+     * @return ResponseInterface
+     */
+    public function desistModel(ModelInterface $model)
+    {
+        return $this->dataMediator()->delete($model->schema());
+    }
+
+    /**
+     * @param SchemaInterface $schema
+     * @return ResponseInterface
+     */
+    public function desistSchema(SchemaInterface $schema)
+    {
+        return $this->dataMediator()->delete($schema);
+    }
+
+    /**
      * @param SchemaInterface $schema
      * @return ModelInterface
      */
-    public function buildBlankModelFromSchema(SchemaInterface $schema)
+    public function newBlankModel(SchemaInterface $schema)
     {
         return $this->buildCompleteModel($schema);
     }
@@ -39,7 +57,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      * @param SchemaInterface $schema
      * @return ModelInterface
      */
-    public function buildDefaultModelFromSchema(SchemaInterface $schema)
+    public function newDefaultModel(SchemaInterface $schema)
     {
         $this->populateSchemaPublicFieldsFromArray($schema, [], false);
         $this->populateSchemaProtectedFieldsFromArray($schema, [], false);
@@ -51,7 +69,19 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      * @param array $array
      * @return ModelInterface
      */
-    public function buildNewModelFromSchemaAndArray(SchemaInterface $schema, Array $array = [])
+    public function newFullyConstitutedModel(SchemaInterface $schema, Array $array = [])
+    {
+        $this->populateSchemaPublicFieldsFromArray($schema, $array, true);
+        $this->populateSchemaProtectedFieldsFromArray($schema, $array, true);
+        return $this->buildCompleteModel($schema);
+    }
+
+    /**
+     * @param SchemaInterface $schema
+     * @param array $array
+     * @return ModelInterface
+     */
+    public function newPartlyConstitutedModel(SchemaInterface $schema, Array $array = [])
     {
         $this->populateSchemaPublicFieldsFromArray($schema, $array);
         return $this->buildCompleteModel($schema);
@@ -59,40 +89,26 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
 
     /**
      * @param ModelInterface $model
-     * @return bool
-     */
-    public function desistModel(ModelInterface $model)
-    {
-        return $this->dataMediator()->delete($model->schema());
-    }
-
-    /**
-     * @param ModelInterface $model
-     * @return bool
+     * @return ModelInterface
      */
     public function persistModel(ModelInterface $model)
     {
-        return $this->dataMediator()->save($model->schema());
+        return $this->newFullyConstitutedModel(
+            $model->schema(),
+            $this->dataMediator()->save($model->schema())->result()[0]
+        );
     }
 
     /**
      * @param SchemaInterface $schema
-     * @return ModelInterface
-     * @throws Exception
+     * @return SchemaInterface
      */
-    public function retrieveModelUsingPreparedSchema(SchemaInterface $schema)
+    public function persistSchema(SchemaInterface $schema)
     {
-        /** @var ResponseInterface $databaseResponse */
-        $databaseResponse = $this->dataMediator()->get($schema);
-        if(!$databaseResponse) {
-            throw new Exception('Unable to retrieve model using prepared schema ' . var_export($schema, true));
-        }
-        /** @var ResponseInterface $dataRow */
-        $data = $databaseResponse->result()[0];
-        $newSchema = clone $schema;
-        $this->populateSchemaProtectedFieldsFromArray($newSchema, $data);
-        $this->populateSchemaPublicFieldsFromArray($newSchema, $data);
-        return $this->buildCompleteModel($newSchema);
+        return $this->newFullyConstitutedModel(
+            $schema,
+            $this->dataMediator()->save($schema)->result()[0]
+        )->schema();
     }
 
     /**
@@ -110,11 +126,29 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
         $models = [];
         foreach($databaseResponse->result() as $data) {
             $newSchema = clone $schema;
-            $this->populateSchemaProtectedFieldsFromArray($newSchema, $data);
-            $this->populateSchemaPublicFieldsFromArray($newSchema, $data);
-            $models[] = $this->buildCompleteModel($newSchema);
+            $newSchema->markFieldsAsPersisted();
+            $models[] = $this->newFullyConstitutedModel($newSchema, $data);
         }
         return $this->buildModelCollection($models);
+    }
+
+    /**
+     * @param SchemaInterface $schema
+     * @return ModelInterface
+     * @throws Exception
+     */
+    public function retrieveModelUsingPreparedSchema(SchemaInterface $schema)
+    {
+        /** @var ResponseInterface $databaseResponse */
+        $databaseResponse = $this->dataMediator()->get($schema);
+        if(!$databaseResponse) {
+            throw new Exception('Unable to retrieve model using prepared schema ' . var_export($schema, true));
+        }
+        /** @var ResponseInterface $dataRow */
+        $data = $databaseResponse->result()[0];
+        $newSchema = clone $schema;
+        $newSchema->markFieldsAsPersisted();
+        return $this->newFullyConstitutedModel($newSchema, $data);
     }
     #endregion
 
@@ -146,8 +180,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
         if($model) {
             $this->establishRelationships($model);
         }
-        $model->schema()->clearFieldsMarkedForIdentification();
-        $model->schema()->clearFieldsMarkedForUpdate();
+        $model->schema()->markFieldsAsPersisted();
         return $model;
     }
     #endregion

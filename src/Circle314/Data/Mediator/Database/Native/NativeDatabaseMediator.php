@@ -12,5 +12,3 @@ class NativeDatabaseMediator extends AbstractDatabaseMediator
 {
 
 }
-
-?>

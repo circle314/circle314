@@ -23,20 +23,30 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     /**
      * @return string
      */
-    public function getClosingIdentityDelimiter();
-
-    /**
-     * @return mixed
-     */
-    public function getDatabaseName();
+    public function closingIdentityDelimiter();
 
     /**
      * @return string
      */
-    public function getOpeningIdentityDelimiter();
+    public function getDatabaseName();
+
+    /**
+     * @return mixed
+     */
+    public function insertParameterPrefix();
+
+    /**
+     * @return string
+     */
+    public function openingIdentityDelimiter();
 
     /**
      * @return bool
      */
     public function supportsCrossDatabaseReferences();
+
+    /**
+     * @return mixed
+     */
+    public function updateParameterPrefix();
 }

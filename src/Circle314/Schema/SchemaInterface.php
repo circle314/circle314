@@ -4,9 +4,6 @@ namespace Circle314\Schema;
 
 interface SchemaInterface
 {
-    public function clearFieldsMarkedForIdentification();
-    public function clearFieldsMarkedForUpdate();
-
     /**
      * @return SchemaFieldCollection
      */
@@ -18,8 +15,7 @@ interface SchemaInterface
     public function fieldsMarkedForUpdate();
 
     /**
-     * @param SchemaFieldInterface $schemaField
-     * @return mixed
+     * @return void
      */
-    public function markFieldAsIdentifier(SchemaFieldInterface $schemaField);
+    public function markFieldsAsPersisted();
 }

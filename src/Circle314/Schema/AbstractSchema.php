@@ -2,57 +2,78 @@
 
 namespace Circle314\Schema;
 
+use Circle314\Collection\Exception\CollectionIDDuplicateException;
 use Circle314\Collection\KeyedCollectionInterface;
 
 abstract class AbstractSchema implements SchemaInterface
 {
     #region Properties
     /** @var SchemaFieldCollection */
-    protected $fieldsMarkedAsIdentifiers;
-    /** @var SchemaFieldCollection */
-    protected $fieldsMarkedForUpdate;
+    protected $fields;
     #endregion
 
     #region Constructor
     public function __construct()
     {
-        $this->fieldsMarkedAsIdentifiers    = $this->getBlankFieldCollection();
-        $this->fieldsMarkedForUpdate        = $this->getBlankFieldCollection();
+        $this->fields                       = $this->getBlankFieldCollection();
+        foreach($this as $key => $value) {
+            if($value instanceof SchemaFieldInterface) {
+                if($this->fields->hasID($value->ID())) {
+                    throw new CollectionIDDuplicateException('Attempted to create a schema containing fields with duplicate field name "' . $value->ID() . '"');
+                }
+                $this->fields->addCollectionItem($value);
+            }
+        }
     }
     #endregion
 
     #region Public Methods
-    public function clearFieldsMarkedForIdentification()
+    /**
+     * @return KeyedCollectionInterface
+     */
+    final public function fieldsMarkedAsIdentifiers()
     {
-        $this->fieldsMarkedAsIdentifiers()->clearCollection();
+        $fieldsMarkedForIdentification = $this->getBlankFieldCollection();
+        /** @var SchemaFieldInterface $field */
+        foreach($this->fields as $field) {
+            if($field->isMarkedAsIdentifier()) {
+                $fieldsMarkedForIdentification->addCollectionItem($field);
+            }
+        }
+        return $fieldsMarkedForIdentification;
     }
 
-    public function clearFieldsMarkedForUpdate()
+    /**
+     * @return KeyedCollectionInterface
+     */
+    final public function fieldsMarkedForUpdate()
     {
-        $this->fieldsMarkedForUpdate()->clearCollection();
+        $fieldsMarkedForUpdate = $this->getBlankFieldCollection();
+        /** @var SchemaFieldInterface $field */
+        foreach($this->fields as $field) {
+            if($field->isMarkedAsUpdated()) {
+                $fieldsMarkedForUpdate->addCollectionItem($field);
+            }
+        }
+        return $fieldsMarkedForUpdate;
     }
 
-    public function fieldsMarkedAsIdentifiers()
+    /**
+     * @return bool
+     */
+    final public function markFieldsAsPersisted()
     {
-        return $this->fieldsMarkedAsIdentifiers;
-    }
-
-    public function fieldsMarkedForUpdate()
-    {
-        return $this->fieldsMarkedForUpdate;
+        foreach($this->fields as $field) {
+            $field->markAsPersisted();
+        }
+        return true;
     }
     #endregion
 
-    #reigon Abstract Methods
+    #region Abstract Methods
     /**
      * @return KeyedCollectionInterface
      */
     abstract protected function getBlankFieldCollection();
-
-    /**
-     * @param SchemaFieldInterface $schemaField
-     * @return mixed
-     */
-    abstract public function markFieldAsIdentifier(SchemaFieldInterface $schemaField);
     #endregion
 }

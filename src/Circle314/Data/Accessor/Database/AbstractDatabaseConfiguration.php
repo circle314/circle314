@@ -164,12 +164,12 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     /**
      * @return string
      */
-    abstract public function getClosingIdentityDelimiter();
+    abstract public function closingIdentityDelimiter();
 
     /**
      * @return string
      */
-    abstract public function getOpeningIdentityDelimiter();
+    abstract public function openingIdentityDelimiter();
 
     /**
      * @return bool

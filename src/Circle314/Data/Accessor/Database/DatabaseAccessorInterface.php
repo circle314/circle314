@@ -3,6 +3,8 @@
 namespace Circle314\Data\Accessor\Database;
 
 use Circle314\Data\Accessor\AccessorInterface;
+use Circle314\Schema\Database\DatabaseColumnCollection;
+use Circle314\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Type\TypeInterface\TypeInterface;
 
 /**
@@ -38,6 +40,43 @@ interface DatabaseAccessorInterface extends AccessorInterface
 
     /** @return array */
     public function errorInfo();
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
+    public function generateDeleteQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
+    public function generateInsertQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return DatabaseColumnCollection
+     */
+    public function generateParameters(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
+    public function generateSelectQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
+    public function generateUpdateQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param string $readWrite
+     * @return string
+     */
+    public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite);
 
     /**
      * @return integer
