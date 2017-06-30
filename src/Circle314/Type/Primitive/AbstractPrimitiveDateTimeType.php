@@ -12,10 +12,30 @@ abstract class AbstractPrimitiveDateTimeType extends AbstractPrimitiveType imple
 
     public function __construct($value) {
         $this->validateDateTime($value);
-        if(is_a($value, DateTime::class)) {
+        if(
+            is_a($value, DateTime::class)
+            || is_null($value)
+        ) {
             $this->value = $value;
         } else {
-            $this->value = new DateTime($value);
+            if(
+                ((string)(int)$value === $value)
+                && ($value <= PHP_INT_MAX)
+                && ($value >= ~PHP_INT_MAX)
+            ) {
+                // UNIX Timestamp as a string
+                $this->value = new DateTime(date("c", $value));
+            } else if(
+                ((int)$value === $value)
+                && ($value <= PHP_INT_MAX)
+                && ($value >= ~PHP_INT_MAX)
+            ) {
+                // UNIX Timestamp as an integer
+                $this->value = new DateTime(date("c", (int)$value));
+            } else {
+                // Try making a DateTime with whatever remains
+                $this->value = new DateTime($value);
+            }
         }
         parent::__construct($value);
     }
@@ -32,7 +52,8 @@ abstract class AbstractPrimitiveDateTimeType extends AbstractPrimitiveType imple
         return '';
     }
 
-    final public function format($format) {
+    final public function format($format)
+    {
         return $this->value->format($format);
     }
 
@@ -41,5 +62,3 @@ abstract class AbstractPrimitiveDateTimeType extends AbstractPrimitiveType imple
         return true;
     }
 }
-
-?>
