@@ -54,7 +54,17 @@ abstract class AbstractPrimitiveDateTimeType extends AbstractPrimitiveType imple
 
     final public function format($format)
     {
-        return $this->value->format($format);
+        if(is_null($this->value)) {
+            return null;
+        } else {
+            return $this->value->format($format);
+        }
+    }
+
+    final public function hasPassed(DateTime $dateTime = null)
+    {
+        $dateTime = $dateTime ?: new DateTime();
+        return $this->value < $dateTime;
     }
 
     final protected function valueInBounds($value)
