@@ -2,8 +2,10 @@
 
 namespace Circle314\Data\Operation\Database;
 
-use Circle314\Concept\Null\NullConstants;
+use \PDO;
+use \PDOException;
 use \PDOStatement;
+use Circle314\Concept\Null\NullConstants;
 use Circle314\Collection\KeyedCollectionInterface;
 use Circle314\Collection\Native\NativeKeyedCollection;
 use Circle314\Data\Operation\AbstractOperationMediator;
@@ -55,7 +57,13 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
                     );
                 }
             }
-            $PDOStatement->execute();
+            try {
+                $PDOStatement->execute();
+            } catch(PDOException $e) {
+                $output = $e->getMessage() . PHP_EOL;
+                $output .= 'Failed query is: ' . $PDOStatement->queryString . PHP_EOL;
+                throw new PDOException($output);
+            }
             $this->getQueryBranch($call)->getResponseCollection()->saveID(
                 $this->getResponseName($call),
                 $this->generateNewResponse($PDOStatement)

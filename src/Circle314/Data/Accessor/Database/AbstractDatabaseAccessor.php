@@ -3,6 +3,8 @@
 namespace Circle314\Data\Accessor\Database;
 
 use \PDO;
+use Circle314\Concept\Ordering\OrderingConstants;
+use Circle314\Schema\SchemaFieldInterface;
 use Circle314\Collection\CollectionInterface;
 use Circle314\Concept\Persistence\PersistenceConstants;
 use Circle314\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
@@ -97,8 +99,11 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     final public function generateParameters(DatabaseTableSchemaInterface $databaseTableSchema)
     {
         $parameters = new DatabaseColumnCollection();
+        /** @var SchemaFieldInterface $column */
         foreach ($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column) {
-            $parameters->saveID($this->configuration()->insertParameterPrefix() . $column->fieldName(), $column);
+            if(!is_null($column->identifiedValue()->getValue())) {
+                $parameters->saveID($this->configuration()->insertParameterPrefix() . $column->fieldName(), $column);
+            }
         }
         foreach ($databaseTableSchema->fieldsMarkedForUpdate() as $column) {
             $parameters->saveID($this->configuration()->updateParameterPrefix() . $column->fieldName(), $column);
@@ -234,6 +239,46 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
      * @param DatabaseTableSchemaInterface $databaseTableSchema
      * @return string
      */
+    final protected function generateOrderByClauses(DatabaseTableSchemaInterface $databaseTableSchema)
+    {
+        $query = '';
+        if($databaseTableSchema->fieldsMarkedForOrdering()->count())
+        {
+            $query .= ' ORDER BY ';
+            $orderByClauses = [];
+            /** @var SchemaFieldInterface $column */
+            foreach($databaseTableSchema->fieldsMarkedForOrdering() as $column)
+            {
+                $fullyQualifiedFieldName = $this->configuration->openingIdentityDelimiter()
+                    . $column->fieldName()
+                    . $this->configuration->closingIdentityDelimiter()
+                ;
+                switch($column->orderingDirection()) {
+                    case OrderingConstants::ASCENDING:
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' ASC';
+                        break;
+                    case OrderingConstants::ASCENDING_NULLS_FIRST:
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' IS NOT NULL';
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' ASC';
+                        break;
+                    case OrderingConstants::DESCENDING:
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' DESC';
+                        break;
+                    case OrderingConstants::DESCENDING_NULLS_LAST:
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' IS NULL';
+                        $orderByClauses[] = $fullyQualifiedFieldName . ' DESC';
+                        break;
+                }
+            }
+            $query .= implode(', ', $orderByClauses);
+        }
+        return $query;
+    }
+
+    /**
+     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @return string
+     */
     final protected function generateWhereClauses(DatabaseTableSchemaInterface $databaseTableSchema)
     {
         $query = '';
@@ -241,15 +286,23 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
         {
             $query .= ' WHERE ';
             $whereClauses = [];
+            /** @var SchemaFieldInterface $column */
             foreach($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column)
             {
                 $whereClauses[] =
                     $this->configuration->openingIdentityDelimiter()
                     . $column->fieldName()
                     . $this->configuration->closingIdentityDelimiter()
-                    . '='
-                    . $this->configuration()->insertParameterPrefix()
-                    . $column->fieldName();
+                    . (
+                        is_null($column->identifiedValue()->getValue())
+                        ? ' IS NULL'
+                        : (
+                            '='
+                            . $this->configuration()->insertParameterPrefix()
+                            . $column->fieldName()
+                        )
+                    )
+                ;
             }
             $query .= implode(' AND ', $whereClauses);
         }

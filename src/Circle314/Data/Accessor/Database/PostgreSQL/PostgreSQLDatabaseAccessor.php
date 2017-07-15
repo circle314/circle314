@@ -47,7 +47,6 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,
-                        PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
                         PDO::ATTR_EMULATE_PREPARES => true,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
                     ]
@@ -157,6 +156,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
             'SELECT * FROM '
             . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::READ)
             . $this->generateWhereClauses($databaseTableSchema)
+            . $this->generateOrderByClauses($databaseTableSchema)
             . ';'
         ;
         return $query;

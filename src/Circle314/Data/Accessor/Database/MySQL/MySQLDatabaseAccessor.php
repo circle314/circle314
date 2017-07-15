@@ -155,6 +155,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
             'SELECT * FROM '
             . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::READ)
             . $this->generateWhereClauses($databaseTableSchema)
+            . $this->generateOrderByClauses($databaseTableSchema)
             . ';'
         ;
         return $query;
