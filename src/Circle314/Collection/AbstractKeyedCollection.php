@@ -82,7 +82,7 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
      */
     public function hasID($ID)
     {
-        return is_null($ID) || $this->offsetExists($ID);
+        return !is_null($ID) && $this->offsetExists($ID);
     }
 
     /**
