@@ -2,6 +2,7 @@
 
 namespace Circle314\Modelling;
 
+use Circle314\Schema\SchemaFieldInterface;
 use Circle314\Schema\SchemaInterface;
 
 abstract class AbstractModel implements ModelInterface
@@ -22,6 +23,27 @@ abstract class AbstractModel implements ModelInterface
     #endregion
 
     #region Public Methods
+    public function debugPrint()
+    {
+        $output = PHP_EOL;
+        $output .= '/== MODEL:' . static::class . ' ==\\' . PHP_EOL;
+        $output .= 'Schema: ' . PHP_EOL;
+        /** @var SchemaFieldInterface $field */
+        foreach($this->schema()->fields() as $field) {
+            $output .=
+                ' ' .
+                $field->fieldName() .
+                '=' .
+                ($field->isMarkedAsIdentifier() ? '(i)' : '') .
+                ($field->isMarkedForOrdering() ? '(o)' : '') .
+                ($field->isMarkedAsUpdated() ? '(u)' : '') .
+                var_export($field->getValue(), true) .
+                PHP_EOL
+            ;
+        }
+        $output .= '\\=========' . str_repeat('=', strlen(static::class)) . '===/' . PHP_EOL;
+        return $output;
+    }
     /**
      * @return SchemaInterface
      */

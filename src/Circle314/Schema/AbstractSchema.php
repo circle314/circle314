@@ -2,8 +2,10 @@
 
 namespace Circle314\Schema;
 
+use \ArrayIterator;
 use Circle314\Collection\Exception\CollectionIDDuplicateException;
 use Circle314\Collection\KeyedCollectionInterface;
+use Circle314\Schema\Native\NativeSchemaFieldConfiguration;
 
 abstract class AbstractSchema implements SchemaInterface
 {
@@ -28,6 +30,19 @@ abstract class AbstractSchema implements SchemaInterface
     #endregion
 
     #region Public Methods
+    public function className()
+    {
+        return static::class;
+    }
+
+    /**
+     * @return mixed
+     */
+    final public function fields()
+    {
+        return $this->fields;
+    }
+
     /**
      * @return KeyedCollectionInterface
      */
@@ -46,12 +61,33 @@ abstract class AbstractSchema implements SchemaInterface
     /**
      * @return KeyedCollectionInterface
      */
+    final public function fieldsMarkedForOrdering()
+    {
+        /** @var ArrayIterator $fieldsMarkedForOrdering */
+        $fieldsMarkedForOrdering = $this->getBlankFieldCollection();
+        /** @var SchemaFieldInterface $field */
+        foreach($this->fields as $field) {
+            if($field->isMarkedForOrdering()) {
+                $fieldsMarkedForOrdering->addCollectionItem($field);
+            }
+        }
+        $fieldsMarkedForOrdering->uasort(function($a, $b) {
+            /** @var SchemaFieldInterface $a */
+            /** @var SchemaFieldInterface $b */
+            return $a->isMarkedForOrdering() > $b->isMarkedForOrdering();
+        });
+        return $fieldsMarkedForOrdering;
+    }
+
+    /**
+     * @return KeyedCollectionInterface
+     */
     final public function fieldsMarkedForUpdate()
     {
         $fieldsMarkedForUpdate = $this->getBlankFieldCollection();
         /** @var SchemaFieldInterface $field */
         foreach($this->fields as $field) {
-            if($field->isMarkedAsUpdated()) {
+            if($field->isMarkedAsUpdated() && $field->isWriteable()) {
                 $fieldsMarkedForUpdate->addCollectionItem($field);
             }
         }
@@ -63,10 +99,20 @@ abstract class AbstractSchema implements SchemaInterface
      */
     final public function markFieldsAsPersisted()
     {
+        /** @var SchemaFieldInterface $field */
         foreach($this->fields as $field) {
             $field->markAsPersisted();
         }
         return true;
+    }
+    #endregion
+
+    #region Protected Methods
+    final protected function configReadOnly()
+    {
+        $config = new NativeSchemaFieldConfiguration();
+        $config->setReadable();
+        return $config;
     }
     #endregion
 

@@ -3,12 +3,17 @@
 namespace Circle314\Schema;
 
 use Circle314\Concept\Null\NullConstants;
+use Circle314\Concept\Ordering\OrderingConstants;
+use Circle314\Exception\SchemaFieldException;
 use Circle314\Exception\TypeTraitException;
+use Circle314\Schema\Native\NativeSchemaFieldConfiguration;
 use Circle314\Type\TypeInterface\TypeInterface;
 
 abstract class AbstractSchemaField implements SchemaFieldInterface
 {
     #region Properties
+    private $configuration;
+
     /** @var string */
     private $fieldName;
 
@@ -19,16 +24,28 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     private $markedAsIdentifier = false;
 
     /** @var bool */
+    private $markedAsOrdering = false;
+
+    /** @var bool */
     private $markedAsUpdated = false;
+
+    /** @var string */
+    private $orderingDirection;
 
     /** @var TypeInterface */
     private $value;
     #endregion
 
     #region Constructor
-    public function __construct($fieldName)
+    public function __construct($fieldName, SchemaFieldConfigurationInterface $schemaFieldConfiguration = null)
     {
         $this->fieldName = $fieldName;
+        if(is_null($schemaFieldConfiguration)) {
+            $schemaFieldConfiguration = new NativeSchemaFieldConfiguration();
+            $schemaFieldConfiguration->setReadable();
+            $schemaFieldConfiguration->setWriteable();
+        }
+        $this->configuration = $schemaFieldConfiguration;
     }
     #endregion
 
@@ -97,7 +114,9 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER)
     {
         try {
-            if($value !== NullConstants::NON_EXISTENT_PARAMETER) {
+            if($value === NullConstants::NON_EXISTENT_PARAMETER) {
+                $this->identifiedValue = $this->value;
+            } else {
                 $this->identifiedValue = $this->refreshTypedValue($value);
             }
             $this->markAsIdentifier();
@@ -118,9 +137,33 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     /**
      * @return bool
      */
+    final public function isMarkedForOrdering()
+    {
+        return $this->markedAsOrdering;
+    }
+
+    /**
+     * @return bool
+     */
     final public function isMarkedAsUpdated()
     {
         return $this->markedAsUpdated;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReadable()
+    {
+        return $this->configuration->isReadable();
+    }
+
+    /**
+     * @return bool
+     */
+    public function isWriteable()
+    {
+        return $this->configuration->isWriteable();
     }
 
     /**
@@ -129,7 +172,31 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     final public function markAsPersisted()
     {
         $this->unmarkAsIdentifier();
+        $this->unmarkAsOrdering();
         $this->unmarkAsUpdated();
+    }
+
+    /**
+     * @param $orderingDirection
+     * @throws SchemaFieldException
+     */
+    final public function orderByValue($orderingDirection = OrderingConstants::ASCENDING, $orderingPriority = 1)
+    {
+        if(
+            $orderingDirection !== OrderingConstants::ASCENDING
+            && $orderingDirection !== OrderingConstants::ASCENDING_NULLS_FIRST
+            && $orderingDirection !== OrderingConstants::DESCENDING
+            && $orderingDirection !== OrderingConstants::DESCENDING_NULLS_LAST
+        ) {
+            throw new SchemaFieldException('Attempted to order field "' . $this->fieldName() . '" in unrecognised direction "' . $orderingDirection . '"');
+        }
+        $this->orderingDirection = $orderingDirection;
+        $this->markAsOrdering($orderingPriority);
+    }
+
+    final public function orderingDirection()
+    {
+        return $this->orderingDirection;
     }
 
     /**
@@ -160,22 +227,15 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
 
     /**
      * @param array $array
-     * @param $isDataPopulationImperative
      * @return $this
      * @throws TypeTraitException
      */
-    final public function setValueFromArray(Array $array, $isDataPopulationImperative)
+    final public function setValueFromArray(Array $array)
     {
-        try {
-            if(array_key_exists($this->fieldName(), $array)) {
-                $this->setValue($array[$this->fieldName()]);
-            } else {
-                $this->applyDefaultValue();
-            }
-        } catch(TypeTraitException $e) {
-            if($isDataPopulationImperative) {
-                throw new TypeTraitException($e);
-            }
+        if(array_key_exists($this->fieldName(), $array)) {
+            $this->setValue($array[$this->fieldName()]);
+        } else if($this->hasDefaultValue()) {
+            $this->applyDefaultValue();
         }
         return $this;
     }
@@ -187,6 +247,11 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
         $this->markedAsIdentifier = true;
     }
 
+    final protected function markAsOrdering($orderingPriority)
+    {
+        $this->markedAsOrdering = $orderingPriority;
+    }
+
     final protected function markAsUpdated()
     {
         $this->markedAsUpdated = true;
@@ -195,6 +260,11 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     final protected function unmarkAsIdentifier()
     {
         $this->markedAsIdentifier = false;
+    }
+
+    final protected function unmarkAsOrdering()
+    {
+        $this->markedAsOrdering = false;
     }
 
     final protected function unmarkAsUpdated()

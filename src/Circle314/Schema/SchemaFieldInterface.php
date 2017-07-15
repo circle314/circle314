@@ -53,12 +53,32 @@ interface SchemaFieldInterface extends KeyedCollectionItemInterface, ValueHandle
     /**
      * @return bool
      */
+    public function isMarkedForOrdering();
+
+    /**
+     * @return bool
+     */
     public function isMarkedAsUpdated();
+
+    /**
+     * @return bool
+     */
+    public function isReadable();
+
+    /**
+     * @return bool
+     */
+    public function isWriteable();
 
     /**
      * @return void
      */
     public function markAsPersisted();
+
+    /**
+     * @return string
+     */
+    public function orderingDirection();
 
     /**
      * @param $value mixed
@@ -69,11 +89,10 @@ interface SchemaFieldInterface extends KeyedCollectionItemInterface, ValueHandle
 
     /**
      * @param array $array
-     * @param $isDataPopulationImperative
      * @return $this
      * @throws TypeTraitException
      */
-    public function setValueFromArray(Array $array, $isDataPopulationImperative);
+    public function setValueFromArray(Array $array);
 
     /**
      * @return TypeInterface

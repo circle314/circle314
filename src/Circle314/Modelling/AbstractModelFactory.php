@@ -3,6 +3,7 @@
 namespace Circle314\Modelling;
 
 use \Exception;
+use Circle314\Schema\SchemaFieldInterface;
 use Circle314\Data\Operation\Response\ResponseInterface;
 use Circle314\Data\Mediator\DataMediatorInterface;
 use Circle314\Modelling\Native\NativeModelCollection;
@@ -59,8 +60,12 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      */
     public function newDefaultModel(SchemaInterface $schema)
     {
-        $this->populateSchemaPublicFieldsFromArray($schema, [], false);
-        $this->populateSchemaProtectedFieldsFromArray($schema, [], false);
+        /** @var SchemaFieldInterface $schemaField */
+        foreach($schema->fields() as $schemaField) {
+            if($schemaField->isWriteable() && $schemaField->hasDefaultValue()) {
+                $schemaField->applyDefaultValue();
+            }
+        }
         return $this->buildCompleteModel($schema);
     }
 
@@ -71,8 +76,10 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      */
     public function newFullyConstitutedModel(SchemaInterface $schema, Array $array = [])
     {
-        $this->populateSchemaPublicFieldsFromArray($schema, $array, true);
-        $this->populateSchemaProtectedFieldsFromArray($schema, $array, true);
+        /** @var SchemaFieldInterface $schemaField */
+        foreach($schema->fields() as $schemaField) {
+            $schemaField->setValueFromArray($array, true);
+        }
         return $this->buildCompleteModel($schema);
     }
 
@@ -83,7 +90,12 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      */
     public function newPartlyConstitutedModel(SchemaInterface $schema, Array $array = [])
     {
-        $this->populateSchemaPublicFieldsFromArray($schema, $array);
+        /** @var SchemaFieldInterface $schemaField */
+        foreach($schema->fields() as $schemaField) {
+            if($schemaField->isWriteable()) {
+                $schemaField->setValueFromArray($array, true);
+            }
+        }
         return $this->buildCompleteModel($schema);
     }
 
@@ -124,10 +136,10 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
             throw new Exception('Unable to retrieve model using prepared schema ' . var_export($schema, true));
         }
         $models = [];
+        $schema->markFieldsAsPersisted();
+        $schemaClass = $schema->className();
         foreach($databaseResponse->result() as $data) {
-            $newSchema = clone $schema;
-            $newSchema->markFieldsAsPersisted();
-            $models[] = $this->newFullyConstitutedModel($newSchema, $data);
+            $models[] = $this->newFullyConstitutedModel(new $schemaClass, $data);
         }
         return $this->buildModelCollection($models);
     }
@@ -145,10 +157,10 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
             throw new Exception('Unable to retrieve model using prepared schema ' . var_export($schema, true));
         }
         /** @var ResponseInterface $dataRow */
+        $schema->markFieldsAsPersisted();
         $data = $databaseResponse->result()[0];
-        $newSchema = clone $schema;
-        $newSchema->markFieldsAsPersisted();
-        return $this->newFullyConstitutedModel($newSchema, $data);
+        $schemaClass = $schema->className();
+        return $this->newFullyConstitutedModel(new $schemaClass, $data);
     }
     #endregion
 
@@ -197,29 +209,5 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
      * @return mixed
      */
     abstract protected function establishRelationships(ModelInterface $model);
-
-    /**
-     * @param SchemaInterface $schema
-     * @param array $array
-     * @param bool $isDataPopulationImperative
-     * @return mixed
-     */
-    abstract protected function populateSchemaProtectedFieldsFromArray(
-        SchemaInterface $schema,
-        Array $array,
-        $isDataPopulationImperative = true
-    );
-
-    /**
-     * @param SchemaInterface $schema
-     * @param array $array
-     * @param bool $isDataPopulationImperative
-     * @return mixed
-     */
-    abstract protected function populateSchemaPublicFieldsFromArray(
-        SchemaInterface $schema,
-        Array $array,
-        $isDataPopulationImperative = true
-    );
 #endregion
 }

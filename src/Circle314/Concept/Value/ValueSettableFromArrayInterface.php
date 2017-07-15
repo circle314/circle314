@@ -6,7 +6,6 @@ interface ValueSettableFromArrayInterface
 {
     /**
      * @param array $array
-     * @param bool $takeActionWhenKeyIsMissing
      */
-    public function setValueFromArray(Array $array, $takeActionWhenKeyIsMissing);
+    public function setValueFromArray(Array $array);
 }

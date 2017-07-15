@@ -66,11 +66,15 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     }
 
     /**
-     * @param $ID mixed
+     * @param mixed $ID
      * @return ModelInterface
+     * @throws Exception
      */
     public function getModelByID($ID)
     {
+        if(is_null($ID)) {
+            throw new Exception('Tried get getModelByID using $ID = null');
+        }
         if(!$this->repository()->hasID($ID)) {
             $model = $this->factory()->retrieveModelUsingPreparedSchema(
                 $this->prepareSchemaForIDRetrieval($ID)
