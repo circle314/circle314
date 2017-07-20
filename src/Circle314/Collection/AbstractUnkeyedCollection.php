@@ -43,7 +43,7 @@ abstract class AbstractUnkeyedCollection extends AbstractCollection
         if(!$this->isCollectionClass($collectionItem)) {
             throw new CollectionExpectedClassMismatchException('Attempted to add class ' . get_class($collectionItem) . ' to ' . __CLASS__ . '. Expected concrete class of type ' . $this->collectionClass()->getValue() . '.');
         } else {
-            $this->append($collectionItem);
+            $this->offsetSet($this->safeOffset($this->count()), $collectionItem);
         }
     }
 

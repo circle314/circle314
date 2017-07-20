@@ -177,7 +177,8 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     }
 
     /**
-     * @param $orderingDirection
+     * @param string $orderingDirection
+     * @param int $orderingPriority
      * @throws SchemaFieldException
      */
     final public function orderByValue($orderingDirection = OrderingConstants::ASCENDING, $orderingPriority = 1)

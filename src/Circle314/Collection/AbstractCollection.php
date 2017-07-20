@@ -44,7 +44,6 @@ abstract class AbstractCollection extends ArrayIterator implements CollectionInt
     /** {@inheritdoc} */
     final public function clearCollection()
     {
-        // FIXME: This fails when you have an array with elements 0 and 1... it unsets 0, then 1 becomes the new 0, but the foreach $key value is now 1
         foreach($this as $key => $value) {
             $this->offsetUnset($key);
         }
@@ -73,6 +72,11 @@ abstract class AbstractCollection extends ArrayIterator implements CollectionInt
         } else {
             return is_a($collectionItem, $this->collectionClass->getValue());
         }
+    }
+
+    final protected function safeOffset($ID)
+    {
+        return 'offset_' . (string)$ID;
     }
 
     /**

@@ -93,20 +93,18 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     {
         $modelCollection = $this->factory()->retrieveModelCollectionUsingPreparedSchema($schema);
 
-        if($modelCollection->count() === 0) {
-            return false;
-        }
-
         if($modelCollection->count() > 1) {
             throw new Exception(__METHOD__ . ' expects at most one model to be generated, multiple models generated');
         }
 
-        $model = $modelCollection[0];
-
-        // Override using the repository for models already retrieved
-        $ID = $model->ID();
-        if($this->repository()->hasID($ID)) {
-            $modelCollection->offsetSet($ID, $this->repository()->getID($ID));
+        $model = false;
+        foreach($modelCollection as $onlyModel) {
+            // Override using the repository for models already retrieved
+            $ID = $onlyModel->ID();
+            if(!$this->repository()->hasID($ID)) {
+                $this->repository()->saveID($ID, $onlyModel);
+            }
+            $model = $this->repository()->getID($ID);
         }
         return $model;
     }
@@ -122,9 +120,10 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $model) {
             // Override using the repository for models already retrieved
             $ID = $model->ID();
-            if($this->repository()->hasID($ID)) {
-                $modelCollection->offsetSet($ID, $this->repository()->getID($ID));
+            if(!$this->repository()->hasID($ID)) {
+                $this->repository()->saveID($ID, $model);
             }
+            $modelCollection->saveID($ID, $this->repository()->getID($ID));
         }
         return $modelCollection;
     }

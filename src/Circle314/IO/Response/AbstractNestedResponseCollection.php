@@ -45,8 +45,7 @@ abstract class AbstractNestedResponseCollection extends AbstractKeyedCollection 
      */
     public function setGeneratedResponse($ID, $generatedResponse)
     {
-        if($this->offsetExists((string)$ID))
-        {
+        if($this->hasID($ID)) {
             /** @var NestedResponseCollectionItemInterface $ID */
             $ID = $this->getID($ID);
             $ID->setGeneratedResponse(new StringType($generatedResponse));

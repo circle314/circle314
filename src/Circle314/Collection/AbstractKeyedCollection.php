@@ -37,7 +37,7 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
             throw new CollectionItemUnidentifiableException('Attempted to add a collection item to ' . __CLASS__ . ' without providing an identifier.');
         } else {
             if($this->isCollectionClass($collectionItem)) {
-                $this->offsetSet((string)$collectionItem->ID(), $collectionItem);
+                $this->offsetSet($this->safeOffset($collectionItem->ID()), $collectionItem);
             } else {
                 throw new CollectionExpectedClassMismatchException('Attempted to add class ' . get_class($collectionItem) . ' to ' . __CLASS__ . '. Expected concrete class of type ' . $this->collectionClass()->getValue() . '.');
             }
@@ -49,7 +49,7 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
     {
         if(is_null($this->collectionClass())) {
             foreach($collectionItems as $ID => $collectionItem) {
-                $this->offsetSet($ID, $collectionItem);
+                $this->offsetSet($this->safeOffset($ID), $collectionItem);
             }
         } else {
             foreach($collectionItems as $collectionItem) {
@@ -66,11 +66,10 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
      */
     public function deleteID($ID)
     {
-        $id = (string)$ID;
-        if($this->offsetExists($id)) {
-            $this->offsetUnset($id);
+        if($this->offsetExists($this->safeOffset($ID))) {
+            $this->offsetUnset($this->safeOffset($ID));
         } else {
-            throw new CollectionIDNotFoundException('ID "' . $id . '" does not exist in collection');
+            throw new CollectionIDNotFoundException('ID "' . $ID . '" does not exist in collection');
         }
     }
 
@@ -82,7 +81,7 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
      */
     public function hasID($ID)
     {
-        return !is_null($ID) && $this->offsetExists($ID);
+        return !is_null($ID) && $this->offsetExists($this->safeOffset($ID));
     }
 
     /**
@@ -92,11 +91,10 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
      */
     public function getID($ID)
     {
-        $id = (string)$ID;
-        if($this->offsetExists($id)) {
-            return $this->offsetGet($id);
+        if($this->hasID($ID)) {
+            return $this->offsetGet($this->safeOffset($ID));
         } else {
-            throw new CollectionIDNotFoundException('ID "' . $id . '" does not exist in collection');
+            throw new CollectionIDNotFoundException('ID "' . $ID . '" does not exist in collection');
         }
     }
 

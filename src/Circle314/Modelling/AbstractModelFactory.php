@@ -78,7 +78,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
     {
         /** @var SchemaFieldInterface $schemaField */
         foreach($schema->fields() as $schemaField) {
-            $schemaField->setValueFromArray($array, true);
+            $schemaField->setValueFromArray($array);
         }
         return $this->buildCompleteModel($schema);
     }
@@ -93,7 +93,7 @@ abstract class AbstractModelFactory implements ModelFactoryInterface
         /** @var SchemaFieldInterface $schemaField */
         foreach($schema->fields() as $schemaField) {
             if($schemaField->isWriteable()) {
-                $schemaField->setValueFromArray($array, true);
+                $schemaField->setValueFromArray($array);
             }
         }
         return $this->buildCompleteModel($schema);

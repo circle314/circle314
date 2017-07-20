@@ -2,7 +2,6 @@
 
 namespace Circle314\Data\Operation\Database;
 
-use \PDO;
 use \PDOException;
 use \PDOStatement;
 use Circle314\Concept\Null\NullConstants;
@@ -137,11 +136,11 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
 
     /**
      * @param CallInterface $call
-     * @return mixed
+     * @return void
      */
     protected function ensureResponseLeafParentExistsInOperationRepository(CallInterface $call)
     {
-        return $this->ensureQueryBranchExistsInOperationRepository($call);
+        $this->ensureQueryBranchExistsInOperationRepository($call);
     }
 
     /**

@@ -45,7 +45,7 @@ class NativeExceptionCastingErrorHandlingFunction extends AbstractErrorHandlingF
             case E_RECOVERABLE_ERROR:   throw new RecoverableErrorException ($err_msg, 0, $err_severity, $err_file, $err_line);
             case E_DEPRECATED:          throw new DeprecatedException       ($err_msg, 0, $err_severity, $err_file, $err_line);
             case E_USER_DEPRECATED:     throw new UserDeprecatedException   ($err_msg, 0, $err_severity, $err_file, $err_line);
-            default:                    throw new Exception                 ($err_msg, 0, $err_severity, $err_file, $err_line);
+            default:                    throw new Exception                 ($err_msg, 0, $err_severity);
         }
     }
 

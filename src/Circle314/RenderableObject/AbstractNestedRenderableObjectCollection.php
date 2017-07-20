@@ -49,8 +49,7 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
      */
     public function setRenderedContent($ID, $renderedContent)
     {
-        if($this->offsetExists((string)$ID))
-        {
+        if($this->hasID($ID)) {
             /** @var NestedRenderableObjectCollectionItemInterface $ID */
             $ID = $this->getID($ID);
             $ID->setRenderedContent(new StringType($renderedContent));
