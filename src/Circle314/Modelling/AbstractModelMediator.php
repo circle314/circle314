@@ -101,10 +101,14 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $onlyModel) {
             // Override using the repository for models already retrieved
             $ID = $onlyModel->ID();
-            if(!$this->repository()->hasID($ID)) {
-                $this->repository()->saveID($ID, $onlyModel);
+            if($this->repository()->hasID($ID)) {
+                $model = $this->repository()->getID($ID);
+            } else {
+                if(!is_null($ID)) {
+                    $this->repository()->saveID($ID, $onlyModel);
+                }
+                $model = $onlyModel;
             }
-            $model = $this->repository()->getID($ID);
         }
         return $model;
     }
@@ -120,10 +124,14 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $model) {
             // Override using the repository for models already retrieved
             $ID = $model->ID();
-            if(!$this->repository()->hasID($ID)) {
-                $this->repository()->saveID($ID, $model);
+            if($this->repository()->hasID($ID)) {
+                $modelCollection->saveID($ID, $this->repository()->getID($ID));
+            } else {
+                if(!is_null($ID)) {
+                    $this->repository()->saveID($ID, $model);
+                }
+                $modelCollection->saveID($ID, $model);
             }
-            $modelCollection->saveID($ID, $this->repository()->getID($ID));
         }
         return $modelCollection;
     }
