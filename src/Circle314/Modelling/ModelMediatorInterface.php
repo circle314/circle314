@@ -7,16 +7,6 @@ use Circle314\Schema\SchemaInterface;
 interface ModelMediatorInterface
 {
     /**
-     * @return ModelInterface
-     */
-    public function getBlankModel();
-
-    /**
-     * @return ModelInterface
-     */
-    public function getDefaultModel();
-
-    /**
      * @param ModelInterface $model
      * @return void
      */
@@ -27,6 +17,21 @@ interface ModelMediatorInterface
      * @return mixed
      */
     public function deleteSchema(SchemaInterface $schema);
+
+    /**
+     * @return ModelInterface
+     */
+    public function getBlankModel();
+
+    /**
+     * @return SchemaInterface
+     */
+    public function getBasicSchema();
+
+    /**
+     * @return ModelInterface
+     */
+    public function getDefaultModel();
 
     /**
      * @param $ID mixed
@@ -64,5 +69,3 @@ interface ModelMediatorInterface
      */
     public function saveSchema(SchemaInterface $schema);
 }
-
-?>

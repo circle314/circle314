@@ -187,7 +187,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     /**
      * @return DatabaseTableSchemaInterface
      */
-    abstract protected function getBasicSchema();
+    abstract public function getBasicSchema();
 
     /**
      * @param mixed $ID

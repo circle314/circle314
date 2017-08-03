@@ -38,7 +38,10 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
         // Only attempt to connect if a connection does not already exist
         if($this->PDO() === null) {
             // Attempt to connect
-            $dsn = 'pgsql:host=' . $this->configuration()->getServerIP() . ';dbname=' . $this->configuration()->getDatabaseName();
+            $dsn = 'pgsql:host=' .
+                $this->configuration()->getServerIP() .
+                ($this->configuration()->getDatabaseName() ? ';dbname=' . $this->configuration()->getDatabaseName() : '')
+            ;
             $this->setPDO(
                 new PDO(
                     $dsn,

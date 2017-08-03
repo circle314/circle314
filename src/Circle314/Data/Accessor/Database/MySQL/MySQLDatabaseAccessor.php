@@ -37,7 +37,10 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
         // Only attempt to connect if a connection does not already exist
         if($this->PDO() === null) {
             // Attempt to connect
-            $dsn = 'mysql:host=' . $this->configuration()->getServerIP() . ';dbname=' . $this->configuration()->getDatabaseName();
+            $dsn = 'mysql:host=' .
+                $this->configuration()->getServerIP() .
+                ($this->configuration()->getDatabaseName() ? ';dbname=' . $this->configuration()->getDatabaseName() : '')
+            ;
             $this->setPDO(
                 new PDO(
                     $dsn,
