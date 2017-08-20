@@ -9,9 +9,7 @@ class NullableNonEmptyStringType extends NullableStringType
     use NonEmptyStringTypeTrait;
 
     public function __construct($value, $minLength = null, $maxLength = null) {
-        if(!is_null($value)) {
-            $this->validateNonEmptyString($value);
-        }
+        $this->validateNonEmptyString($value);
         parent::__construct($value, $minLength, $maxLength);
     }
 }

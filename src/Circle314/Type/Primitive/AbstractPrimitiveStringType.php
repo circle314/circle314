@@ -15,7 +15,7 @@ abstract class AbstractPrimitiveStringType extends AbstractPrimitiveType impleme
 
     public function __construct($value, $minLength = null, $maxLength = null)
     {
-        $this->value = (string)$value;
+        $this->value = is_null($value) ? null : (string)$value;
         $this->minLength = $minLength;
         $this->maxLength = $maxLength;
         parent::__construct($value);

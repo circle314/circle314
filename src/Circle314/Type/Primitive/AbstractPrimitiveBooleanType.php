@@ -12,7 +12,7 @@ use Circle314\Type\TypeInterface\BooleanTypeInterface;
 abstract class AbstractPrimitiveBooleanType extends AbstractPrimitiveType implements BooleanTypeInterface
 {
     public function __construct($value) {
-        $this->value = (bool)$value;
+        $this->value = is_null($value) ? null : (bool)$value;
         parent::__construct($value);
     }
 
