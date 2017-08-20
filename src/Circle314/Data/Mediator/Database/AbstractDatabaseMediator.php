@@ -41,6 +41,14 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
     }
 
     /**
+     * @return mixed
+     */
+    final public function commitTransaction()
+    {
+        return $this->databaseAccessor()->commitTransaction();
+    }
+
+    /**
      * @param DatabaseTableSchemaInterface $databaseTableSchema
      * @return DatabaseResponseInterface
      */
