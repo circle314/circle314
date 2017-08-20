@@ -8,7 +8,7 @@ use Circle314\ShutdownHandling\AbstractShutdownHandlingFunction;
 class NativeDatabaseConnectionShutdownFunction extends AbstractShutdownHandlingFunction
 {
     #region Properties
-    public $databaseAccessor;
+    private $databaseAccessor;
     #endregion
 
     #region Constructor

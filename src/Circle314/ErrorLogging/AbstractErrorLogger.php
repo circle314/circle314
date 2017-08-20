@@ -36,7 +36,9 @@ abstract class AbstractErrorLogger implements ErrorLoggerInterface
             $loggedMessages[] = $errorLogEntry->getAsText();
         }
         $this->errorLogEntryCollection()->clearCollection();
-        error_log(implode('\\n\\r', $loggedMessages));
+        if(count($loggedMessages) > 0) {
+            error_log(implode('\\n\\r', $loggedMessages));
+        }
     }
     #endregion
 
