@@ -122,7 +122,7 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
             $this->markAsIdentifier();
             return $this;
         } catch (TypeTraitException $e) {
-            throw new TypeTraitException('Could not cast value ' . $value . ' to new typed value for schema field "' . $this->fieldName() . '"" in ' . __CLASS__);
+            throw new TypeTraitException('Could not cast value ' . var_export($value, true) . ' to new typed value for schema field "' . $this->fieldName() . '" in ' . static::class);
         }
     }
 
@@ -222,7 +222,7 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
             $this->markAsUpdated();
             return $this;
         } catch (TypeTraitException $e) {
-            throw new TypeTraitException('Could not cast value ' . $value . ' to new typed value for schema field "' . $this->fieldName() . '"" in ' . __CLASS__);
+            throw new TypeTraitException('Could not cast value ' . var_export($value, true) . ' to new typed value for schema field "' . $this->fieldName() . '" in ' . static::class);
         }
     }
 
