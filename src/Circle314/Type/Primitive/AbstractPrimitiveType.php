@@ -15,7 +15,7 @@ abstract class AbstractPrimitiveType implements TypeInterface
     public function __construct($value)
     {
         if(!$this->valueInBounds($value)) {
-            throw new ValueOutOfBoundsException('Value ' . var_export($value) . ' is out of bounds for ' . __CLASS__);
+            throw new ValueOutOfBoundsException('Value ' . var_export($value) . ' is out of bounds for ' . static::class);
         }
     }
     #endregion

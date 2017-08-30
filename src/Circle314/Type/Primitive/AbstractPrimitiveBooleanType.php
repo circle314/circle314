@@ -23,7 +23,7 @@ abstract class AbstractPrimitiveBooleanType extends AbstractPrimitiveType implem
         try {
             return $this->value ? 'true' : 'false';
         } catch (Exception $e) {
-            trigger_error('Error in ' . __METHOD__ . ' method for ' . __CLASS__);
+            trigger_error('Error in ' . __METHOD__ . ' method for ' . static::class);
             return '';
         }
     }

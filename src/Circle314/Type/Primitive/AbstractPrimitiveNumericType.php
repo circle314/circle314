@@ -45,7 +45,7 @@ abstract class AbstractPrimitiveNumericType extends AbstractPrimitiveType implem
         try {
             return (string)$this->value;
         } catch (Exception $e) {
-            trigger_error('Error in ' . __METHOD__ . ' method for ' . __CLASS__);
+            trigger_error('Error in ' . __METHOD__ . ' method for ' . static::class);
             return '';
         }
     }

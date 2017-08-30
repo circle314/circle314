@@ -48,7 +48,7 @@ abstract class AbstractPrimitiveDateTimeType extends AbstractPrimitiveType imple
     }
 
     final public function __toString() {
-        trigger_error(__CLASS__ . ' objects must use the format($format) method instead of __toString()');
+        trigger_error(static::class . ' objects must use the format($format) method instead of __toString()');
         return '';
     }
 
