@@ -6,6 +6,11 @@ use Circle314\Schema\Database\AbstractDatabaseColumn;
 use Circle314\Schema\Traits\DefaultValue\DefaultZeroTrait;
 use Circle314\Schema\Traits\RefreshType\RefreshTypeNullableDecimalTrait;
 
+/**
+ * Class PrimitiveDatabaseColumnNullableDecimalDefaultZero
+ * @package Circle314\Schema\Database\Primitive\Decimal
+ * @method float|null getValue()
+ */
 class PrimitiveDatabaseColumnNullableDecimalDefaultZero extends AbstractDatabaseColumn
 {
     use DefaultZeroTrait;

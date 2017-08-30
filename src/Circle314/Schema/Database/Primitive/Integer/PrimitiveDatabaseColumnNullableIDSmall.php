@@ -6,6 +6,11 @@ use Circle314\Schema\Database\AbstractDatabaseColumn;
 use Circle314\Schema\Traits\DefaultValue\DefaultNoneTrait;
 use Circle314\Schema\Traits\RefreshType\RefreshTypeNullableIntegerSmallPositiveTrait;
 
+/**
+ * Class PrimitiveDatabaseColumnNullableIDSmall
+ * @package Circle314\Schema\Database\Primitive\Integer
+ * @method integer|null getValue()
+ */
 class PrimitiveDatabaseColumnNullableIDSmall extends AbstractDatabaseColumn
 {
     use DefaultNoneTrait;

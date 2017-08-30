@@ -2,6 +2,7 @@
 
 namespace Circle314\Schema;
 
+use Circle314\Collection\KeyedCollectionInterface;
 use Circle314\Concept\Null\NullConstants;
 use Circle314\Concept\Ordering\OrderingConstants;
 use Circle314\Exception\SchemaFieldException;
@@ -70,10 +71,7 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
         return $this->fieldName;
     }
 
-    /**
-     * @return string
-     */
-    final public function getValue()
+    public function getValue()
     {
         if(is_null($this->typedValue())) {
             return null;
@@ -235,6 +233,20 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
     {
         if(array_key_exists($this->fieldName(), $array)) {
             $this->setValue($array[$this->fieldName()]);
+        } else if($this->hasDefaultValue()) {
+            $this->applyDefaultValue();
+        }
+        return $this;
+    }
+
+    /**
+     * @param KeyedCollectionInterface $collection
+     * @return $this
+     */
+    final public function setValueFromKeyedCollection(KeyedCollectionInterface $collection)
+    {
+        if($collection->hasID($this->fieldName())) {
+            $this->setValue($collection->getID($this->fieldName()));
         } else if($this->hasDefaultValue()) {
             $this->applyDefaultValue();
         }
