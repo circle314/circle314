@@ -34,12 +34,12 @@ abstract class AbstractKeyedCollection extends AbstractCollection implements Key
     final public function addCollectionItem($collectionItem)
     {
         if(is_null($this->collectionClass()) || !is_a($collectionItem, IdentifiableInterface::class)) {
-            throw new CollectionItemUnidentifiableException('Attempted to add a collection item to ' . __CLASS__ . ' without providing an identifier.');
+            throw new CollectionItemUnidentifiableException('Attempted to add a collection item to ' . static::class . ' without providing an identifier.');
         } else {
             if($this->isCollectionClass($collectionItem)) {
                 $this->offsetSet($this->safeOffset($collectionItem->ID()), $collectionItem);
             } else {
-                throw new CollectionExpectedClassMismatchException('Attempted to add class ' . get_class($collectionItem) . ' to ' . __CLASS__ . '. Expected concrete class of type ' . $this->collectionClass()->getValue() . '.');
+                throw new CollectionExpectedClassMismatchException('Attempted to add class ' . get_class($collectionItem) . ' to ' . static::class . '. Expected concrete class of type ' . $this->collectionClass()->getValue() . '.');
             }
         }
     }
