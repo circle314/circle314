@@ -44,8 +44,9 @@ abstract class AbstractCollection extends ArrayIterator implements CollectionInt
     /** {@inheritdoc} */
     final public function clearCollection()
     {
-        foreach($this as $key => $value) {
-            $this->offsetUnset($key);
+        while($this->valid()) {
+            $this->rewind();
+            $this->offsetUnset($this->key());
         }
     }
     #endregion
