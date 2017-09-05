@@ -7,11 +7,14 @@
     "license": "Apache",
     "autoload": {
         "psr-4": {
-            "Circle314\\": "src/Circle314/"
+            "Circle314\\": "src/"
         }
     },
     "require": {
-        "php": ">=5.5.0"
+        "php": ">=7.0",
+        "circle314/collection": "^0.1",
+        "circle314/concept": "~1.0",
+        "circle314/type": "^0.1"
     },
     "minimum-stability": "stable"
 }

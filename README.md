@@ -9,7 +9,7 @@ Recent changes made to the framework have "broken" functionality in projects it 
 
 Also, some modules are slated for removal or entire revamp, including Rendering, Authentication, FileLocation, IO, ParameterSet, and Session.
 
-Modules thatare safe(-ish) to use at the moment include Collection, Concept, Data, Encoding, Encryption, ErrorHandling, ExceptionHandling, Hash, Modelling, Schema, and Type.
+Modules that are safe(-ish) to use at the moment include Collection, Concept, Data, Encoding, Encryption, ErrorHandling, ExceptionHandling, Hash, Modelling, Schema, and Type.
 
 Note that there is a strong possibility that some of these safe(-ish) modules will be refactored into different namespaces in the near future. A good example of this is Schema, which should reside under Modelling, and Modelling, which should probably reside under Data.
 
