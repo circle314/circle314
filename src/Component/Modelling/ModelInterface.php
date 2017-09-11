@@ -20,4 +20,9 @@ interface ModelInterface extends KeyedCollectionItemInterface
      * @return SchemaInterface
      */
     public function schema();
+
+    /**
+     * @return int
+     */
+    public function volatility();
 }

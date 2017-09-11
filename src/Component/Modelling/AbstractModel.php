@@ -44,6 +44,7 @@ abstract class AbstractModel implements ModelInterface
         $output .= '\\=========' . str_repeat('=', strlen(static::class)) . '===/' . PHP_EOL;
         return $output;
     }
+
     /**
      * @return SchemaInterface
      */
@@ -55,6 +56,7 @@ abstract class AbstractModel implements ModelInterface
 
     #region Abstract Methods
     abstract public function ID();
+    abstract public function volatility();
     #endregion
 }
 

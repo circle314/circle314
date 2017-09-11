@@ -3,6 +3,7 @@
 namespace Circle314\Component\Modelling;
 
 use \Exception;
+use Circle314\Modelling\ModelVolatilityConstants;
 use Circle314\Component\Schema\SchemaInterface;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 
@@ -75,7 +76,11 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         if(is_null($ID)) {
             throw new Exception('Tried get getModelByID using $ID = null');
         }
-        if(!$this->repository()->hasID($ID)) {
+        $getFresh =
+            $this->getBlankModel()->volatility() >= ModelVolatilityConstants::_DYNAMIC ||
+            $this->repository()->hasID($ID) === false
+        ;
+        if($getFresh) {
             $model = $this->factory()->retrieveModelUsingPreparedSchema(
                 $this->prepareSchemaForIDRetrieval($ID)
             );
@@ -101,13 +106,17 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $onlyModel) {
             // Override using the repository for models already retrieved
             $ID = $onlyModel->ID();
-            if($this->repository()->hasID($ID)) {
-                $model = $this->repository()->getID($ID);
-            } else {
+            $getFresh =
+                $this->getBlankModel()->volatility() >= ModelVolatilityConstants::_DYNAMIC ||
+                $this->repository()->hasID($ID) === false
+            ;
+            if($getFresh) {
                 if(!is_null($ID)) {
                     $this->repository()->saveID($ID, $onlyModel);
                 }
                 $model = $onlyModel;
+            } else {
+                $model = $this->repository()->getID($ID);
             }
         }
         return $model;
@@ -124,13 +133,17 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         foreach($modelCollection as $model) {
             // Override using the repository for models already retrieved
             $ID = $model->ID();
-            if($this->repository()->hasID($ID)) {
-                $modelCollection->saveID($ID, $this->repository()->getID($ID));
-            } else {
+            $getFresh =
+                $this->getBlankModel()->volatility() >= ModelVolatilityConstants::_DYNAMIC ||
+                $this->repository()->hasID($ID) === false
+            ;
+            if($getFresh) {
                 if(!is_null($ID)) {
                     $this->repository()->saveID($ID, $model);
                 }
                 $modelCollection->saveID($ID, $model);
+            } else {
+                $modelCollection->saveID($ID, $this->repository()->getID($ID));
             }
         }
         return $modelCollection;
