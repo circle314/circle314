@@ -1,6 +1,6 @@
 <?php
 
-namespace Circle314\Modelling;
+namespace Circle314\Component\Modelling;
 
 abstract class ModelVolatilityConstants
 {

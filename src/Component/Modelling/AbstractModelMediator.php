@@ -3,7 +3,7 @@
 namespace Circle314\Component\Modelling;
 
 use \Exception;
-use Circle314\Modelling\ModelVolatilityConstants;
+use Circle314\Component\Modelling\Exception\ModelMediatorRetrievalException;
 use Circle314\Component\Schema\SchemaInterface;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 
@@ -74,7 +74,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
     public function getModelByID($ID)
     {
         if(is_null($ID)) {
-            throw new Exception('Tried get getModelByID using $ID = null');
+            throw new ModelMediatorRetrievalException('Tried get getModelByID using $ID = null');
         }
         $getFresh =
             $this->getBlankModel()->volatility() >= ModelVolatilityConstants::_DYNAMIC ||
@@ -99,7 +99,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
         $modelCollection = $this->factory()->retrieveModelCollectionUsingPreparedSchema($schema);
 
         if($modelCollection->count() > 1) {
-            throw new Exception(__METHOD__ . ' expects at most one model to be generated, multiple models generated');
+            throw new ModelMediatorRetrievalException(__METHOD__ . ' expects at most one model to be generated, multiple models generated');
         }
 
         $model = false;
