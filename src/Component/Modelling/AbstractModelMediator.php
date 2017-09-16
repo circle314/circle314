@@ -91,7 +91,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
 
     /**
      * @param SchemaInterface $schema
-     * @return ModelInterface|bool
+     * @return ModelInterface|null
      * @throws Exception
      */
     public function getModelBySchema(SchemaInterface $schema)
@@ -102,7 +102,7 @@ abstract class AbstractModelMediator implements ModelMediatorInterface
             throw new ModelMediatorRetrievalException(__METHOD__ . ' expects at most one model to be generated, multiple models generated');
         }
 
-        $model = false;
+        $model = null;
         foreach($modelCollection as $onlyModel) {
             // Override using the repository for models already retrieved
             $ID = $onlyModel->ID();
