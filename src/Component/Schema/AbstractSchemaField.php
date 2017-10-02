@@ -13,6 +13,7 @@ use Circle314\Component\Type\TypeInterface\TypeInterface;
 abstract class AbstractSchemaField implements SchemaFieldInterface
 {
     #region Properties
+    /** @var SchemaFieldConfigurationInterface */
     private $configuration;
 
     /** @var string */

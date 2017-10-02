@@ -68,5 +68,3 @@ interface ModelFactoryInterface
      */
     public function retrieveModelCollectionUsingPreparedSchema(SchemaInterface $schema);
 }
-
-?>
