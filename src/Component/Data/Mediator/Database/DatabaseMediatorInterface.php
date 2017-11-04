@@ -6,6 +6,12 @@ use Circle314\Component\Collection\CollectionInterface;
 use Circle314\Component\Data\Mediator\DataMediatorInterface;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 
+/**
+ * Interface DatabaseMediatorInterface
+ * @package Circle314\Component\Data\Mediator\Database
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Strategy\PersistenceStrategyInterface;
+ */
 interface DatabaseMediatorInterface extends DataMediatorInterface
 {
     /**

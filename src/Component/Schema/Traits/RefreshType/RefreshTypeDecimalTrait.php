@@ -6,6 +6,8 @@ use Circle314\Component\Type\NumericType;
 
 /**
  * @method NumericType typedValue()
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\ValueObject\Traits\RefreshType\RefreshTypeDecimalTrait
  */
 trait RefreshTypeDecimalTrait
 {

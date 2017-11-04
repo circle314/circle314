@@ -4,10 +4,14 @@ namespace Circle314\Component\Data\Accessor\Database\MySQL;
 
 use \Exception;
 use \PDO;
-use Circle314\Concept\Persistence\PersistenceConstants;
-use Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
+use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperationException;
+use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalSelectOperationException;
 use Circle314\Component\Data\Accessor\Database\AbstractDatabaseAccessor;
+use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
+use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalUpdateOperationException;
+use Circle314\Component\Data\Persistence\PersistenceConstants;
+use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
+use Circle314\Transitional\TransitionalDataEntityInterface;
 
 /**
  * Class MySQLDatabaseAccessor
@@ -66,59 +70,77 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @param string $schemaName
+     * @param string $tableName
      * @return string
-     * @throws DatabaseDataPersistenceException
+     * @throws IllegalDeleteOperationException
      */
-    public function generateDeleteQuery(DatabaseTableSchemaInterface $databaseTableSchema)
+    public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
     {
-        if(!$databaseTableSchema->deleteQueriesAllowed()) {
-            throw new DatabaseDataPersistenceException(
-                'SQL DELETE queries forbidden on table '
-                . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
-            );
+        if(is_null($tableName)) {
+            /** @var DatabaseTableSchemaInterface $dataEntity */
+            if(!$dataEntity->deleteQueriesAllowed()) {
+                throw new IllegalDeleteOperationException(
+                    'SQL DELETE queries forbidden on table '
+                    . $tableName
+                );
+            }
+            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
+        } else {
+            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
         }
 
-        if(!$databaseTableSchema->fieldsMarkedAsIdentifiers()->count()) {
-            throw new DatabaseDataPersistenceException('Cannot generate an SQL DELETE query without identifiers');
+        /** @var TransitionalDataEntityInterface $dataEntity */
+        if(!$dataEntity->fieldsMarkedAsIdentifiers()->count()) {
+            throw new IllegalDeleteOperationException('Cannot generate an SQL DELETE query without identifiers');
         }
 
         $query =
             'DELETE FROM '
-            . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
-            . $this->generateWhereClauses($databaseTableSchema)
+            . $tableName
+            . $this->generateWhereClauses($dataEntity)
             . ';'
         ;
         return $query;
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @param string $schemaName
+     * @param string $tableName
      * @return string
-     * @throws DatabaseDataPersistenceException
+     * @throws IllegalInsertOperationException
      */
-    public function generateInsertQuery(DatabaseTableSchemaInterface $databaseTableSchema)
+    public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
     {
-        if(!$databaseTableSchema->insertQueriesAllowed())
-        {
-            throw new DatabaseDataPersistenceException(
-                'SQL INSERT queries forbidden on table '
-                . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
-            );
+        if(is_null($tableName)) {
+            /** @var DatabaseTableSchemaInterface $dataEntity */
+            if(!$dataEntity->insertQueriesAllowed())
+            {
+                throw new IllegalInsertOperationException(
+                    'SQL INSERT queries forbidden on table '
+                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
+                );
+            }
+            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
+        } else {
+            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
         }
 
-        if(!$databaseTableSchema->fieldsMarkedForUpdate()->count())
+        /** @var TransitionalDataEntityInterface $dataEntity */
+        if(!$dataEntity->fieldsMarkedForUpdate()->count())
         {
-            throw new DatabaseDataPersistenceException('Cannot generate an SQL INSERT query without any updated fields');
+            throw new IllegalInsertOperationException('Cannot generate an SQL INSERT query without any updated fields');
         }
 
         $query =
             'INSERT INTO '
-            . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
+            . $tableName
         ;
         $columnNames = [];
         $boundValueNames = [];
-        foreach($databaseTableSchema->fieldsMarkedForUpdate() as $column)
+        foreach($dataEntity->fieldsMarkedForUpdate() as $column)
         {
             $columnNames[] =
                 $this->configuration()->openingIdentityDelimiter()
@@ -141,61 +163,79 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @param string $schemaName
+     * @param string $tableName
      * @return string
-     * @throws DatabaseDataPersistenceException
+     * @throws IllegalSelectOperationException
      */
-    public function generateSelectQuery(DatabaseTableSchemaInterface $databaseTableSchema)
+    public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
     {
-        if(!$databaseTableSchema->selectQueriesAllowed()) {
-            throw new DatabaseDataPersistenceException(
-                'SQL SELECT queries forbidden on table '
-                . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::READ)
-            );
+        if(is_null($tableName)) {
+            /** @var DatabaseTableSchemaInterface $dataEntity */
+            if(!$dataEntity->selectQueriesAllowed()) {
+                throw new IllegalSelectOperationException(
+                    'SQL SELECT queries forbidden on table '
+                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ)
+                );
+            }
+            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ);
+        } else {
+            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
         }
 
+        /** @var TransitionalDataEntityInterface $dataEntity */
         $query =
             'SELECT * FROM '
-            . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::READ)
-            . $this->generateWhereClauses($databaseTableSchema)
-            . $this->generateOrderByClauses($databaseTableSchema)
+            . $tableName
+            . $this->generateWhereClauses($dataEntity)
+            . $this->generateOrderByClauses($dataEntity)
             . ';'
         ;
         return $query;
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @param string $schemaName
+     * @param string $tableName
      * @return string
-     * @throws DatabaseDataPersistenceException
+     * @throws IllegalUpdateOperationException
      */
-    public function generateUpdateQuery(DatabaseTableSchemaInterface $databaseTableSchema)
+    public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
     {
-        if(!$databaseTableSchema->updateQueriesAllowed())
-        {
-            throw new DatabaseDataPersistenceException(
-                'SQL UPDATE queries forbidden on table '
-                . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
-            );
+        if(is_null($tableName)) {
+            /** @var DatabaseTableSchemaInterface $dataEntity */
+            if(!$dataEntity->updateQueriesAllowed())
+            {
+                throw new IllegalUpdateOperationException(
+                    'SQL UPDATE queries forbidden on table '
+                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
+                );
+            }
+            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
+        } else {
+            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
         }
 
-        if(!$databaseTableSchema->fieldsMarkedForUpdate()->count())
+        /** @var TransitionalDataEntityInterface $dataEntity */
+        if(!$dataEntity->fieldsMarkedForUpdate()->count())
         {
-            throw new DatabaseDataPersistenceException('Cannot generate an SQL UPDATE query without any updated fields');
+            throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any updated fields');
         }
 
-        if(!$databaseTableSchema->fieldsMarkedAsIdentifiers()->count())
+        if(!$dataEntity->fieldsMarkedAsIdentifiers()->count())
         {
-            throw new DatabaseDataPersistenceException('Cannot generate an SQL UPDATE query without any identifier fields');
+            throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any identifier fields');
         }
 
         $query =
             'UPDATE '
-            . $this->getFullyQualifiedTableName($databaseTableSchema, PersistenceConstants::WRITE)
+            . $tableName
             . ' SET '
         ;
         $updateFields = [];
-        foreach($databaseTableSchema->fieldsMarkedForUpdate() as $column)
+        foreach($dataEntity->fieldsMarkedForUpdate() as $column)
         {
             $updateFields[] =
                 $this->configuration()->openingIdentityDelimiter()
@@ -207,7 +247,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
             ;
         }
         $query .= implode(', ', $updateFields);
-        $query .= $this->generateWhereClauses($databaseTableSchema);
+        $query .= $this->generateWhereClauses($dataEntity);
         return $query;
     }
     #endregion

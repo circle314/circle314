@@ -4,10 +4,13 @@ namespace Circle314\Component\Data\Operation\Database;
 
 use \PDOStatement;
 use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseQueryCollectionItem;
 
 /**
  * Class AbstractDatabaseQueryBranchCollection
  * @package Circle314\Component\Data\Operation\Database
+ * @deprecated 0.6
+ * @see AbstractDatabaseQueryCollectionItem
  */
 abstract class AbstractDatabaseQueryBranch implements DatabaseQueryBranchInterface
 {

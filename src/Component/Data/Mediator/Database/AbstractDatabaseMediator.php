@@ -2,13 +2,20 @@
 
 namespace Circle314\Component\Data\Mediator\Database;
 
-use Circle314\Concept\Persistence\PersistenceConstants;
+use Circle314\Component\Data\Operation\Response\ResponseInterface;
+use Circle314\Component\Data\Persistence\PersistenceConstants;
 use Circle314\Component\Data\Operation\Call\Database\Native\NativeDatabaseCall;
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
 use Circle314\Component\Data\Operation\OperationMediatorInterface;
 use Circle314\Component\Data\Operation\Response\Database\DatabaseResponseInterface;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 
+/**
+ * Class AbstractDatabaseMediator
+ * @package Circle314\Component\Data\Mediator\Database
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Strategy\Database\AbstractDatabasePersistenceStrategy;
+ */
 abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
 {
     #region Properties
@@ -62,7 +69,7 @@ abstract class AbstractDatabaseMediator implements DatabaseMediatorInterface
 
     /**
      * @param mixed $databaseTableSchema
-     * @return DatabaseResponseInterface
+     * @return ResponseInterface
      */
     final public function get($databaseTableSchema)
     {

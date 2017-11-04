@@ -5,6 +5,12 @@ namespace Circle314\Component\Data\Operation\Response\Database;
 use \PDOStatement;
 use Circle314\Component\Data\Operation\Response\AbstractResponse;
 
+/**
+ * Class AbstractDatabaseResponse
+ * @package Circle314\Component\Data\Operation\Response\Database
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Response\Database\AbstractDatabaseResponse
+ */
 abstract class AbstractDatabaseResponse extends AbstractResponse implements DatabaseResponseInterface
 {
     #region Properties

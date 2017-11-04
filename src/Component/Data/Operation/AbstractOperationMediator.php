@@ -12,6 +12,12 @@ use Circle314\Component\Data\Operation\Response\ResponseInterface;
 use Circle314\Component\Encoding\EncodingHandlerInterface;
 use Circle314\Component\Hash\HashHandlerInterface;
 
+/**
+ * Class AbstractOperationMediator
+ * @package Circle314\Component\Data\Operation
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Mediator\AbstractOperationMediator
+ */
 abstract class AbstractOperationMediator implements OperationMediatorInterface
 {
     #region Properties

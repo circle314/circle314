@@ -3,6 +3,7 @@
 namespace Circle314\Component\Schema;
 
 use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Data\ValueObject\AbstractDVO;
 use Circle314\Concept\Null\NullConstants;
 use Circle314\Concept\Ordering\OrderingConstants;
 use Circle314\Component\Exception\SchemaFieldException;
@@ -10,6 +11,12 @@ use Circle314\Component\Type\Exception\TypeValidationException;
 use Circle314\Component\Schema\Native\NativeSchemaFieldConfiguration;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 
+/**
+ * Class AbstractSchemaField
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see AbstractDVO
+ */
 abstract class AbstractSchemaField implements SchemaFieldInterface
 {
     #region Properties

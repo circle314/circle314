@@ -9,6 +9,12 @@ use Circle314\Component\Data\Operation\Call\CallInterface;
 use Circle314\Component\Data\Operation\Call\Database\DatabaseCallInterface;
 use Circle314\Component\Data\Operation\Database\AbstractDatabaseOperationMediator;
 
+/**
+ * Class NativeDatabaseOperationMediator
+ * @package Circle314\Component\Data\Operation\Database\Native
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Database\Native\NativeDatabaseOperationMediator
+ */
 class NativeDatabaseOperationMediator extends AbstractDatabaseOperationMediator
 {
     /**

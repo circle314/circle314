@@ -3,12 +3,19 @@
 namespace Circle314\Component\Modelling;
 
 use \Exception;
+use Circle314\Component\Data\Entity\Factory\AbstractDataEntityFactory;
 use Circle314\Component\Schema\SchemaFieldInterface;
 use Circle314\Component\Data\Operation\Response\ResponseInterface;
 use Circle314\Component\Data\Mediator\DataMediatorInterface;
 use Circle314\Component\Modelling\Native\NativeModelCollection;
 use Circle314\Component\Schema\SchemaInterface;
 
+/**
+ * Class AbstractModelFactory
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see AbstractDataEntityFactory
+ */
 abstract class AbstractModelFactory implements ModelFactoryInterface
 {
     #region Properties

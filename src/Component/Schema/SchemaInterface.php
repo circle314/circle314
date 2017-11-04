@@ -2,7 +2,16 @@
 
 namespace Circle314\Component\Schema;
 
-interface SchemaInterface
+use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Transitional\TransitionalDataEntityInterface;
+
+/**
+ * Interface SchemaInterface
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see DataEntityInterface
+ */
+interface SchemaInterface extends TransitionalDataEntityInterface
 {
     /**
      * @return string

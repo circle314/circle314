@@ -2,8 +2,15 @@
 
 namespace Circle314\Component\Modelling;
 
+use Circle314\Component\Data\Entity\Repository\DataEntityRepositoryInterface;
 use Circle314\Component\Schema\SchemaInterface;
 
+/**
+ * Interface ModelMediatorInterface
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see DataEntityRepositoryInterface
+ */
 interface ModelMediatorInterface
 {
     /**

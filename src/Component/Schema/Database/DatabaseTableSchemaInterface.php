@@ -2,8 +2,16 @@
 
 namespace Circle314\Component\Schema\Database;
 
+use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\Persistence\Strategy\PersistenceStrategyInterface;
 use Circle314\Component\Schema\SchemaInterface;
 
+/**
+ * Interface DatabaseTableSchemaInterface
+ * @package Circle314\Component\Schema\Database
+ * @deprecated
+ * @see DataEntityInterface, PersistenceStrategyInterface
+ */
 interface DatabaseTableSchemaInterface extends SchemaInterface
 {
     /**
@@ -46,5 +54,3 @@ interface DatabaseTableSchemaInterface extends SchemaInterface
      */
     public function updateQueriesAllowed();
 }
-
-?>

@@ -2,6 +2,14 @@
 
 namespace Circle314\Component\Modelling;
 
+use Circle314\Component\Data\Persistence\PersistenceConstants;
+
+/**
+ * Class ModelVolatilityConstants
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see PersistenceConstants
+ */
 abstract class ModelVolatilityConstants
 {
     #region Constants

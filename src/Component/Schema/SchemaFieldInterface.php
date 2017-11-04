@@ -3,10 +3,18 @@
 namespace Circle314\Component\Schema;
 
 use Circle314\Component\Collection\KeyedCollectionItemInterface;
+use Circle314\Component\Data\ValueObject\DVOInterface;
 use Circle314\Concept\Value\ValueHandlerInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
+use Circle314\Transitional\TransitionalDVOInterface;
 
-interface SchemaFieldInterface extends KeyedCollectionItemInterface, ValueHandlerInterface
+/**
+ * Interface SchemaFieldInterface
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see DVOInterface
+ */
+interface SchemaFieldInterface extends KeyedCollectionItemInterface, ValueHandlerInterface, TransitionalDVOInterface
 {
     /**
      * @return void

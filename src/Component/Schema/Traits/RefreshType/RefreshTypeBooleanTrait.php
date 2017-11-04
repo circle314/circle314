@@ -6,6 +6,8 @@ use Circle314\Component\Type\BooleanType;
 
 /**
  * @method BooleanType typedValue()
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\ValueObject\Traits\RefreshType\RefreshTypeBooleanTrait
  */
 trait RefreshTypeBooleanTrait
 {

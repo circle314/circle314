@@ -2,6 +2,12 @@
 
 namespace Circle314\Component\Data\Operation\Response;
 
+/**
+ * Class AbstractResponse
+ * @package Circle314\Component\Data\Operation\Response
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Response\AbstractResponse
+ */
 abstract class AbstractResponse implements ResponseInterface
 {
     #region Properties

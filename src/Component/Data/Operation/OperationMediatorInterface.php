@@ -5,6 +5,12 @@ namespace Circle314\Component\Data\Operation;
 use Circle314\Component\Data\Accessor\AccessorInterface;
 use Circle314\Component\Data\Operation\Call\CallInterface;
 
+/**
+ * Interface OperationMediatorInterface
+ * @package Circle314\Component\Data\Operation
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Mediator\OperationMediatorInterface
+ */
 interface OperationMediatorInterface
 {
     /**

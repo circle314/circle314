@@ -2,9 +2,16 @@
 
 namespace Circle314\Component\Modelling;
 
+use Circle314\Component\Data\Entity\AbstractDataEntity;
 use Circle314\Component\Schema\SchemaFieldInterface;
 use Circle314\Component\Schema\SchemaInterface;
 
+/**
+ * Class AbstractModel
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see AbstractDataEntity
+ */
 abstract class AbstractModel implements ModelInterface
 {
     #region Properties

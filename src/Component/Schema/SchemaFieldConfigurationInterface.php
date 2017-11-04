@@ -2,6 +2,14 @@
 
 namespace Circle314\Component\Schema;
 
+use Circle314\Component\Data\ValueObject\Configuration\DVOConfigurationInterface;
+
+/**
+ * Interface SchemaFieldConfigurationInterface
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see DVOConfigurationInterface
+ */
 interface SchemaFieldConfigurationInterface
 {
     /**

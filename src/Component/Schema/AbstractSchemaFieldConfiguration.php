@@ -2,8 +2,15 @@
 
 namespace Circle314\Component\Schema;
 
-use Circle314\Concept\Persistence\PersistenceConstants;
+use Circle314\Component\Data\Persistence\PersistenceConstants;
+use Circle314\Component\Data\ValueObject\Configuration\AbstractDVOConfiguration;
 
+/**
+ * Class AbstractSchemaFieldConfiguration
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see AbstractDVOConfiguration
+ */
 abstract class AbstractSchemaFieldConfiguration implements SchemaFieldConfigurationInterface
 {
     #region Properties

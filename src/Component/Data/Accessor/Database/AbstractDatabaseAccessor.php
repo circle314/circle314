@@ -3,18 +3,19 @@
 namespace Circle314\Component\Data\Accessor\Database;
 
 use \PDO;
-use Circle314\Concept\Ordering\OrderingConstants;
-use Circle314\Component\Schema\SchemaFieldInterface;
-use Circle314\Component\Collection\CollectionInterface;
-use Circle314\Concept\Persistence\PersistenceConstants;
+use Circle314\Component\Data\Persistence\PersistenceConstants;
+use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
+use Circle314\Component\Data\ValueObject\Collection\Native\NativeDVOCollection;
 use Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
-use Circle314\Component\Schema\Database\DatabaseColumnCollection;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Component\Type\TypeInterface\BooleanTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTimeTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTypeInterface;
 use Circle314\Component\Type\TypeInterface\IntegerTypeInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
+use Circle314\Concept\Ordering\OrderingConstants;
+use Circle314\Transitional\TransitionalDataEntityInterface;
+use Circle314\Transitional\TransitionalDVOInterface;
 
 abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 {
@@ -93,19 +94,18 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @return DatabaseColumnCollection
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @return DVOCollectionInterface
      */
-    final public function generateParameters(DatabaseTableSchemaInterface $databaseTableSchema)
+    final public function generateParameters(TransitionalDataEntityInterface $dataEntity)
     {
-        $parameters = new DatabaseColumnCollection();
-        /** @var SchemaFieldInterface $column */
-        foreach ($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column) {
+        $parameters = new NativeDVOCollection();
+        foreach ($dataEntity->fieldsMarkedAsIdentifiers() as $column) {
             if(!is_null($column->identifiedValue()->getValue())) {
                 $parameters->saveID($this->configuration()->insertParameterPrefix() . $column->fieldName(), $column);
             }
         }
-        foreach ($databaseTableSchema->fieldsMarkedForUpdate() as $column) {
+        foreach ($dataEntity->fieldsMarkedForUpdate() as $column) {
             $parameters->saveID($this->configuration()->updateParameterPrefix() . $column->fieldName(), $column);
         }
         return $parameters;
@@ -116,6 +116,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
      * @param string $readWrite
      * @return string
      * @throws DatabaseDataPersistenceException
+     * @deprecated
      */
     final public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
     {
@@ -235,19 +236,32 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     #endregion
 
     #region Protected Methods
+    final protected function delimitedFullyQualifiedTableName($schemaName, $tableName)
+    {
+        $schema = $this->configuration()->openingIdentityDelimiter()
+            . $schemaName
+            . $this->configuration()->closingIdentityDelimiter()
+            . '.'
+        ;
+        $table = $this->configuration()->openingIdentityDelimiter()
+            . $tableName
+            . $this->configuration()->closingIdentityDelimiter()
+        ;
+        return $schema . $table;
+    }
+
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateOrderByClauses(DatabaseTableSchemaInterface $databaseTableSchema)
+    final protected function generateOrderByClauses(TransitionalDataEntityInterface $dataEntity)
     {
         $query = '';
-        if($databaseTableSchema->fieldsMarkedForOrdering()->count())
+        if($dataEntity->fieldsMarkedForOrdering()->count())
         {
             $query .= ' ORDER BY ';
             $orderByClauses = [];
-            /** @var SchemaFieldInterface $column */
-            foreach($databaseTableSchema->fieldsMarkedForOrdering() as $column)
+            foreach($dataEntity->fieldsMarkedForOrdering() as $column)
             {
                 $fullyQualifiedFieldName = $this->configuration->openingIdentityDelimiter()
                     . $column->fieldName()
@@ -276,18 +290,18 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
+     * @param TransitionalDataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateWhereClauses(DatabaseTableSchemaInterface $databaseTableSchema)
+    final protected function generateWhereClauses(TransitionalDataEntityInterface $dataEntity)
     {
         $query = '';
-        if($databaseTableSchema->fieldsMarkedAsIdentifiers()->count())
+        if($dataEntity->fieldsMarkedAsIdentifiers()->count())
         {
             $query .= ' WHERE ';
             $whereClauses = [];
-            /** @var SchemaFieldInterface $column */
-            foreach($databaseTableSchema->fieldsMarkedAsIdentifiers() as $column)
+            /** @var TransitionalDVOInterface $column */
+            foreach($dataEntity->fieldsMarkedAsIdentifiers() as $column)
             {
                 $whereClauses[] =
                     $this->configuration->openingIdentityDelimiter()
@@ -360,29 +374,9 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 
     #region Abstract Methods
     abstract public function connect();
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @return bool
-     */
-    abstract public function generateDeleteQuery(DatabaseTableSchemaInterface $databaseTableSchema);
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @return CollectionInterface
-     */
-    abstract public function generateInsertQuery(DatabaseTableSchemaInterface $databaseTableSchema);
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @return CollectionInterface
-     */
-    abstract public function generateSelectQuery(DatabaseTableSchemaInterface $databaseTableSchema);
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @return CollectionInterface
-     */
-    abstract public function generateUpdateQuery(DatabaseTableSchemaInterface $databaseTableSchema);
+    abstract public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    abstract public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    abstract public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    abstract public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
     #endregion
 }

@@ -2,8 +2,15 @@
 
 namespace Circle314\Component\Modelling;
 
+use Circle314\Component\Data\Entity\Factory\DataEntityFactoryInterface;
 use Circle314\Component\Schema\SchemaInterface;
 
+/**
+ * Interface ModelFactoryInterface
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see DataEntityFactoryInterface
+ */
 interface ModelFactoryInterface
 {
     /**

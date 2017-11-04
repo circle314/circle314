@@ -5,6 +5,12 @@ namespace Circle314\Component\Data\Operation\Call;
 use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Data\Accessor\AccessorInterface;
 
+/**
+ * Interface CallInterface
+ * @package Circle314\Component\Data\Operation\Call
+ * @deprecated 0.6
+ * @see \Circle314\Component\Data\Persistence\Operation\Call\CallInterface
+ */
 interface CallInterface
 {
     /**
@@ -40,6 +46,3 @@ interface CallInterface
      */
     public function setQuery($query);
 }
-
-
-?>

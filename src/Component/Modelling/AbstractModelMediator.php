@@ -2,11 +2,18 @@
 
 namespace Circle314\Component\Modelling;
 
+use Circle314\Component\Data\Entity\Repository\AbstractDataEntityRepository;
 use \Exception;
 use Circle314\Component\Modelling\Exception\ModelMediatorRetrievalException;
 use Circle314\Component\Schema\SchemaInterface;
 use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 
+/**
+ * Class AbstractModelMediator
+ * @package Circle314\Component\Modelling
+ * @deprecated 0.6
+ * @see AbstractDataEntityRepository
+ */
 abstract class AbstractModelMediator implements ModelMediatorInterface
 {
     #region Properties

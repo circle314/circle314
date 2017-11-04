@@ -5,8 +5,15 @@ namespace Circle314\Component\Schema;
 use \ArrayIterator;
 use Circle314\Component\Collection\Exception\CollectionIDDuplicateException;
 use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Data\Entity\AbstractDataEntity;
 use Circle314\Component\Schema\Native\NativeSchemaFieldConfiguration;
 
+/**
+ * Class AbstractSchema
+ * @package Circle314\Component\Schema
+ * @deprecated 0.6
+ * @see AbstractDataEntity
+ */
 abstract class AbstractSchema implements SchemaInterface
 {
     #region Properties

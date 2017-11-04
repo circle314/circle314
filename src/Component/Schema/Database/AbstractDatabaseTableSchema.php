@@ -2,8 +2,15 @@
 
 namespace Circle314\Component\Schema\Database;
 
+use Circle314\Component\Data\Entity\AbstractDataEntity;
 use Circle314\Component\Schema\AbstractSchema;
 
+/**
+ * Class AbstractDatabaseTableSchema
+ * @package Circle314\Component\Schema\Database
+ * @deprecated 0.6
+ * @see AbstractDataEntity
+ */
 abstract class AbstractDatabaseTableSchema extends AbstractSchema implements DatabaseTableSchemaInterface
 {
     #region Protected Methods
