@@ -14,7 +14,7 @@ interface DataEntityRepositoryInterface
     public function forget(DataEntityInterface $dataEntity) : void;
     public function new(DataEntityInterface $dataEntity) : DataEntityInterface;
     public function retrieveID($ID) : DataEntityInterface;
-    public function retrieve(DataEntityInterface $dataEntity) : DataEntityInterface;
+    public function retrieve(DataEntityInterface $dataEntity): ?DataEntityInterface;
     public function retrieveCollection(DataEntityInterface $dataEntityCollection) : DataEntityCollectionInterface;
     public function save(DataEntityInterface $dataEntity) : void;
     public function saveCollection(DataEntityCollectionInterface $dataEntityCollection) : void;

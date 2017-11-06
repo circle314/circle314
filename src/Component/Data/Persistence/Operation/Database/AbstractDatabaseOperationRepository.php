@@ -4,26 +4,25 @@ namespace Circle314\Component\Data\Persistence\Operation\Database;
 
 use \PDOException;
 use \PDOStatement;
+use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 use Circle314\Component\Data\Accessor\AccessorInterface;
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
-use Circle314\Component\Data\Persistence\Operation\Database\Native\NativeDatabaseQueryCollectionItem;
-use Circle314\Component\Data\Persistence\Operation\Mediator\AbstractOperationMediator;
+use Circle314\Component\Data\Persistence\Operation\Repository\AbstractOperationRepository;
 use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 
 /**
  * Class AbstractDatabaseOperationMediator
  * @package Circle314\Component\Data\Persistence\Operation\Database
  */
-abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediator
+abstract class AbstractDatabaseOperationRepository extends AbstractOperationRepository
 {
     #region Public Methods
-    public function generateResponse(CallInterface $call, AccessorInterface $accessor)
+    protected function generateResponse(CallInterface $call, AccessorInterface $accessor): ResponseInterface
     {
         /** @var DatabaseAccessorInterface $accessor */
-        $this->mapQueryBranch($call, [$call, $accessor]);
-        /** @var DatabaseQueryCollectionItemInterface $responseCollection */
-        $responseCollection = $this->responseCollection($call);
-        $PDOStatement = $responseCollection->PDOStatement();
+        /** @var DatabaseQueryInterface $query */
+        $query = $this->operationCache()->query($call, $accessor);
+        $PDOStatement = $query->PDOStatement();
 
         // Generate response
         foreach($call->parameters() as $parameter) {
@@ -52,32 +51,6 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
         }
 
         return $this->generateNewResponse($PDOStatement);
-    }
-    #endregion
-
-    #region Protected Methods
-    /**
-     * TODO: Write invalidation procedures for database operations.
-     * This method currently clears out all resultant operations against a table/view.
-     * Ideally, we would be invalidating according to an invalidation procedure. This
-     * still needs to have interfaces, abstracts, and natives written.
-     * @param CallInterface $call
-     */
-    protected function invalidateDependantResponses(CallInterface $call)
-    {
-        if($this->endPointCollection($call)) {
-            $this->endPointCollection($call)->clearCollection();
-        }
-    }
-    #endregion
-
-    #region Protected Methods - Overridden
-    protected function newResponseCollection($mappingParameters = null)
-    {
-        /** @var array $mappingParameters */
-        $call = $mappingParameters[0];
-        $accessor = $mappingParameters[1];
-        return new NativeDatabaseQueryCollectionItem($accessor->prepareStatement($call->query()));
     }
     #endregion
 

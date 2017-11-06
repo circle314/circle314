@@ -16,7 +16,7 @@ use Circle314\Component\Hash\HashHandlerInterface;
  * Class AbstractOperationMediator
  * @package Circle314\Component\Data\Operation
  * @deprecated 0.6
- * @see \Circle314\Component\Data\Persistence\Operation\Mediator\AbstractOperationMediator
+ * @see \Circle314\Component\Data\Persistence\Operation\Repository\AbstractOperationRepository
  */
 abstract class AbstractOperationMediator implements OperationMediatorInterface
 {

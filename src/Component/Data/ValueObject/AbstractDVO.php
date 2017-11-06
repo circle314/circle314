@@ -281,6 +281,11 @@ abstract class AbstractDVO implements DVOInterface
 
     #region Abstract Methods
     abstract public function getDefaultValue();
-    abstract protected function refreshTypedValue($value) : TypeInterface;
+    abstract protected function refreshTypedValue($value);
     #endregion
+
+    public function __toString()
+    {
+        return (string)$this->getValue();
+    }
 }

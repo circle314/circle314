@@ -4,9 +4,9 @@ namespace Circle314\Component\Data\Persistence\Operation\Database\Native;
 
 use \PDOStatement;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeDatabaseResponse;
-use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseOperationMediator;
+use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseOperationRepository;
 
-class NativeDatabaseOperationMediator extends AbstractDatabaseOperationMediator
+class NativeDatabaseOperationRepository extends AbstractDatabaseOperationRepository
 {
     #region Protected Methods
     /**

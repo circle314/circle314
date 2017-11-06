@@ -5,13 +5,13 @@ namespace Circle314\Component\Data\Operation\Database;
 use \PDOStatement;
 use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\CollectionItemInterface;
-use Circle314\Component\Data\Persistence\Operation\Database\DatabaseQueryCollectionItemInterface;
+use Circle314\Component\Data\Persistence\Operation\Database\DatabaseQueryInterface;
 
 /**
  * Interface DatabaseQueryBranchInterface
  * @package Circle314\Component\Data\Operation\Database
  * @deprecated 0.6
- * @see DatabaseQueryCollectionItemInterface
+ * @see DatabaseQueryInterface
  */
 interface DatabaseQueryBranchInterface extends CollectionItemInterface
 {

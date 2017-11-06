@@ -13,7 +13,7 @@ use Circle314\Component\Data\Operation\Database\AbstractDatabaseOperationMediato
  * Class NativeDatabaseOperationMediator
  * @package Circle314\Component\Data\Operation\Database\Native
  * @deprecated 0.6
- * @see \Circle314\Component\Data\Persistence\Operation\Database\Native\NativeDatabaseOperationMediator
+ * @see \Circle314\Component\Data\Persistence\Operation\Database\Native\NativeDatabaseOperationRepository
  */
 class NativeDatabaseOperationMediator extends AbstractDatabaseOperationMediator
 {

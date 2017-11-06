@@ -74,7 +74,7 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $cachedDataEntity;
     }
 
-    public function retrieve(DataEntityInterface $dataEntity) : DataEntityInterface
+    public function retrieve(DataEntityInterface $dataEntity): ?DataEntityInterface
     {
         $retrievedDataEntityCollection = $this->retrieveCollection($dataEntity);
 

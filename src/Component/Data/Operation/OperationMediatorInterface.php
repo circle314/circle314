@@ -9,7 +9,7 @@ use Circle314\Component\Data\Operation\Call\CallInterface;
  * Interface OperationMediatorInterface
  * @package Circle314\Component\Data\Operation
  * @deprecated 0.6
- * @see \Circle314\Component\Data\Persistence\Operation\Mediator\OperationMediatorInterface
+ * @see \Circle314\Component\Data\Persistence\Operation\Repository\OperationRepositoryInterface
  */
 interface OperationMediatorInterface
 {

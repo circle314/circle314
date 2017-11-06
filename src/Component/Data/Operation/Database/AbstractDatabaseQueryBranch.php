@@ -4,13 +4,14 @@ namespace Circle314\Component\Data\Operation\Database;
 
 use \PDOStatement;
 use Circle314\Component\Collection\KeyedCollectionInterface;
-use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseQueryCollectionItem;
+use Circle314\Component\Data\Persistence\Operation\Database\DatabaseQueryInterface;
+use Circle314\Component\Data\Persistence\Operation\Database\Native\NativeDatabaseQuery;
 
 /**
  * Class AbstractDatabaseQueryBranchCollection
  * @package Circle314\Component\Data\Operation\Database
  * @deprecated 0.6
- * @see AbstractDatabaseQueryCollectionItem
+ * @see DatabaseQueryInterface, NativeDatabaseQuery
  */
 abstract class AbstractDatabaseQueryBranch implements DatabaseQueryBranchInterface
 {

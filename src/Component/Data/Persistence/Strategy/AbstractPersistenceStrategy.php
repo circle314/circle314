@@ -3,7 +3,7 @@
 namespace Circle314\Component\Data\Persistence\Strategy;
 
 use Circle314\Component\Data\Accessor\AccessorInterface;
-use Circle314\Component\Data\Persistence\Operation\Mediator\OperationMediatorInterface;
+use Circle314\Component\Data\Persistence\Operation\Repository\OperationRepositoryInterface;
 use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 use Circle314\Transitional\TransitionalDataEntityInterface;
 
@@ -13,17 +13,17 @@ abstract class AbstractPersistenceStrategy implements PersistenceStrategyInterfa
     /** @var AccessorInterface */
     private $accessor;
 
-    /** @var OperationMediatorInterface */
-    private $operationMediator;
+    /** @var OperationRepositoryInterface */
+    private $operationRepository;
     #endregion
 
     #region Constructor
     public function __construct(
         AccessorInterface $accessor,
-        OperationMediatorInterface $operationMediator
+        OperationRepositoryInterface $operationMediator
     ) {
         $this->accessor = $accessor;
-        $this->operationMediator = $operationMediator;
+        $this->operationRepository = $operationMediator;
     }
     #endregion
 
@@ -33,15 +33,15 @@ abstract class AbstractPersistenceStrategy implements PersistenceStrategyInterfa
         return $this->accessor;
     }
 
-    final protected function operationMediator() : OperationMediatorInterface
+    final protected function operationRepository() : OperationRepositoryInterface
     {
-        return $this->operationMediator;
+        return $this->operationRepository;
     }
     #endregion
 
     #region Abstract Methods
     abstract public function delete(TransitionalDataEntityInterface $dataEntity): ResponseInterface;
-    abstract public function get(TransitionalDataEntityInterface $dataEntity): ResponseInterface;
+    abstract public function get(TransitionalDataEntityInterface $dataEntity): ?ResponseInterface;
     abstract public function isLessVolatileThan($volatility): bool;
     abstract public function save(TransitionalDataEntityInterface $dataEntity): ResponseInterface;
 

@@ -31,12 +31,12 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
             $accessor->ID(),
             $this->targetSchema() . '.' . $this->targetTable(),
             $accessor->generateDeleteQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
-            $dataEntity
+            $accessor->generateParameters($dataEntity)
         );
-        return $this->operationMediator()->response($call, $accessor);
+        return $this->operationRepository()->response($call, $accessor);
     }
 
-    final public function get(TransitionalDataEntityInterface $dataEntity) : ResponseInterface
+    final public function get(TransitionalDataEntityInterface $dataEntity): ?ResponseInterface
     {
         if(!$this->selectOperationsEnabled()) {
             throw new IllegalSelectOperationException('SQL select operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
@@ -48,9 +48,9 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
             $accessor->ID(),
             $this->sourceSchema() . '.' . $this->sourceTable(),
             $accessor->generateSelectQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
-            $dataEntity
+            $accessor->generateParameters($dataEntity)
         );
-        return $this->operationMediator()->response($call, $accessor);
+        return $this->operationRepository()->response($call, $accessor);
     }
 
     final public function save(TransitionalDataEntityInterface $dataEntity) : ResponseInterface
@@ -65,7 +65,7 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
                 $accessor->ID(),
                 $this->sourceSchema() . '.' . $this->sourceTable(),
                 $accessor->generateUpdateQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
-                $dataEntity
+                $accessor->generateParameters($dataEntity)
             );
         } else {
             if(!$this->insertOperationsEnabled()) {
@@ -75,10 +75,10 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
                 $accessor->ID(),
                 $this->sourceSchema() . '.' . $this->sourceTable(),
                 $accessor->generateInsertQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
-                $dataEntity
+                $accessor->generateParameters($dataEntity)
             );
         }
-        $response = $this->operationMediator()->response($call, $accessor);
+        $response = $this->operationRepository()->response($call, $accessor);
         $dataEntity->markFieldsAsPersisted();
         return $response;
     }

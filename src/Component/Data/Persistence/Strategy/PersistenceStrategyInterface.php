@@ -8,7 +8,7 @@ use Circle314\Transitional\TransitionalDataEntityInterface;
 interface PersistenceStrategyInterface
 {
     public function delete(TransitionalDataEntityInterface $dataEntity) : ResponseInterface;
-    public function get(TransitionalDataEntityInterface $dataEntity) : ResponseInterface;
+    public function get(TransitionalDataEntityInterface $dataEntity): ?ResponseInterface;
     public function isLessVolatileThan($volatility) : bool;
     public function save(TransitionalDataEntityInterface $dataEntity) : ResponseInterface;
 }
