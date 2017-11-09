@@ -34,33 +34,33 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
     #endregion
 
     #region Public Methods
-    public function createBlank() : DataEntityInterface
+    public function createBlank()
     {
         return $this->factory()->declare();
     }
 
-    public function createDefault() : DataEntityInterface
+    public function createDefault()
     {
         return $this->factory()->declareDefault();
     }
 
-    public function createFromArray(Array $array = [], $defaultFallback = true) : DataEntityInterface
+    public function createFromArray(Array $array = [], $defaultFallback = true)
     {
         return $this->factory()->initialise($array, $defaultFallback);
     }
 
-    public function delete(DataEntityInterface $dataEntity) : void
+    public function delete(DataEntityInterface $dataEntity)
     {
         $this->persistenceStrategy->delete($dataEntity);
         $this->forget($dataEntity);
     }
 
-    public function forget(DataEntityInterface $dataEntity) : void
+    public function forget(DataEntityInterface $dataEntity)
     {
         $this->cache()->deleteID($dataEntity->ID());
     }
 
-    public function new(DataEntityInterface $dataEntity) : DataEntityInterface
+    public function new(DataEntityInterface $dataEntity)
     {
         $ID = $dataEntity->ID();
         if($this->useCachedVersion($dataEntity->ID())) {
@@ -74,7 +74,7 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $cachedDataEntity;
     }
 
-    public function retrieve(DataEntityInterface $dataEntity): ?DataEntityInterface
+    public function retrieve(DataEntityInterface $dataEntity)
     {
         $retrievedDataEntityCollection = $this->retrieveCollection($dataEntity);
 
@@ -97,7 +97,7 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $retrievedDataEntity;
     }
 
-    public function retrieveCollection(DataEntityInterface $dataEntity) : DataEntityCollectionInterface
+    public function retrieveCollection(DataEntityInterface $dataEntity)
     {
         $dataMediatorResponse = $this->persistenceStrategy->get($dataEntity);
 
@@ -124,7 +124,7 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $dataEntityCollection;
     }
 
-    public function retrieveID($ID) : DataEntityInterface
+    public function retrieveID($ID)
     {
         if(is_null($ID)) {
             throw new DataEntityRetrievalException('Tried to retrieve a Data Entity using a null ID');
@@ -141,13 +141,13 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $cachedDataEntity;
     }
 
-    public function save(DataEntityInterface $dataEntity) : void
+    public function save(DataEntityInterface $dataEntity)
     {
         $this->persistenceStrategy->save($dataEntity);
         $dataEntity->markFieldsAsPersisted();
     }
 
-    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection) : void
+    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection)
     {
         foreach($dataEntityCollection as $dataEntity) {
             $this->save($dataEntity);
@@ -156,21 +156,36 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
     #endregion
 
     #region Protected Methods
-    protected function cache() : DataEntityCollectionInterface
+    /**
+     * @return DataEntityCollectionInterface
+     */
+    protected function cache()
     {
         return $this->cache;
     }
 
-    protected function factory() : DataEntityFactoryInterface
+    /**
+     * @return DataEntityFactoryInterface
+     */
+    protected function factory()
     {
         return $this->factory;
     }
 
-    protected function persistenceStrategy() : PersistenceStrategyInterface
+    /**
+     * @return PersistenceStrategyInterface
+     */
+    protected function persistenceStrategy()
     {
         return $this->persistenceStrategy;
     }
 
+    /**
+     * Determines whether a cached version should be used.
+     *
+     * @param mixed $ID The ID that the DataEntity would be stored under.
+     * @return bool
+     */
     protected function useCachedVersion($ID)
     {
         return

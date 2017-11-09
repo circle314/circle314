@@ -9,6 +9,12 @@ use Circle314\Component\Type\NullableNumericType;
  */
 trait RefreshTypeNullableDecimalTrait
 {
+    /**
+     * A new NullableNumericType.
+     *
+     * @param $value
+     * @return NullableNumericType
+     */
     protected function refreshTypedValue($value)
     {
         return new NullableNumericType($value);

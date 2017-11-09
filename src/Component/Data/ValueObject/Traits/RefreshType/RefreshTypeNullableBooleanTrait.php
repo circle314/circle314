@@ -9,6 +9,12 @@ use Circle314\Component\Type\NullableBooleanType;
  */
 trait RefreshTypeNullableBooleanTrait
 {
+    /**
+     * A new NullableBooleanType.
+     *
+     * @param $value
+     * @return NullableBooleanType
+     */
     protected function refreshTypedValue($value)
     {
         return new NullableBooleanType($value);

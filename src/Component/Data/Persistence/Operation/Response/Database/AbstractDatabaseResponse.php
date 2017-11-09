@@ -40,22 +40,22 @@ abstract class AbstractDatabaseResponse extends AbstractResponse implements Data
     #endregion
 
     #region Public Methods
-    public function columnCount() : int
+    public function columnCount()
     {
         return $this->columnCount;
     }
 
-    public function errorCode() : string
+    public function errorCode()
     {
         return $this->errorCode;
     }
 
-    public function errorInfo() : array
+    public function errorInfo()
     {
         return $this->errorInfo;
     }
 
-    public function rowCount() : int
+    public function rowCount()
     {
         return $this->rowCount;
     }

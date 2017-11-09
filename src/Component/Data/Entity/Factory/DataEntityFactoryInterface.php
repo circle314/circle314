@@ -11,14 +11,14 @@ interface DataEntityFactoryInterface
      *
      * @return DataEntityInterface
      */
-    public function declare() : DataEntityInterface;
+    public function declare();
 
     /**
      * Creates a new DataEntity with DataValueObjects populated only with default values
      *
      * @return DataEntityInterface
      */
-    public function declareDefault() : DataEntityInterface;
+    public function declareDefault();
 
     /**
      * Deserializes a DataEntity from a supplied Array
@@ -31,7 +31,7 @@ interface DataEntityFactoryInterface
      * @param array $array A supplied array in $key => $value format, which will map to DVO->fieldName() => DVO->typedValue()->getValue()
      * @return DataEntityInterface
      */
-    public function deserialize(Array $array = []) : DataEntityInterface;
+    public function deserialize(Array $array = []);
 
     /**
      * Initialises a DataEntity from a supplied Array
@@ -45,5 +45,5 @@ interface DataEntityFactoryInterface
      * @param bool $defaultFallback Whether missing values will be populated with default values (if they exist)
      * @return DataEntityInterface
      */
-    public function initialise(Array $array = [], $defaultFallback) : DataEntityInterface;
+    public function initialise(Array $array = [], $defaultFallback);
 }

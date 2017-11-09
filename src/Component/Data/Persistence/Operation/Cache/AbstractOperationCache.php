@@ -4,6 +4,7 @@ namespace Circle314\Component\Data\Persistence\Operation\Cache;
 
 use Circle314\Component\Collection\Native\NativeKeyedCollection;
 use Circle314\Component\Data\Accessor\AccessorInterface;
+use Circle314\Component\Data\Persistence\Operation\Cache\Collection\EndPointCollectionInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Strategy\OperationCachingStrategyInterface;
 use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
@@ -37,19 +38,19 @@ abstract class AbstractOperationCache implements OperationCacheInterface
     #endregion
 
     #region Public Methods
-    public function cacheResponse(ResponseInterface $response, CallInterface $call, AccessorInterface $accessor): void
+    public function cacheResponse(ResponseInterface $response, CallInterface $call, AccessorInterface $accessor)
     {
         $ID = $this->pseudoUniqueIdentifier($call->parameters());
         $this->query($call, $accessor)->saveResponse($ID, $response);
     }
 
-    public function cachedResponseExists(CallInterface $call, AccessorInterface $accessor): bool
+    public function cachedResponseExists(CallInterface $call, AccessorInterface $accessor)
     {
         $ID = $this->pseudoUniqueIdentifier($call->parameters());
         return $this->query($call, $accessor)->hasResponse($ID);
     }
 
-    public function endPoint(CallInterface $call, AccessorInterface $accessor): EndPointInterface
+    public function endPoint(CallInterface $call, AccessorInterface $accessor)
     {
         $ID = $call->endPoint();
         if(!$this->cache->hasID($ID)) {
@@ -58,13 +59,13 @@ abstract class AbstractOperationCache implements OperationCacheInterface
         return $this->cache->getID($ID);
     }
 
-    public function getCachedResponse(CallInterface $call, AccessorInterface $accessor): ResponseInterface
+    public function getCachedResponse(CallInterface $call, AccessorInterface $accessor)
     {
         $ID = $this->pseudoUniqueIdentifier($call->parameters());
         return $this->query($call, $accessor)->getResponse($ID);
     }
 
-    public function query(CallInterface $call, AccessorInterface $accessor): QueryInterface
+    public function query(CallInterface $call, AccessorInterface $accessor)
     {
         $ID = $this->pseudoUniqueIdentifier($call->query());
         if(!$this->endPoint($call, $accessor)->hasQuery($ID)) {
@@ -75,11 +76,20 @@ abstract class AbstractOperationCache implements OperationCacheInterface
     #endregion
 
     #region Protected Methods
+    /**
+     * @return EndPointCollectionInterface
+     */
     protected function cache()
     {
         return $this->cache;
     }
 
+    /**
+     * Generates a pseudo-unique identifier for a string/array/etc.
+     *
+     * @param mixed $input The input string/array/etc that will be encoded and hashed to produce a pseudo-unique identifier.
+     * @return string
+     */
     protected function pseudoUniqueIdentifier($input)
     {
         return $this->hashHandler->hash($this->encodingHandler->encode($input));

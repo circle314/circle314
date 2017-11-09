@@ -26,7 +26,7 @@ abstract class AbstractOperationRepository implements OperationRepositoryInterfa
     #endregion
 
     #region Public Methods
-    public function response(CallInterface $call, AccessorInterface $accessor): ?ResponseInterface
+    public function response(CallInterface $call, AccessorInterface $accessor)
     {
         $this->operationCache->invalidateDependantResponses($call, $accessor);
         if($this->operationCache->cachedResponseExists($call, $accessor)) {
@@ -40,6 +40,9 @@ abstract class AbstractOperationRepository implements OperationRepositoryInterfa
     #endregion
 
     #region Protected Methods
+    /**
+     * @return OperationCacheInterface
+     */
     protected function operationCache()
     {
         return $this->operationCache;
@@ -47,6 +50,13 @@ abstract class AbstractOperationRepository implements OperationRepositoryInterfa
     #endregion
 
     #region Abstract Methods
-    abstract protected function generateResponse(CallInterface $call, AccessorInterface $accessor): ResponseInterface;
+    /**
+     * A Response generated from a Call.
+     *
+     * @param CallInterface $call The Call that generates the Response.
+     * @param AccessorInterface $accessor The Accessor that the Call is made against.
+     * @return ResponseInterface
+     */
+    abstract protected function generateResponse(CallInterface $call, AccessorInterface $accessor);
     #endregion
 }

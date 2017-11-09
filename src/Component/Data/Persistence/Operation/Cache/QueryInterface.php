@@ -7,7 +7,27 @@ use Circle314\Concept\Identification\IdentifiableInterface;
 
 interface QueryInterface extends IdentifiableInterface
 {
-    public function hasResponse($responseID): bool;
-    public function getResponse($responseID): ResponseInterface;
-    public function saveResponse($responseID, $response): void;
+    /**
+     * Gets an existing Response for the Query.
+     *
+     * @param $responseID
+     * @return ResponseInterface
+     */
+    public function getResponse($responseID);
+
+    /**
+     * Whether or not there is an existing Response for the Query.
+     *
+     * @param $responseID
+     * @return bool
+     */
+    public function hasResponse($responseID);
+
+    /**
+     * Saves a Response against the Query.
+     *
+     * @param $responseID
+     * @param $response
+     */
+    public function saveResponse($responseID, $response);
 }

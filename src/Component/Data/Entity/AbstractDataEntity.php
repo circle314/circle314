@@ -33,17 +33,17 @@ abstract class AbstractDataEntity implements DataEntityInterface
     #endregion
 
     #region Public Methods
-    public function className() : string
+    public function className()
     {
         return static::class;
     }
 
-    final public function fields() : DVOCollectionInterface
+    final public function fields()
     {
         return $this->fields;
     }
 
-    final public function fieldsMarkedAsIdentifiers() : DVOCollectionInterface
+    final public function fieldsMarkedAsIdentifiers()
     {
         $fieldsMarkedForIdentification = $this->newDVOCollection();
         /** @var DVOInterface $field */
@@ -55,7 +55,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $fieldsMarkedForIdentification;
     }
 
-    final public function fieldsMarkedForOrdering() : DVOCollectionInterface
+    final public function fieldsMarkedForOrdering()
     {
         /** @var ArrayIterator $fieldsMarkedForOrdering */
         $fieldsMarkedForOrdering = $this->newDVOCollection();
@@ -73,7 +73,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $fieldsMarkedForOrdering;
     }
 
-    final public function fieldsMarkedForUpdate() : DVOCollectionInterface
+    final public function fieldsMarkedForUpdate()
     {
         $fieldsMarkedForUpdate = $this->newDVOCollection();
         /** @var DVOInterface $field */
@@ -85,7 +85,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $fieldsMarkedForUpdate;
     }
 
-    final public function markFieldsAsPersisted() : void
+    final public function markFieldsAsPersisted()
     {
         /** @var DVOInterface $field */
         foreach($this->fields as $field) {
@@ -95,14 +95,24 @@ abstract class AbstractDataEntity implements DataEntityInterface
     #endregion
 
     #region Protected Methods
-    final protected function configReadOnly() : DVOConfigurationInterface
+    /**
+     * Returns a native "read-only" DVOConfiguration object.
+     *
+     * @return DVOConfigurationInterface
+     */
+    final protected function configReadOnly()
     {
         $config = new NativeDVOConfiguration();
         $config->setReadable();
         return $config;
     }
 
-    final protected function newDVOCollection() : DVOCollectionInterface
+    /**
+     * Returns a native DVOCollection object.
+     *
+     * @return DVOCollectionInterface
+     */
+    final protected function newDVOCollection()
     {
         return new NativeDVOCollection();
     }

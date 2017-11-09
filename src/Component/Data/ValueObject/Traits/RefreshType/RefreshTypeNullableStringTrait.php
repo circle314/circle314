@@ -9,6 +9,12 @@ use Circle314\Component\Type\NullableStringType;
  */
 trait RefreshTypeNullableStringTrait
 {
+    /**
+     * A new NullableStringType.
+     *
+     * @param $value
+     * @return NullableStringType
+     */
     protected function refreshTypedValue($value)
     {
         return new NullableStringType($value);

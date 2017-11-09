@@ -4,11 +4,12 @@ namespace Circle314\Component\Data\Persistence\Operation\Database;
 
 use \PDOException;
 use \PDOStatement;
-use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 use Circle314\Component\Data\Accessor\AccessorInterface;
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
-use Circle314\Component\Data\Persistence\Operation\Repository\AbstractOperationRepository;
+use Circle314\Component\Data\Persistence\Operation\Cache\Database\DatabaseQueryInterface;
 use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
+use Circle314\Component\Data\Persistence\Operation\Response\Database\DatabaseResponseInterface;
+use Circle314\Component\Data\Persistence\Operation\Repository\AbstractOperationRepository;
 
 /**
  * Class AbstractDatabaseOperationMediator
@@ -17,7 +18,7 @@ use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 abstract class AbstractDatabaseOperationRepository extends AbstractOperationRepository
 {
     #region Public Methods
-    protected function generateResponse(CallInterface $call, AccessorInterface $accessor): ResponseInterface
+    protected function generateResponse(CallInterface $call, AccessorInterface $accessor)
     {
         /** @var DatabaseAccessorInterface $accessor */
         /** @var DatabaseQueryInterface $query */
@@ -56,8 +57,10 @@ abstract class AbstractDatabaseOperationRepository extends AbstractOperationRepo
 
     #region Abstract Methods
     /**
-     * @param PDOStatement $PDOStatement
-     * @return mixed
+     * Generates a new Response from a PDOStatement.
+     *
+     * @param PDOStatement $PDOStatement The PDOStatement that generates the Response.
+     * @return DatabaseResponseInterface
      */
     abstract protected function generateNewResponse(PDOStatement $PDOStatement);
     #endregion

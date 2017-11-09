@@ -10,7 +10,30 @@ use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 
 interface OperationCachingStrategyInterface
 {
-    public function newCache(): EndPointCollectionInterface;
-    public function newEndPoint($ID, CallInterface $call, AccessorInterface $accessor): EndPointInterface;
-    public function newQuery($ID, CallInterface $call, AccessorInterface $accessor): QueryInterface;
+    /**
+     * Creates a new cache.
+     *
+     * @return EndPointCollectionInterface
+     */
+    public function newCache();
+
+    /**
+     * Creates a new EndPoint for a Call.
+     *
+     * @param mixed $ID The identifier for the EndPoint.
+     * @param CallInterface $call The Call that generates the EndPoint.
+     * @param AccessorInterface $accessor The Accessor that the Call is made against.
+     * @return EndPointInterface
+     */
+    public function newEndPoint($ID, CallInterface $call, AccessorInterface $accessor);
+
+    /**
+     * Creates a new Query for a Call.
+     *
+     * @param mixed $ID The identifier for the Query.
+     * @param CallInterface $call The Call that generates the Query.
+     * @param AccessorInterface $accessor The Accessor that the Call is made against.
+     * @return QueryInterface
+     */
+    public function newQuery($ID, CallInterface $call, AccessorInterface $accessor);
 }

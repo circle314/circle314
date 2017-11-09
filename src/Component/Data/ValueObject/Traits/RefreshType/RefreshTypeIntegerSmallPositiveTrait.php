@@ -9,6 +9,11 @@ use Circle314\Component\Type\IntegerType;
  */
 trait RefreshTypeIntegerSmallPositiveTrait
 {
+    /**
+     * A new IntegerType, with minimum value 1 and maximum value 32767.
+     * @param $value
+     * @return IntegerType
+     */
     protected function refreshTypedValue($value)
     {
         return new IntegerType($value, 1, 32767);

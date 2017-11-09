@@ -1,15 +1,14 @@
 <?php
 
-namespace Circle314\Component\Data\Persistence\Operation\Database\Native;
+namespace Circle314\Component\Data\Persistence\Operation\Cache\Database\Native;
 
 use \PDOStatement;
-use Circle314\Component\Data\Accessor\AccessorInterface;
-use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
-use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
-use Circle314\Component\Data\Persistence\Operation\Database\DatabaseQueryInterface;
-use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\Native\NativeKeyedCollection;
+use Circle314\Component\Data\Accessor\AccessorInterface;
+use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
+use Circle314\Component\Data\Persistence\Operation\Cache\Database\DatabaseQueryInterface;
+use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 
 /**
  * Class AbstractDatabaseQueryBranchCollection
@@ -42,12 +41,12 @@ class NativeDatabaseQuery implements DatabaseQueryInterface
         $this->responseCollection = new NativeKeyedCollection();
     }
 
-    public function getResponse($ID): ResponseInterface
+    public function getResponse($ID)
     {
         return $this->responseCollection->getID($ID);
     }
 
-    public function hasResponse($ID): bool
+    public function hasResponse($ID)
     {
         return $this->responseCollection->hasID($ID);
     }
@@ -57,12 +56,12 @@ class NativeDatabaseQuery implements DatabaseQueryInterface
         return $this->ID;
     }
 
-    public function PDOStatement() : PDOStatement
+    public function PDOStatement()
     {
         return $this->PDOStatement;
     }
 
-    public function saveResponse($ID, $response): void
+    public function saveResponse($ID, $response)
     {
         $this->responseCollection->saveID($ID, $response);
     }

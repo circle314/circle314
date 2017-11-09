@@ -9,6 +9,12 @@ use Circle314\Component\Type\IntegerType;
  */
 trait RefreshTypeIntegerTrait
 {
+    /**
+     * A new IntegerType.
+     *
+     * @param $value
+     * @return IntegerType
+     */
     protected function refreshTypedValue($value)
     {
         return new IntegerType($value);

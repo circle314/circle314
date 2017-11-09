@@ -56,7 +56,7 @@ abstract class AbstractDVO implements DVOInterface
     /**
      * @throws TypeValidationException
      */
-    final public function applyDefaultValue() : void
+    final public function applyDefaultValue()
     {
         if(!$this->hasDefaultValue()) {
             throw new TypeValidationException('Could not set default value, as "' . $this->fieldName() . '" does not have a default value');
@@ -66,7 +66,7 @@ abstract class AbstractDVO implements DVOInterface
         }
     }
 
-    public function fieldName() : string
+    public function fieldName()
     {
         return $this->fieldName;
     }
@@ -80,10 +80,7 @@ abstract class AbstractDVO implements DVOInterface
         }
     }
 
-    /**
-     * @return bool
-     */
-    final public function hasDefaultValue() : bool
+    final public function hasDefaultValue(): bool
     {
         return ($this->getDefaultValue() !== NullConstants::NO_DEFAULT_VALUE);
     }
@@ -91,7 +88,7 @@ abstract class AbstractDVO implements DVOInterface
     /**
      * @return string
      */
-    final public function ID() : string
+    final public function ID()
     {
         return $this->fieldName();
     }
@@ -99,16 +96,16 @@ abstract class AbstractDVO implements DVOInterface
     /**
      * @return TypeInterface
      */
-    final public function identifiedValue() : TypeInterface
+    final public function identifiedValue()
     {
         return $this->identifiedValue;
     }
 
     /**
-     * @param $value mixed
-     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws TypeValidationException
+     * @inheritdoc
      */
-    final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER) : void
+    final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER): void
     {
         try {
             if($value === NullConstants::NON_EXISTENT_PARAMETER) {
@@ -122,50 +119,32 @@ abstract class AbstractDVO implements DVOInterface
         }
     }
 
-    /**
-     * @return bool
-     */
-    final public function isMarkedAsIdentifier() : bool
+    final public function isMarkedAsIdentifier(): bool
     {
         return $this->markedAsIdentifier;
     }
 
-    /**
-     * @return bool
-     */
-    final public function isMarkedForOrdering() : bool
+    final public function isMarkedForOrdering(): bool
     {
         return $this->markedAsOrdering;
     }
 
-    /**
-     * @return bool
-     */
-    final public function isMarkedAsUpdated() : bool
+    final public function isMarkedAsUpdated(): bool
     {
         return $this->markedAsUpdated;
     }
 
-    /**
-     * @return bool
-     */
-    public function isReadable() : bool
+    public function isReadable(): bool
     {
         return $this->configuration->isReadable();
     }
 
-    /**
-     * @return bool
-     */
-    public function isWriteable() : bool
+    public function isWriteable(): bool
     {
         return $this->configuration->isWriteable();
     }
 
-    /**
-     * @return void
-     */
-    final public function markAsPersisted() : void
+    final public function markAsPersisted()
     {
         $this->unmarkAsIdentifier();
         $this->unmarkAsOrdering();
@@ -173,11 +152,10 @@ abstract class AbstractDVO implements DVOInterface
     }
 
     /**
-     * @param string $orderingDirection
-     * @param int $orderingPriority
      * @throws DVOOrderingException
+     * @inheritdoc
      */
-    final public function orderByValue($orderingDirection = OrderingConstants::ASCENDING, $orderingPriority = 1) : void
+    final public function orderByValue($orderingDirection = OrderingConstants::ASCENDING, $orderingPriority = 1): void
     {
         if(
             $orderingDirection !== OrderingConstants::ASCENDING
@@ -191,26 +169,21 @@ abstract class AbstractDVO implements DVOInterface
         $this->markAsOrdering($orderingPriority);
     }
 
-    final public function orderingDirection() : string
+    final public function orderingDirection(): string
     {
         return $this->orderingDirection;
     }
 
-    /**
-     * Returns the TypeInterface object that holds the value of this DVO.
-     *
-     * @return TypeInterface
-     */
-    public function typedValue() : TypeInterface
+    public function typedValue()
     {
         return $this->value;
     }
 
     /**
-     * @param $value mixed
      * @throws TypeValidationException
+     * @inheritdoc
      */
-    final public function setValue($value) : void
+    final public function setValue($value)
     {
         try {
             $this->value = $this->refreshTypedValue($value);
@@ -221,11 +194,10 @@ abstract class AbstractDVO implements DVOInterface
     }
 
     /**
-     * @param array $array
-     * @param bool $defaultFallback
      * @throws TypeValidationException
+     * @inheritdoc
      */
-    final public function setValueFromArray(Array $array, $defaultFallback = false) : void
+    final public function setValueFromArray(Array $array, $defaultFallback = false)
     {
         if(array_key_exists($this->fieldName(), $array)) {
             $this->setValue($array[$this->fieldName()]);
@@ -234,10 +206,7 @@ abstract class AbstractDVO implements DVOInterface
         }
     }
 
-    /**
-     * @param KeyedCollectionInterface $collection
-     */
-    final public function setValueFromKeyedCollection(KeyedCollectionInterface $collection) : void
+    final public function setValueFromKeyedCollection(KeyedCollectionInterface $collection)
     {
         if($collection->hasID($this->fieldName())) {
             $this->setValue($collection->getID($this->fieldName()));
@@ -248,32 +217,52 @@ abstract class AbstractDVO implements DVOInterface
     #endregion
 
     #region Protected Methods
-    final protected function markAsIdentifier() : void
+    /**
+     * Flags the field as an identifier.
+     */
+    final protected function markAsIdentifier(): void
     {
         $this->markedAsIdentifier = true;
     }
 
-    final protected function markAsOrdering($orderingPriority) : void
+    /**
+     * Flags the field as an ordering field, with a given priority.
+     *
+     * @param int $orderingPriority The priority in which this ordering will be applied, given there may be ordering from other fields in the downstream query.
+     */
+    final protected function markAsOrdering($orderingPriority): void
     {
         $this->markedAsOrdering = $orderingPriority;
     }
 
-    final protected function markAsUpdated() : void
+    /**
+     * Flags the field as having been updated.
+     */
+    final protected function markAsUpdated(): void
     {
         $this->markedAsUpdated = true;
     }
 
-    final protected function unmarkAsIdentifier() : void
+    /**
+     * Removes the identifier flag from the field.
+     */
+    final protected function unmarkAsIdentifier(): void
     {
         $this->markedAsIdentifier = false;
     }
 
-    final protected function unmarkAsOrdering() : void
+    /**
+     * Removes the ordering flag from the field.
+     */
+    final protected function unmarkAsOrdering(): void
     {
         $this->markedAsOrdering = false;
     }
 
-    final protected function unmarkAsUpdated() : void
+    /**
+     * Removes the updated flag from the field.
+     */
+    final protected function unmarkAsUpdated(): void
     {
         $this->markedAsUpdated = false;
     }
@@ -281,11 +270,19 @@ abstract class AbstractDVO implements DVOInterface
 
     #region Abstract Methods
     abstract public function getDefaultValue();
+
+    /**
+     * Refreshes the typed value with the new value.
+     *
+     * @param mixed $value The new value.
+     */
     abstract protected function refreshTypedValue($value);
     #endregion
 
+    #region Magic Methods
     public function __toString()
     {
         return (string)$this->getValue();
     }
+    #endregion
 }

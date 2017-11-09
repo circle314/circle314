@@ -9,6 +9,12 @@ use Circle314\Component\Type\NumericType;
  */
 trait RefreshTypeDecimalTrait
 {
+    /**
+     * A new NumericType.
+     *
+     * @param $value
+     * @return NumericType
+     */
     protected function refreshTypedValue($value)
     {
         return new NumericType($value);

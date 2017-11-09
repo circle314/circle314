@@ -5,7 +5,7 @@ namespace Circle314\Component\Data\Operation\Database;
 use \PDOStatement;
 use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\CollectionItemInterface;
-use Circle314\Component\Data\Persistence\Operation\Database\DatabaseQueryInterface;
+use Circle314\Component\Data\Persistence\Operation\Cache\Database\DatabaseQueryInterface;
 
 /**
  * Interface DatabaseQueryBranchInterface

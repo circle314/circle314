@@ -1,6 +1,6 @@
 <?php
 
-namespace Circle314\Component\Data\Persistence\Operation\Database\Native;
+namespace Circle314\Component\Data\Persistence\Operation\Repository\Database\Native;
 
 use \PDOStatement;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeDatabaseResponse;
@@ -9,10 +9,6 @@ use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseOper
 class NativeDatabaseOperationRepository extends AbstractDatabaseOperationRepository
 {
     #region Protected Methods
-    /**
-     * @param PDOStatement $PDOStatement
-     * @return NativeDatabaseResponse
-     */
     protected function generateNewResponse(PDOStatement $PDOStatement)
     {
         return new NativeDatabaseResponse($PDOStatement);

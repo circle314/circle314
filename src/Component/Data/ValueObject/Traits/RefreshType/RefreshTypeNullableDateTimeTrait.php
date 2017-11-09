@@ -9,6 +9,12 @@ use Circle314\Component\Type\NullableDateTimeType;
  */
 trait RefreshTypeNullableDateTimeTrait
 {
+    /**
+     * A new NullableDateTimeType.
+     *
+     * @param $value
+     * @return NullableDateTimeType
+     */
     protected function refreshTypedValue($value)
     {
         return new NullableDateTimeType($value);

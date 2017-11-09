@@ -38,7 +38,6 @@ interface TransitionalDVOInterface
 
     /**
      * @param $value
-     * @return $this
      */
     public function identifyValue($value);
 
@@ -84,14 +83,12 @@ interface TransitionalDVOInterface
 
     /**
      * @param $value mixed
-     * @return $this
      * @throws \Circle314\Component\Type\Exception\TypeValidationException
      */
     public function setValue($value);
 
     /**
      * @param array $array
-     * @return $this
      * @throws \Circle314\Component\Type\Exception\TypeValidationException
      */
     public function setValueFromArray(Array $array);

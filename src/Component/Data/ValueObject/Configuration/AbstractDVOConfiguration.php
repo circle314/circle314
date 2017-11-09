@@ -11,32 +11,32 @@ abstract class AbstractDVOConfiguration implements DVOConfigurationInterface
     #endregion
 
     #region
-    public function isReadable()
+    public function isReadable(): bool
     {
         return $this->readWriteFlags & PersistenceConstants::BIT_READ;
     }
 
-    public function isWriteable()
+    public function isWriteable(): bool
     {
         return $this->readWriteFlags & PersistenceConstants::BIT_WRITE;
     }
 
-    public function setReadable()
+    public function setReadable(): void
     {
         $this->readWriteFlags |= PersistenceConstants::BIT_READ;
     }
 
-    public function setWriteable()
+    public function setWriteable(): void
     {
         $this->readWriteFlags |= PersistenceConstants::BIT_WRITE;
     }
 
-    public function unsetReadable()
+    public function unsetReadable(): void
     {
         $this->readWriteFlags ^= PersistenceConstants::BIT_READ;
     }
 
-    public function unsetWriteable()
+    public function unsetWriteable(): void
     {
         $this->readWriteFlags ^= PersistenceConstants::BIT_WRITE;
     }

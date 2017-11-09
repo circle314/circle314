@@ -9,6 +9,12 @@ use Circle314\Component\Type\DateTimeType;
  */
 trait RefreshTypeDateTimeTrait
 {
+    /**
+     * A new DateTimeType.
+     *
+     * @param $value
+     * @return DateTimeType
+     */
     protected function refreshTypedValue($value)
     {
         return new DateTimeType($value);

@@ -2,8 +2,6 @@
 
 namespace Circle314\Component\Data\Persistence\Operation\Call;
 
-use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
-
 class AbstractCall implements CallInterface
 {
     #region Private variables
@@ -33,7 +31,17 @@ class AbstractCall implements CallInterface
     #endregion
 
     #region Public Methods
-    public function parameters() : DVOCollectionInterface
+    public function endPoint()
+    {
+        return $this->targetEndPoint;
+    }
+
+    public function environment()
+    {
+        return $this->targetEnvironment;
+    }
+
+    public function parameters()
     {
         return $this->parameters;
     }
@@ -41,16 +49,6 @@ class AbstractCall implements CallInterface
     public function query()
     {
         return $this->query;
-    }
-
-    public function endPoint(): string
-    {
-        return $this->targetEndPoint;
-    }
-
-    public function environment(): string
-    {
-        return $this->targetEnvironment;
     }
     #endregion
 }

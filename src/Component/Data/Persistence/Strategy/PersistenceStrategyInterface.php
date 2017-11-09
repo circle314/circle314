@@ -7,8 +7,35 @@ use Circle314\Transitional\TransitionalDataEntityInterface;
 
 interface PersistenceStrategyInterface
 {
-    public function delete(TransitionalDataEntityInterface $dataEntity) : ResponseInterface;
-    public function get(TransitionalDataEntityInterface $dataEntity): ?ResponseInterface;
-    public function isLessVolatileThan($volatility) : bool;
-    public function save(TransitionalDataEntityInterface $dataEntity) : ResponseInterface;
+    /**
+     * Deletes a DataEntity from the persistence mechanism.
+     *
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @return ResponseInterface
+     */
+    public function delete(TransitionalDataEntityInterface $dataEntity);
+
+    /**
+     * Gets a DataEntity from the persistence mechanism.
+     *
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @return ResponseInterface|null
+     */
+    public function get(TransitionalDataEntityInterface $dataEntity);
+
+    /**
+     * Checks whether the persistence strategy is less volatile than the supplied volatility value.
+     *
+     * @param $volatility
+     * @return bool
+     */
+    public function isLessVolatileThan($volatility);
+
+    /**
+     * Saves the DataEntity to the persistence mechanism.
+     *
+     * @param TransitionalDataEntityInterface $dataEntity
+     * @return ResponseInterface
+     */
+    public function save(TransitionalDataEntityInterface $dataEntity);
 }

@@ -7,17 +7,17 @@ use Circle314\Component\Data\Entity\DataEntityInterface;
 abstract class AbstractDataEntityFactory implements DataEntityFactoryInterface
 {
     #region Public Methods
-    public function declare(): DataEntityInterface
+    public function declare()
     {
         return $this->initialise([], false);
     }
 
-    public function declareDefault(): DataEntityInterface
+    public function declareDefault()
     {
         return $this->initialise([], true);
     }
 
-    public function deserialize(Array $array = []): DataEntityInterface
+    public function deserialize(Array $array = [])
     {
         $dataEntity = $this->newDataEntity();
         foreach($dataEntity->fields() as $dataValueObject) {
@@ -27,7 +27,7 @@ abstract class AbstractDataEntityFactory implements DataEntityFactoryInterface
         return $dataEntity;
     }
 
-    public function initialise(Array $array = [], $defaultFallback = true): DataEntityInterface
+    public function initialise(Array $array = [], $defaultFallback = true)
     {
         $dataEntity = $this->newDataEntity();
         foreach($dataEntity->fields() as $dataValueObject) {
@@ -40,6 +40,9 @@ abstract class AbstractDataEntityFactory implements DataEntityFactoryInterface
     #endregion
 
     #region Abstract Methods
-    abstract protected function newDataEntity() : DataEntityInterface;
+    /**
+     * @return DataEntityInterface
+     */
+    abstract protected function newDataEntity();
     #endregion
 }

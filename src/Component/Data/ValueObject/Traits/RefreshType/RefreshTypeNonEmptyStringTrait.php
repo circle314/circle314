@@ -9,6 +9,12 @@ use Circle314\Component\Type\NonEmptyStringType;
  */
 trait RefreshTypeNonEmptyStringTrait
 {
+    /**
+     * A new NonEmptyStringType.
+     *
+     * @param $value
+     * @return NonEmptyStringType
+     */
     protected function refreshTypedValue($value)
     {
         return new NonEmptyStringType($value);

@@ -7,15 +7,86 @@ use Circle314\Component\Data\Entity\DataEntityInterface;
 
 interface DataEntityRepositoryInterface
 {
-    public function createBlank() : DataEntityInterface;
-    public function createDefault() : DataEntityInterface;
-    public function createFromArray(Array $array = [], $defaultFallback = true) : DataEntityInterface;
-    public function delete(DataEntityInterface $dataEntity) : void;
-    public function forget(DataEntityInterface $dataEntity) : void;
-    public function new(DataEntityInterface $dataEntity) : DataEntityInterface;
-    public function retrieveID($ID) : DataEntityInterface;
-    public function retrieve(DataEntityInterface $dataEntity): ?DataEntityInterface;
-    public function retrieveCollection(DataEntityInterface $dataEntityCollection) : DataEntityCollectionInterface;
-    public function save(DataEntityInterface $dataEntity) : void;
-    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection) : void;
+    /**
+     * Creates a new unpopulated DataEntity.
+     *
+     * @return DataEntityInterface
+     */
+    public function createBlank();
+
+    /**
+     * Creates a new DataEntity populated only with default values.
+     *
+     * @return DataEntityInterface
+     */
+    public function createDefault();
+
+    /**
+     * Creates a new DataEntity populated by values from an array and, optionally, with default values as a fallback.
+     *
+     * @param array $array The array of field values to be populated in $key => $value format
+     * @param bool $defaultFallback Whether or not to use default values as a fallback
+     * @return DataEntityInterface
+     */
+    public function createFromArray(Array $array = [], $defaultFallback = true);
+
+    /**
+     * Removes a DataEntity from both the repository and the persistence mechanism
+     *
+     * @param DataEntityInterface $dataEntity
+     */
+    public function delete(DataEntityInterface $dataEntity);
+
+    /**
+     * Removes a DataEntity from the repository, but not the persistence mechanism.
+     *
+     * @param DataEntityInterface $dataEntity
+     */
+    public function forget(DataEntityInterface $dataEntity);
+
+    /**
+     * Adds an existing DataEntity to the repository.
+     *
+     * @param DataEntityInterface $dataEntity
+     * @return DataEntityInterface
+     */
+    public function new(DataEntityInterface $dataEntity);
+
+    /**
+     * Retrieves a DataEntity matching the ID.
+     *
+     * @param $ID
+     * @return DataEntityInterface|null
+     */
+    public function retrieveID($ID);
+
+    /**
+     * Retrieves a single DataEntity matching the supplied DataEntity.
+     *
+     * @param DataEntityInterface $dataEntity
+     * @return DataEntityInterface|null
+     */
+    public function retrieve(DataEntityInterface $dataEntity);
+
+    /**
+     * Retrieves a DataEntityCollection matching the supplied DataEntity.
+     *
+     * @param DataEntityInterface $dataEntityCollection
+     * @return DataEntityCollectionInterface
+     */
+    public function retrieveCollection(DataEntityInterface $dataEntityCollection);
+
+    /**
+     * Saves a DataEntity.
+     *
+     * @param DataEntityInterface $dataEntity
+     */
+    public function save(DataEntityInterface $dataEntity);
+
+    /**
+     * Saves a DataEntityCollection.
+     *
+     * @param DataEntityCollectionInterface $dataEntityCollection
+     */
+    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection);
 }

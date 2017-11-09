@@ -2,10 +2,9 @@
 
 namespace Circle314\Component\Data\Persistence\Operation\Cache\Native;
 
-use Circle314\Component\Data\Persistence\Operation\Cache\Collection\QueryCollectionInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Collection\Native\NativeQueryCollection;
+use Circle314\Component\Data\Persistence\Operation\Cache\Collection\QueryCollectionInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\QueryInterface;
-use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 
 class NativeQuery implements QueryInterface
 {
@@ -26,20 +25,12 @@ class NativeQuery implements QueryInterface
     #endregion
 
     #region Public Methods
-    /**
-     * @param $responseID
-     * @return ResponseInterface
-     */
-    public function getResponse($responseID): ResponseInterface
+    public function getResponse($responseID)
     {
         return $this->responseCollection->getID($responseID);
     }
 
-    /**
-     * @param $responseID
-     * @return bool
-     */
-    public function hasResponse($responseID): bool
+    public function hasResponse($responseID)
     {
         return $this->responseCollection->hasID($responseID);
     }
@@ -49,11 +40,7 @@ class NativeQuery implements QueryInterface
         return $this->ID;
     }
 
-    /**
-     * @param $responseID
-     * @param $response
-     */
-    public function saveResponse($responseID, $response): void
+    public function saveResponse($responseID, $response)
     {
         $this->responseCollection->saveID($responseID, $response);
     }

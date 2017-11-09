@@ -9,6 +9,12 @@ use Circle314\Component\Type\StringType;
  */
 trait RefreshTypeStringTrait
 {
+    /**
+     * A new StringType.
+     *
+     * @param $value
+     * @return StringType
+     */
     protected function refreshTypedValue($value)
     {
         return new StringType($value);

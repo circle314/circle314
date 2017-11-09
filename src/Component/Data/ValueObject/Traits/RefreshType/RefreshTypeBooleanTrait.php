@@ -9,6 +9,12 @@ use Circle314\Component\Type\BooleanType;
  */
 trait RefreshTypeBooleanTrait
 {
+    /**
+     * A new BooleanType.
+     *
+     * @param $value
+     * @return BooleanType
+     */
     protected function refreshTypedValue($value)
     {
         return new BooleanType($value);

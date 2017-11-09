@@ -6,8 +6,28 @@ use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 
 interface DatabaseResponseInterface extends ResponseInterface
 {
-    public function columnCount() : int;
-    public function errorCode() : string;
-    public function errorInfo() : array;
-    public function rowCount() : int;
+    /**
+     * The column count of the DatabaseResponse.
+     *
+     * @return int
+     */
+    public function columnCount();
+
+    /**
+     * The error code (if any) from the DatabaseResponse.
+     * @return string
+     */
+    public function errorCode();
+
+    /**
+     * The error info (if any) from the DatabaseResponse.
+     * @return array
+     */
+    public function errorInfo();
+
+    /**
+     * The row count of the DatabaseResponse.
+     * @return int
+     */
+    public function rowCount();
 }

@@ -2,9 +2,9 @@
 
 namespace Circle314\Component\Data\Persistence\Strategy\Database;
 
-use Circle314\Component\Data\Persistence\Operation\Call\Native\NativeCall;
-use Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface;
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
+use Circle314\Component\Data\Operation\Response\Database\DatabaseResponseInterface;
+use Circle314\Component\Data\Persistence\Operation\Call\Native\NativeCall;
 use Circle314\Component\Data\Persistence\Strategy\AbstractPersistenceStrategy;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
@@ -19,7 +19,12 @@ use Circle314\Transitional\TransitionalDataEntityInterface;
 abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceStrategy
 {
     #region Public Methods
-    final public function delete(TransitionalDataEntityInterface $dataEntity) : ResponseInterface
+    /**
+     * @return DatabaseResponseInterface
+     * @throws IllegalDeleteOperationException
+     * @inheritdoc
+     */
+    final public function delete(TransitionalDataEntityInterface $dataEntity)
     {
         if(!$this->deleteOperationsEnabled()) {
             throw new IllegalDeleteOperationException('SQL delete operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
@@ -36,7 +41,12 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
         return $this->operationRepository()->response($call, $accessor);
     }
 
-    final public function get(TransitionalDataEntityInterface $dataEntity): ?ResponseInterface
+    /**
+     * @return DatabaseResponseInterface
+     * @throws IllegalDeleteOperationException
+     * @inheritdoc
+     */
+    final public function get(TransitionalDataEntityInterface $dataEntity)
     {
         if(!$this->selectOperationsEnabled()) {
             throw new IllegalSelectOperationException('SQL select operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
@@ -53,7 +63,12 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
         return $this->operationRepository()->response($call, $accessor);
     }
 
-    final public function save(TransitionalDataEntityInterface $dataEntity) : ResponseInterface
+    /**
+     * @return DatabaseResponseInterface
+     * @throws IllegalDeleteOperationException
+     * @inheritdoc
+     */
+    final public function save(TransitionalDataEntityInterface $dataEntity)
     {
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
@@ -85,9 +100,32 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
     #endregion
 
     #region Abstract Methods
+    /**
+     * The source schema used in select operations.
+     *
+     * @return null|string
+     */
     abstract protected function sourceSchema(): ?string;
+
+    /**
+     * The source table used in select operations.
+     *
+     * @return null|string
+     */
     abstract protected function sourceTable(): ?string;
+
+    /**
+     * The target schema used in delete, insert, and update operations.
+     *
+     * @return null|string
+     */
     abstract protected function targetSchema(): ?string;
+
+    /**
+     * The target table used in delete, insert, and update operations.
+     *
+     * @return null|string
+     */
     abstract protected function targetTable(): ?string;
     #endregion
 }
