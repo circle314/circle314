@@ -4,7 +4,7 @@ namespace Circle314\Component\Data\Persistence\Operation\Repository\Database\Nat
 
 use \PDOStatement;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeDatabaseResponse;
-use Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseOperationRepository;
+use Circle314\Component\Data\Persistence\Operation\Repository\Database\AbstractDatabaseOperationRepository;
 
 class NativeDatabaseOperationRepository extends AbstractDatabaseOperationRepository
 {

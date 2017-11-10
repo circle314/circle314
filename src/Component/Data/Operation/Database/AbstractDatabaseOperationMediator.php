@@ -17,7 +17,7 @@ use Circle314\Component\Data\Operation\Response\Database\DatabaseResponseInterfa
  * @package Circle314\Component\Data\Operation\Database
  * @method DatabaseQueryBranchInterface getQueryBranch(CallInterface $call)
  * @deprecated 0.6
- * @see \Circle314\Component\Data\Persistence\Operation\Database\AbstractDatabaseOperationRepository
+ * @see \Circle314\Component\Data\Persistence\Operation\Repository\Database\AbstractDatabaseOperationRepository
  */
 abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediator
 {

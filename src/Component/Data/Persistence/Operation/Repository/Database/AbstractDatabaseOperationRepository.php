@@ -1,6 +1,6 @@
 <?php
 
-namespace Circle314\Component\Data\Persistence\Operation\Database;
+namespace Circle314\Component\Data\Persistence\Operation\Repository\Database;
 
 use \PDOException;
 use \PDOStatement;
