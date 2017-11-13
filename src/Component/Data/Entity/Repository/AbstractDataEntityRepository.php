@@ -143,8 +143,9 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
 
     public function save(DataEntityInterface $dataEntity)
     {
-        $this->persistenceStrategy->save($dataEntity);
-        $dataEntity->markFieldsAsPersisted();
+        $response = $this->persistenceStrategy->save($dataEntity);
+        $this->factory()->deserialize($response->result()[0], $dataEntity);
+        $this->cache()->saveID($dataEntity->ID(), $dataEntity);
     }
 
     public function saveCollection(DataEntityCollectionInterface $dataEntityCollection)

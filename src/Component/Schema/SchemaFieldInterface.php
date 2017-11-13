@@ -96,10 +96,11 @@ interface SchemaFieldInterface extends KeyedCollectionItemInterface, ValueHandle
 
     /**
      * @param array $array
+     * @param bool $defaultFallback
      * @return $this
      * @throws \Circle314\Component\Type\Exception\TypeValidationException
      */
-    public function setValueFromArray(Array $array);
+    public function setValueFromArray(Array $array, $defaultFallback = false);
 
     /**
      * @return TypeInterface

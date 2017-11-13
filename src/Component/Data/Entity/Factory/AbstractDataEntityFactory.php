@@ -17,9 +17,9 @@ abstract class AbstractDataEntityFactory implements DataEntityFactoryInterface
         return $this->initialise([], true);
     }
 
-    public function deserialize(Array $array = [])
+    public function deserialize(Array $array = [], ?DataEntityInterface $dataEntity = null)
     {
-        $dataEntity = $this->newDataEntity();
+        $dataEntity = $dataEntity ?? $this->newDataEntity();
         foreach($dataEntity->fields() as $dataValueObject) {
             $dataValueObject->setValueFromArray($array);
         }
@@ -32,7 +32,7 @@ abstract class AbstractDataEntityFactory implements DataEntityFactoryInterface
         $dataEntity = $this->newDataEntity();
         foreach($dataEntity->fields() as $dataValueObject) {
             if($dataValueObject->isWriteable()) {
-                $dataValueObject->setValueFromArray($array);
+                $dataValueObject->setValueFromArray($array, $defaultFallback);
             }
         }
         return $dataEntity;

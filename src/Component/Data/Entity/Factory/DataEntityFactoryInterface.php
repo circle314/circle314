@@ -29,9 +29,10 @@ interface DataEntityFactoryInterface
      * * After hydration, all values are marked as persisted
      *
      * @param array $array A supplied array in $key => $value format, which will map to DVO->fieldName() => DVO->typedValue()->getValue()
+     * @param null|DataEntityInterface $dataEntity The DataEntity to deserialize the array into. If no DataEntity is supplied, the factory will declare a new one.
      * @return DataEntityInterface
      */
-    public function deserialize(Array $array = []);
+    public function deserialize(Array $array = [], ?DataEntityInterface $dataEntity = null);
 
     /**
      * Initialises a DataEntity from a supplied Array

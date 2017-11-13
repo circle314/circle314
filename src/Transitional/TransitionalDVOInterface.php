@@ -89,9 +89,10 @@ interface TransitionalDVOInterface
 
     /**
      * @param array $array
+     * @param bool $defaultFallback
      * @throws \Circle314\Component\Type\Exception\TypeValidationException
      */
-    public function setValueFromArray(Array $array);
+    public function setValueFromArray(Array $array, $defaultFallback = false);
 
     /**
      * @return TypeInterface

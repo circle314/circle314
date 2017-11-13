@@ -234,10 +234,11 @@ abstract class AbstractSchemaField implements SchemaFieldInterface
 
     /**
      * @param array $array
+     * @param bool $defaultFallback
      * @return $this
      * @throws TypeValidationException
      */
-    final public function setValueFromArray(Array $array)
+    final public function setValueFromArray(Array $array, $defaultFallback = false)
     {
         if(array_key_exists($this->fieldName(), $array)) {
             $this->setValue($array[$this->fieldName()]);
