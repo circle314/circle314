@@ -71,10 +71,10 @@ interface DataEntityRepositoryInterface
     /**
      * Retrieves a DataEntityCollection matching the supplied DataEntity.
      *
-     * @param DataEntityInterface $dataEntityCollection
+     * @param DataEntityInterface $dataEntity
      * @return DataEntityCollectionInterface
      */
-    public function retrieveCollection(DataEntityInterface $dataEntityCollection);
+    public function retrieveCollection(DataEntityInterface $dataEntity);
 
     /**
      * Saves a DataEntity.
