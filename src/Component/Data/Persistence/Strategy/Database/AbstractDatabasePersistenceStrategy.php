@@ -78,8 +78,8 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
             }
             $call = new NativeCall(
                 $accessor->ID(),
-                $this->sourceSchema() . '.' . $this->sourceTable(),
-                $accessor->generateUpdateQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
+                $this->targetSchema() . '.' . $this->targetTable(),
+                $accessor->generateUpdateQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
                 $accessor->generateParameters($dataEntity)
             );
         } else {
@@ -88,8 +88,8 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
             }
             $call = new NativeCall(
                 $accessor->ID(),
-                $this->sourceSchema() . '.' . $this->sourceTable(),
-                $accessor->generateInsertQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
+                $this->targetSchema() . '.' . $this->targetTable(),
+                $accessor->generateInsertQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
                 $accessor->generateParameters($dataEntity)
             );
         }
