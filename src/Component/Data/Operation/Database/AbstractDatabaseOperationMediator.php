@@ -45,14 +45,14 @@ abstract class AbstractDatabaseOperationMediator extends AbstractOperationMediat
             foreach($call->getParameters() as $parameter) {
                 if($parameter->isMarkedAsIdentifier()) {
                     $PDOStatement->bindValue(
-                        $call->getAccessor()->configuration()->insertParameterPrefix() . $parameter->fieldName(),
+                        $call->getAccessor()->configuration()->identifierParameterPrefix() . $parameter->fieldName(),
                         $call->getAccessor()->getPDOParamValue($parameter->identifiedValue()),
                         $call->getAccessor()->getPDOParamType($parameter->identifiedValue())
                     );
                 }
                 if($parameter->isMarkedAsUpdated()) {
                     $PDOStatement->bindValue(
-                        $call->getAccessor()->configuration()->updateParameterPrefix() . $parameter->fieldName(),
+                        $call->getAccessor()->configuration()->writeParameterPrefix() . $parameter->fieldName(),
                         $call->getAccessor()->getPDOParamValue($parameter->typedValue()),
                         $call->getAccessor()->getPDOParamType($parameter->typedValue())
                     );

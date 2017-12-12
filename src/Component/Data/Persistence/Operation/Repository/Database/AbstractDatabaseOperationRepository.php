@@ -29,14 +29,14 @@ abstract class AbstractDatabaseOperationRepository extends AbstractOperationRepo
         foreach($call->parameters() as $parameter) {
             if($parameter->isMarkedAsIdentifier()) {
                 $PDOStatement->bindValue(
-                    $accessor->configuration()->insertParameterPrefix() . $parameter->fieldName(),
+                    $accessor->configuration()->identifierParameterPrefix() . $parameter->fieldName(),
                     $accessor->getPDOParamValue($parameter->identifiedValue()),
                     $accessor->getPDOParamType($parameter->identifiedValue())
                 );
             }
             if($parameter->isMarkedAsUpdated()) {
                 $PDOStatement->bindValue(
-                    $accessor->configuration()->updateParameterPrefix() . $parameter->fieldName(),
+                    $accessor->configuration()->writeParameterPrefix() . $parameter->fieldName(),
                     $accessor->getPDOParamValue($parameter->typedValue()),
                     $accessor->getPDOParamType($parameter->typedValue())
                 );

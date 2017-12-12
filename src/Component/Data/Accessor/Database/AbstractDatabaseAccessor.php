@@ -102,11 +102,11 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
         $parameters = new NativeDVOCollection();
         foreach ($dataEntity->fieldsMarkedAsIdentifiers() as $column) {
             if(!is_null($column->identifiedValue()->getValue())) {
-                $parameters->saveID($this->configuration()->insertParameterPrefix() . $column->fieldName(), $column);
+                $parameters->saveID($this->configuration()->identifierParameterPrefix() . $column->fieldName(), $column);
             }
         }
         foreach ($dataEntity->fieldsMarkedForUpdate() as $column) {
-            $parameters->saveID($this->configuration()->updateParameterPrefix() . $column->fieldName(), $column);
+            $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column);
         }
         return $parameters;
     }
@@ -312,7 +312,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
                         ? ' IS NULL'
                         : (
                             '='
-                            . $this->configuration()->insertParameterPrefix()
+                            . $this->configuration()->identifierParameterPrefix()
                             . $column->fieldName()
                         )
                     )

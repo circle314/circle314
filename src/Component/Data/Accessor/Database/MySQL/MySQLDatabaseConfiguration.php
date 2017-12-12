@@ -19,9 +19,9 @@ class MySQLDatabaseConfiguration extends AbstractDatabaseConfiguration
         return '`';
     }
 
-    final public function insertParameterPrefix()
+    final public function identifierParameterPrefix()
     {
-        return ':i_';
+        return ':id_';
     }
 
     /**
@@ -39,9 +39,9 @@ class MySQLDatabaseConfiguration extends AbstractDatabaseConfiguration
         return false;
     }
 
-    final public function updateParameterPrefix()
+    final public function writeParameterPrefix()
     {
-        return ':u_';
+        return ':wr_';
     }
     #endregion
 }

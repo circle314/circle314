@@ -97,6 +97,13 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $retrievedDataEntity;
     }
 
+    /**
+     * @param DataEntityInterface $dataEntity
+     * @return DataEntityCollectionInterface|NativeDataEntityCollection
+     * @throws Exception
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
     public function retrieveCollection(DataEntityInterface $dataEntity)
     {
         $dataMediatorResponse = $this->persistenceStrategy->get($dataEntity);
@@ -144,8 +151,10 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
     public function save(DataEntityInterface $dataEntity)
     {
         $response = $this->persistenceStrategy->save($dataEntity);
-        $this->factory()->deserialize($response->result()[0], $dataEntity);
-        $this->cache()->saveID($dataEntity->ID(), $dataEntity);
+        if($response->result()) {
+            $this->factory()->deserialize($response->result()[0], $dataEntity);
+            $this->cache()->saveID($dataEntity->ID(), $dataEntity);
+        }
     }
 
     public function saveCollection(DataEntityCollectionInterface $dataEntityCollection)

@@ -148,7 +148,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
                 . $this->configuration()->closingIdentityDelimiter()
             ;
             $boundValueNames[] =
-                $this->configuration()->updateParameterPrefix()
+                $this->configuration()->writeParameterPrefix()
                 . $column->fieldName()
             ;
         }
@@ -242,7 +242,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
                 . $column->fieldName()
                 . $this->configuration()->closingIdentityDelimiter()
                 . '='
-                . $this->configuration()->updateParameterPrefix()
+                . $this->configuration()->writeParameterPrefix()
                 . $column->fieldName()
             ;
         }

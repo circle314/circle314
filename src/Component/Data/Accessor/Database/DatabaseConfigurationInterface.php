@@ -33,7 +33,7 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     /**
      * @return mixed
      */
-    public function insertParameterPrefix();
+    public function identifierParameterPrefix();
 
     /**
      * @return string
@@ -48,5 +48,5 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     /**
      * @return mixed
      */
-    public function updateParameterPrefix();
+    public function writeParameterPrefix();
 }

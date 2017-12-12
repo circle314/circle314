@@ -107,10 +107,11 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
 
     /**
      * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
+     * @param null $schemaName
+     * @param null $tableName
      * @return string
      * @throws IllegalInsertOperationException
+     * @throws \Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException
      */
     public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
     {
@@ -148,7 +149,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
                 . $this->configuration()->closingIdentityDelimiter()
             ;
             $boundValueNames[] =
-                $this->configuration()->updateParameterPrefix()
+                $this->configuration()->writeParameterPrefix()
                 . $column->fieldName()
             ;
         }
@@ -243,7 +244,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
                 . $column->fieldName()
                 . $this->configuration()->closingIdentityDelimiter()
                 . '='
-                . $this->configuration()->updateParameterPrefix()
+                . $this->configuration()->writeParameterPrefix()
                 . $column->fieldName()
             ;
         }

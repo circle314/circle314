@@ -3,8 +3,9 @@
 namespace Circle314\Component\Data\Persistence\Strategy\Database;
 
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
-use Circle314\Component\Data\Operation\Response\Database\DatabaseResponseInterface;
 use Circle314\Component\Data\Persistence\Operation\Call\Native\NativeCall;
+use Circle314\Component\Data\Persistence\Operation\Response\Database\DatabaseResponseInterface;
+use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeNullDatabaseResponse;
 use Circle314\Component\Data\Persistence\Strategy\AbstractPersistenceStrategy;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
@@ -70,6 +71,9 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      */
     final public function save(TransitionalDataEntityInterface $dataEntity)
     {
+        if($dataEntity->fieldsMarkedForUpdate()->count() === 0) {
+            return new NativeNullDatabaseResponse();
+        }
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
         if($dataEntity->fieldsMarkedAsIdentifiers()->count()) {
