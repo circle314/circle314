@@ -36,6 +36,9 @@ abstract class AbstractDVO implements DVOInterface
     private $orderingDirection;
 
     /** @var TypeInterface */
+    private $originalValue;
+
+    /** @var TypeInterface */
     private $value;
     #endregion
 
@@ -169,23 +172,36 @@ abstract class AbstractDVO implements DVOInterface
         $this->markAsOrdering($orderingPriority);
     }
 
+    /**
+     * @return string
+     */
     final public function orderingDirection(): string
     {
         return $this->orderingDirection;
     }
 
-    public function typedValue()
+    /**
+     * @return mixed|null
+     */
+    final public function originalValue()
     {
-        return $this->value;
+        if(is_null($this->originalValue)) {
+            return null;
+        } else {
+            return $this->originalValue->getValue();
+        }
     }
 
     /**
+     * @param mixed $value
      * @throws TypeValidationException
-     * @inheritdoc
      */
     final public function setValue($value)
     {
         try {
+            if(!is_null($this->value)) {
+                $this->originalValue = $this->originalValue ?? $this->value;
+            }
             $this->value = $this->refreshTypedValue($value);
             $this->markAsUpdated();
         } catch (TypeValidationException $e) {
@@ -206,6 +222,10 @@ abstract class AbstractDVO implements DVOInterface
         }
     }
 
+    /**
+     * @param KeyedCollectionInterface $collection
+     * @throws TypeValidationException
+     */
     final public function setValueFromKeyedCollection(KeyedCollectionInterface $collection)
     {
         if($collection->hasID($this->fieldName())) {
@@ -213,6 +233,14 @@ abstract class AbstractDVO implements DVOInterface
         } else if($this->hasDefaultValue()) {
             $this->applyDefaultValue();
         }
+    }
+
+    /**
+     * @return TypeInterface
+     */
+    public function typedValue()
+    {
+        return $this->value;
     }
     #endregion
 

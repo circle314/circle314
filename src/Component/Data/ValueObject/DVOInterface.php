@@ -2,6 +2,7 @@
 
 namespace Circle314\Component\Data\ValueObject;
 
+use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\KeyedCollectionItemInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 use Circle314\Concept\Value\ValueInterface;
@@ -104,6 +105,13 @@ interface DVOInterface extends KeyedCollectionItemInterface, ValueInterface, Tra
     public function orderingDirection(): string;
 
     /**
+     * The original value, before any change was made.
+     *
+     * @return mixed
+     */
+    public function originalValue();
+
+    /**
      * Sets the value of the field.
      *
      * @param mixed $value
@@ -117,6 +125,14 @@ interface DVOInterface extends KeyedCollectionItemInterface, ValueInterface, Tra
      * @param bool $defaultFallback
      */
     public function setValueFromArray(Array $array, $defaultFallback = false);
+
+    /**
+     * Sets the value of the field from a given keyed collection, where the collection is in the format $fieldName => $value
+     *
+     * @param KeyedCollectionInterface $collection
+     * @return mixed
+     */
+    public function setValueFromKeyedCollection(KeyedCollectionInterface $collection);
 
     /**
      * Gets the underlying TypedValue of the field.

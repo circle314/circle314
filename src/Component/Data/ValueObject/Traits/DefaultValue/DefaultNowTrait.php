@@ -12,6 +12,6 @@ trait DefaultNowTrait
      */
     public function getDefaultValue()
     {
-        return time();
+        return microtime(true);
     }
 }
