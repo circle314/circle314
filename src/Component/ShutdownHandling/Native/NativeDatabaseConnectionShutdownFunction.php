@@ -21,7 +21,15 @@ class NativeDatabaseConnectionShutdownFunction extends AbstractShutdownHandlingF
     #region Public Methods
     public function handleShutdown()
     {
-        $this->databaseAccessor->commitTransaction();
+        $error = error_get_last();
+        // Rollback on fatal errors, which don't get caught by error or exception handlers
+        if($error['type'] === E_ERROR) {
+            $this->databaseAccessor->rollbackTransaction();
+        }
+        // Otherwise commit the transaction
+        else {
+            $this->databaseAccessor->commitTransaction();
+        }
         $this->databaseAccessor->dropConnections();
     }
     #endregion

@@ -2,11 +2,13 @@
 
 namespace Circle314\Component\Data\ValueObject;
 
+use \Exception;
 use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Data\ValueObject\Configuration\DVOConfigurationInterface;
 use Circle314\Component\Data\ValueObject\Configuration\Native\NativeDVOConfiguration;
 use Circle314\Component\Data\ValueObject\Exception\DVOOrderingException;
 use Circle314\Component\Type\Exception\TypeValidationException;
+use Circle314\Component\Type\Exception\ValueOutOfBoundsException;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 use Circle314\Concept\Null\NullConstants;
 use Circle314\Concept\Ordering\OrderingConstants;
@@ -57,7 +59,9 @@ abstract class AbstractDVO implements DVOInterface
 
     #region Public Methods
     /**
+     * @throws Exception
      * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      */
     final public function applyDefaultValue()
     {
@@ -194,7 +198,9 @@ abstract class AbstractDVO implements DVOInterface
 
     /**
      * @param mixed $value
+     * @throws Exception
      * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      */
     final public function setValue($value)
     {
@@ -205,7 +211,11 @@ abstract class AbstractDVO implements DVOInterface
             $this->value = $this->refreshTypedValue($value);
             $this->markAsUpdated();
         } catch (TypeValidationException $e) {
-            throw new TypeValidationException('Could not cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
+            throw new TypeValidationException('Type validation exception occurred when attempting to cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
+        } catch (ValueOutOfBoundsException $e) {
+            throw new ValueOutOfBoundsException('Value of out bounds exception occurred when attempting to cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
+        } catch (Exception $e) {
+            throw new Exception('Exception occurred when attempting to cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
         }
     }
 
@@ -224,7 +234,10 @@ abstract class AbstractDVO implements DVOInterface
 
     /**
      * @param KeyedCollectionInterface $collection
+     * @return mixed|void
+     * @throws Exception
      * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      */
     final public function setValueFromKeyedCollection(KeyedCollectionInterface $collection)
     {
@@ -303,6 +316,8 @@ abstract class AbstractDVO implements DVOInterface
      * Refreshes the typed value with the new value.
      *
      * @param mixed $value The new value.
+     * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      */
     abstract protected function refreshTypedValue($value);
     #endregion
