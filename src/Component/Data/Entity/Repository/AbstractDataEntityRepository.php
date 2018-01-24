@@ -131,6 +131,11 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $dataEntityCollection;
     }
 
+    /**
+     * @param $ID
+     * @return DataEntityInterface|mixed|null
+     * @throws DataEntityRetrievalException
+     */
     public function retrieveID($ID)
     {
         if(is_null($ID)) {
