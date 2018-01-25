@@ -74,6 +74,13 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $cachedDataEntity;
     }
 
+    /**
+     * @inheritdoc
+     * @throws DataEntityRetrievalException
+     * @throws Exception
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
     public function retrieve(DataEntityInterface $dataEntity)
     {
         $retrievedDataEntityCollection = $this->retrieveCollection($dataEntity);
@@ -98,8 +105,7 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
     }
 
     /**
-     * @param DataEntityInterface $dataEntity
-     * @return DataEntityCollectionInterface|NativeDataEntityCollection
+     * @inheritdoc
      * @throws Exception
      * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
@@ -132,9 +138,11 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
     }
 
     /**
-     * @param $ID
-     * @return DataEntityInterface|mixed|null
+     * @inheritdoc
      * @throws DataEntityRetrievalException
+     * @throws Exception
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
      */
     public function retrieveID($ID)
     {

@@ -2,6 +2,11 @@
 
 namespace Circle314\Component\ParameterSet\SuperGlobal;
 
+/**
+ * Class ServerSuperGlobal
+ * @package Circle314\Component\ParameterSet
+ * @deprecated 0.7
+ */
 final class ServerSuperGlobal extends AbstractSuperGlobal implements ServerSuperGlobalInterface
 {
     public function httpUserAgent()
@@ -19,5 +24,3 @@ final class ServerSuperGlobal extends AbstractSuperGlobal implements ServerSuper
         return $this->getID('REQUEST_URI');
     }
 }
-
-?>

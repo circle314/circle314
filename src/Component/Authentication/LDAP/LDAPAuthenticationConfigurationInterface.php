@@ -7,6 +7,7 @@ use Circle314\Component\Authentication\AuthenticationConfigurationInterface;
 /**
  * Interface LDAPAuthenticationConfigurationInterface
  * @package Circle314\Component\Authentication
+ * @deprecated 0.7
  */
 interface LDAPAuthenticationConfigurationInterface extends AuthenticationConfigurationInterface
 {

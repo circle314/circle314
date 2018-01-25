@@ -4,7 +4,8 @@ namespace Circle314\Component\Authentication\LDAP;
 
 /**
  * Class AbstractLDAPAuthenticationConfiguration
- * @package Circle314\Component\AuthenticationHandler\LDAP
+ * @package Circle314\Component\Authentication
+ * @deprecated 0.7
  */
 abstract class AbstractLDAPAuthenticationConfiguration implements LDAPAuthenticationConfigurationInterface
 {

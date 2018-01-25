@@ -53,20 +53,20 @@ interface DataEntityRepositoryInterface
     public function new(DataEntityInterface $dataEntity);
 
     /**
-     * Retrieves a DataEntity matching the ID.
-     *
-     * @param $ID
-     * @return DataEntityInterface|null
-     */
-    public function retrieveID($ID);
-
-    /**
      * Retrieves a single DataEntity matching the supplied DataEntity.
      *
      * @param DataEntityInterface $dataEntity
      * @return DataEntityInterface|null
      */
     public function retrieve(DataEntityInterface $dataEntity);
+
+    /**
+     * Retrieves a DataEntity matching the ID.
+     *
+     * @param $ID
+     * @return DataEntityInterface|null
+     */
+    public function retrieveID($ID);
 
     /**
      * Retrieves a DataEntityCollection matching the supplied DataEntity.
