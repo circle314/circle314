@@ -8,5 +8,3 @@ class CoreWarningException extends ErrorException
 {
 
 }
-
-?>

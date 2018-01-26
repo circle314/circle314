@@ -9,5 +9,3 @@ interface JSONEncodingConfigurationInterface extends EncodingConfigurationInterf
     public function getDepth();
     public function getOptions();
 }
-
-?>

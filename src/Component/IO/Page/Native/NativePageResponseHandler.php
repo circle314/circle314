@@ -29,6 +29,13 @@ class NativePageResponseHandler extends AbstractPageResponseHandler
     #endregion
 
     #region Constructor
+    /**
+     * NativePageResponseHandler constructor.
+     * @param HTMLRendererInterface $HTMLRenderer
+     * @param JSRendererInterface $JSRenderer
+     * @param HTMLJSRendererInterface $HTMLJSRenderer
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
+     */
     public function __construct(
         HTMLRendererInterface           $HTMLRenderer,
         JSRendererInterface             $JSRenderer,
@@ -42,6 +49,11 @@ class NativePageResponseHandler extends AbstractPageResponseHandler
     #endregion
 
     #region Public Methods
+    /**
+     * @param ResponseInterface $pageResponse
+     * @return mixed|string
+     * @throws NonRenderableObjectException
+     */
     public function generateResponse(ResponseInterface $pageResponse)
     {
         /** @var RenderableObjectInterface $renderableResponse */
@@ -56,6 +68,11 @@ class NativePageResponseHandler extends AbstractPageResponseHandler
     protected function preProcessResponseCode(ResponseInterface $response) {}
     protected function postProcessResponseCode(ResponseInterface $response) {}
 
+    /**
+     * @param RenderableObjectInterface $renderableObject
+     * @return string
+     * @throws NonRenderableObjectException
+     */
     final protected function renderRenderableObject(RenderableObjectInterface $renderableObject)
     {
         $this->processNestedRenderableObjectCollection($renderableObject->nestedRenderableObjectCollection());
@@ -99,6 +116,10 @@ class NativePageResponseHandler extends AbstractPageResponseHandler
     #endregion
 
     #region Private Methods
+    /**
+     * @param NestedRenderableObjectCollectionInterface $nestedRenderableObjectCollection
+     * @throws NonRenderableObjectException
+     */
     final private function processNestedRenderableObjectCollection(NestedRenderableObjectCollectionInterface $nestedRenderableObjectCollection)
     {
         /** @var NestedRenderableObjectCollectionItemInterface $nestedRenderableObject */
@@ -116,5 +137,3 @@ class NativePageResponseHandler extends AbstractPageResponseHandler
     }
     #endregion
 }
-
-?>

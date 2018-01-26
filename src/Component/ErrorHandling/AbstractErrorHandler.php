@@ -34,6 +34,7 @@ abstract class AbstractErrorHandler implements ErrorHandlerInterface
 
     /**
      * @param ErrorHandlingFunctionInterface $errorHandlingFunction
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      */
     public function registerErrorHandlingFunction(ErrorHandlingFunctionInterface $errorHandlingFunction)
     {
@@ -51,5 +52,3 @@ abstract class AbstractErrorHandler implements ErrorHandlerInterface
     }
     #endregion
 }
-
-?>

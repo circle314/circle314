@@ -8,5 +8,3 @@ interface RenderedJSCacheInterface
     public function clearCache();
     public function retrieveCache($delimiter = PHP_EOL);
 }
-
-?>

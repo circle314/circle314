@@ -6,5 +6,3 @@ interface JSRenderableObjectInterface extends RenderableObjectInterface
 {
 
 }
-
-?>

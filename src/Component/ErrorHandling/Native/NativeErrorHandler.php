@@ -8,5 +8,3 @@ class NativeErrorHandler extends AbstractErrorHandler
 {
 
 }
-
-?>

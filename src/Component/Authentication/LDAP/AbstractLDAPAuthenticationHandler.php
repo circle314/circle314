@@ -85,5 +85,3 @@ abstract class AbstractLDAPAuthenticationHandler extends AbstractAuthenticationH
     }
     #endregion
 }
-
-?>

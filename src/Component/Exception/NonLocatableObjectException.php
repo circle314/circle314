@@ -2,6 +2,7 @@
 
 namespace Circle314\Component\Exception;
 
-class NonLocatableObjectException extends IncompatibleSubtypeException  {}
+class NonLocatableObjectException extends IncompatibleSubtypeException
+{
 
-?>
+}

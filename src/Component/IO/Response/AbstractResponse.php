@@ -73,5 +73,3 @@ abstract class AbstractResponse implements ResponseInterface
     abstract protected function deliverResponse();
     #endregion
 }
-
-?>

@@ -96,5 +96,3 @@ abstract class AbstractJSONEncodingHandler extends AbstractEncodingHandler imple
     }
     #endregion
 }
-
-?>

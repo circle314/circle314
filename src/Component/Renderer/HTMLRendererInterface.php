@@ -6,5 +6,3 @@ interface HTMLRendererInterface extends RendererInterface
 {
 
 }
-
-?>

@@ -8,5 +8,3 @@ class CompileWarningException extends ErrorException
 {
 
 }
-
-?>

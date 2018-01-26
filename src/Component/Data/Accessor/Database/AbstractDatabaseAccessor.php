@@ -3,19 +3,16 @@
 namespace Circle314\Component\Data\Accessor\Database;
 
 use \PDO;
-use Circle314\Component\Data\Persistence\PersistenceConstants;
+use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\ValueObject\DVOInterface;
 use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
 use Circle314\Component\Data\ValueObject\Collection\Native\NativeDVOCollection;
-use Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Component\Type\TypeInterface\BooleanTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTimeTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTypeInterface;
 use Circle314\Component\Type\TypeInterface\IntegerTypeInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 use Circle314\Concept\Ordering\OrderingConstants;
-use Circle314\Transitional\TransitionalDataEntityInterface;
-use Circle314\Transitional\TransitionalDVOInterface;
 
 abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 {
@@ -94,10 +91,10 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return DVOCollectionInterface
      */
-    final public function generateParameters(TransitionalDataEntityInterface $dataEntity)
+    final public function generateParameters(DataEntityInterface $dataEntity)
     {
         $parameters = new NativeDVOCollection();
         foreach ($dataEntity->fieldsMarkedAsIdentifiers() as $column) {
@@ -109,47 +106,6 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
             $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column);
         }
         return $parameters;
-    }
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @param string $readWrite
-     * @return string
-     * @throws DatabaseDataPersistenceException
-     * @deprecated
-     */
-    final public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
-    {
-        switch($readWrite)
-        {
-            case PersistenceConstants::READ:
-                $tableName = $databaseTableSchema->tableNameForReads();
-                break;
-            case PersistenceConstants::WRITE:
-                $tableName = $databaseTableSchema->tableNameForWrites();
-                break;
-            default:
-                throw new DatabaseDataPersistenceException('Calls to ' . __METHOD__ . ' must have context of either READ or WRITE');
-        }
-        $database = $this->configuration()->supportsCrossDatabaseReferences()
-            ? (
-                $this->configuration()->openingIdentityDelimiter()
-                . $databaseTableSchema->databaseName()
-                . $this->configuration()->closingIdentityDelimiter()
-                . '.'
-            )
-            : ''
-        ;
-        $schema = $this->configuration()->openingIdentityDelimiter()
-            . $databaseTableSchema->databaseSchemaName()
-            . $this->configuration()->closingIdentityDelimiter()
-            . '.'
-        ;
-        $table = $this->configuration()->openingIdentityDelimiter()
-            . $tableName
-            . $this->configuration()->closingIdentityDelimiter()
-        ;
-        return $database . $schema . $table;
     }
 
     /**
@@ -251,10 +207,10 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateOrderByClauses(TransitionalDataEntityInterface $dataEntity)
+    final protected function generateOrderByClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
         if($dataEntity->fieldsMarkedForOrdering()->count())
@@ -290,17 +246,17 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateWhereClauses(TransitionalDataEntityInterface $dataEntity)
+    final protected function generateWhereClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
         if($dataEntity->fieldsMarkedAsIdentifiers()->count())
         {
             $query .= ' WHERE ';
             $whereClauses = [];
-            /** @var TransitionalDVOInterface $column */
+            /** @var DVOInterface $column */
             foreach($dataEntity->fieldsMarkedAsIdentifiers() as $column)
             {
                 $whereClauses[] =
@@ -374,9 +330,9 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 
     #region Abstract Methods
     abstract public function connect();
-    abstract public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    abstract public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
+    abstract public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
+    abstract public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
+    abstract public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
     #endregion
 }

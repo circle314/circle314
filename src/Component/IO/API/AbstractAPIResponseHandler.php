@@ -9,6 +9,7 @@ abstract class AbstractAPIResponseHandler extends AbstractResponseHandler implem
     #region Constructor
     /**
      * AbstractAPIResponseHandler constructor.
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     public function __construct()
     {
@@ -17,5 +18,3 @@ abstract class AbstractAPIResponseHandler extends AbstractResponseHandler implem
     }
     #endregion
 }
-
-?>

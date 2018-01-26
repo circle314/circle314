@@ -20,5 +20,3 @@ class ErrorHandlingFunctionCollection extends AbstractUnkeyedCollection
     }
     #endregion
 }
-
-?>

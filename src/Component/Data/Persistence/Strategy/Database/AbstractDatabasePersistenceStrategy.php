@@ -3,6 +3,7 @@
 namespace Circle314\Component\Data\Persistence\Strategy\Database;
 
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
+use Circle314\Component\Data\Entity\DataEntityInterface;
 use Circle314\Component\Data\Persistence\Operation\Call\Native\NativeCall;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\DatabaseResponseInterface;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeNullDatabaseResponse;
@@ -11,7 +12,6 @@ use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperati
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalSelectOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalUpdateOperationException;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
 /**
  * Class AbstractDatabasePersistenceStrategy
@@ -25,7 +25,7 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      * @throws IllegalDeleteOperationException
      * @inheritdoc
      */
-    final public function delete(TransitionalDataEntityInterface $dataEntity)
+    final public function delete(DataEntityInterface $dataEntity)
     {
         if(!$this->deleteOperationsEnabled()) {
             throw new IllegalDeleteOperationException('SQL delete operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
@@ -47,7 +47,7 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      * @throws IllegalDeleteOperationException
      * @inheritdoc
      */
-    final public function get(TransitionalDataEntityInterface $dataEntity)
+    final public function get(DataEntityInterface $dataEntity)
     {
         if(!$this->selectOperationsEnabled()) {
             throw new IllegalSelectOperationException('SQL select operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
@@ -69,7 +69,7 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      * @throws IllegalDeleteOperationException
      * @inheritdoc
      */
-    final public function save(TransitionalDataEntityInterface $dataEntity)
+    final public function save(DataEntityInterface $dataEntity)
     {
         if($dataEntity->fieldsMarkedForUpdate()->count() === 0) {
             return new NativeNullDatabaseResponse();

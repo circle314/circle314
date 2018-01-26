@@ -2,7 +2,6 @@
 
 namespace Circle314\Component\IO\Request;
 
-use Circle314\Component\Exception\IncompatibleSubtypeException;
 use Circle314\Component\IO\Command\CommandHandlerInterface;
 use Circle314\Component\IO\Command\CommandInterface;
 use Circle314\Component\IO\Response\ResponseHandlerInterface;
@@ -73,7 +72,6 @@ abstract class AbstractRequestHandler implements RequestHandlerInterface
 
     /**
      * @param CommandHandlerInterface $commandHandler
-     * @throws IncompatibleSubtypeException
      */
     final protected function setCommandHandler(CommandHandlerInterface $commandHandler)
     {
@@ -82,7 +80,6 @@ abstract class AbstractRequestHandler implements RequestHandlerInterface
 
     /**
      * @param ResponseHandlerInterface $responseHandler
-     * @throws IncompatibleSubtypeException
      */
     final protected function setResponseHandler(ResponseHandlerInterface $responseHandler)
     {
@@ -112,5 +109,3 @@ abstract class AbstractRequestHandler implements RequestHandlerInterface
     abstract protected function preHandleResponseCode();
     #endregion
 }
-
-?>

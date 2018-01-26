@@ -8,5 +8,3 @@ class NativeOpenSSLEncryptionHandler extends AbstractOpenSSLEncryptionHandler
 {
 
 }
-
-?>

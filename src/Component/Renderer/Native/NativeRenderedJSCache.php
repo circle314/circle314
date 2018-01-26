@@ -8,5 +8,3 @@ final class NativeRenderedJSCache extends AbstractRenderedJSCache
 {
 
 }
-
-?>

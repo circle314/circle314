@@ -14,6 +14,8 @@ trait RefreshTypeBooleanTrait
      *
      * @param $value
      * @return BooleanType
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

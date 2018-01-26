@@ -14,6 +14,8 @@ trait RefreshTypeNullableDateTrait
      *
      * @param $value
      * @return NullableDateType
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

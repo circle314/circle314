@@ -6,5 +6,3 @@ abstract class AbstractErrorHandlingFunction implements ErrorHandlingFunctionInt
 {
     abstract public function handleError($err_severity, $err_msg, $err_file, $err_line, array $err_context);
 }
-
-?>

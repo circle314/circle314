@@ -6,5 +6,3 @@ abstract class AbstractSessionConfiguration implements SessionConfigurationInter
 {
 
 }
-
-?>

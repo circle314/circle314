@@ -10,10 +10,11 @@ use Circle314\Component\Type\NullableBooleanType;
 trait RefreshTypeNullableBooleanTrait
 {
     /**
-     * A new NullableBooleanType.
+     * A new NullableBooleanType
      *
      * @param $value
      * @return NullableBooleanType
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

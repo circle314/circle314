@@ -6,5 +6,3 @@ interface JSTemplateFileLocatorInterface extends RenderableObjectTemplateLocator
 {
 
 }
-
-?>

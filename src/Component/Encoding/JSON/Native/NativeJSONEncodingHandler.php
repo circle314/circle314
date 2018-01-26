@@ -8,5 +8,3 @@ class NativeJSONEncodingHandler extends AbstractJSONEncodingHandler
 {
 
 }
-
-?>

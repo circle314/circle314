@@ -14,6 +14,8 @@ trait RefreshTypeDateTimeTrait
      *
      * @param $value
      * @return DateTimeType
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

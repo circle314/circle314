@@ -19,6 +19,7 @@ abstract class AbstractNestedResponseCollectionItem extends AbstractKeyedCollect
      * AbstractNestedResponseCollectionItem constructor.
      * @param $ID
      * @param ResponseInterface $renderableObject
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     public function __construct($ID, ResponseInterface $renderableObject)
     {
@@ -68,5 +69,3 @@ abstract class AbstractNestedResponseCollectionItem extends AbstractKeyedCollect
         return (string)$this->generatedResponse;
     }
 }
-
-?>

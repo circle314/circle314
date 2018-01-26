@@ -9,5 +9,3 @@ interface NestedResponseCollectionInterface extends CollectionInterface
     public function getGeneratedResponse($ID);
     public function setGeneratedResponse($ID, $generatedResponse);
 }
-
-?>

@@ -10,5 +10,3 @@ class NativeAPICommandHandler extends AbstractAPICommandHandler
     final protected function preProcessCommandCode(CommandInterface $command) { }
     final protected function postProcessCommandCode(CommandInterface $command) { }
 }
-
-?>

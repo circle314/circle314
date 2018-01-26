@@ -19,5 +19,3 @@ interface LDAPAuthenticationHandlerInterface extends AuthenticationHandlerInterf
 
     public function authenticate($username, $password);
 }
-
-?>

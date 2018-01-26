@@ -8,5 +8,3 @@ interface OpenSSLEncryptionHandlerInterface extends EncryptionHandlerInterface
 {
     public function __construct(OpenSSLEncryptionConfigurationInterface $configuration);
 }
-
-?>

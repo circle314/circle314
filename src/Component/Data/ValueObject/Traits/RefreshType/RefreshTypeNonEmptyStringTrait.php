@@ -10,10 +10,12 @@ use Circle314\Component\Type\NonEmptyStringType;
 trait RefreshTypeNonEmptyStringTrait
 {
     /**
-     * A new NonEmptyStringType.
-     *
+     * A new NonEmptyStringType
+     * 
      * @param $value
      * @return NonEmptyStringType
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

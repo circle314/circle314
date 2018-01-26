@@ -10,5 +10,3 @@ interface RenderableObjectTemplateLocatorInterface extends FileLocatorInterface
 {
 
 }
-
-?>

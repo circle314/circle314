@@ -12,5 +12,3 @@ class SHA512HashHandler extends AbstractHashHandler
     }
 
 }
-
-?>

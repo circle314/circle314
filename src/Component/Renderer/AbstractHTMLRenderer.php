@@ -13,6 +13,7 @@ abstract class AbstractHTMLRenderer extends AbstractRenderer implements HTMLRend
     /**
      * AbstractHTMLRenderer constructor.
      * @param HTMLTemplateFileLocatorInterface $HTMLTemplateFileLocator
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     final public function __construct(HTMLTemplateFileLocatorInterface $HTMLTemplateFileLocator)
     {
@@ -22,8 +23,11 @@ abstract class AbstractHTMLRenderer extends AbstractRenderer implements HTMLRend
 
     /**
      * @param RenderableObjectInterface $JSRenderableObject
-     * @return string
+     * @return mixed|string
      * @throws FileNotFoundException
+     * @throws \Circle314\Component\Exception\IncompatibleSubtypeException
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function renderContent(RenderableObjectInterface $JSRenderableObject)
     {
@@ -45,5 +49,3 @@ abstract class AbstractHTMLRenderer extends AbstractRenderer implements HTMLRend
         );
     }
 }
-
-?>

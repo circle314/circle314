@@ -8,5 +8,3 @@ class NativeHTMLTemplateFileLocator extends AbstractHTMLTemplateFileLocator
 {
 
 }
-
-?>

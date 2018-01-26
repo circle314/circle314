@@ -10,5 +10,3 @@ interface CommandHandlerInterface
      */
     public function handleCommand(CommandInterface $command);
 }
-
-?>

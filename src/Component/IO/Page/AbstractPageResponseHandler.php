@@ -9,6 +9,7 @@ abstract class AbstractPageResponseHandler extends AbstractResponseHandler imple
     #region Constructor
     /**
      * AbstractPageResponseHandler constructor.
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     public function __construct()
     {
@@ -17,5 +18,3 @@ abstract class AbstractPageResponseHandler extends AbstractResponseHandler imple
     }
     #endregion
 }
-
-?>

@@ -78,5 +78,3 @@ abstract class AbstractErrorLoggerConfiguration implements ErrorLoggerConfigurat
         return $this->logErrorsMaxLen;
     }
 }
-
-?>

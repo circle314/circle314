@@ -14,6 +14,7 @@ trait RefreshTypeNullableStringTrait
      *
      * @param $value
      * @return NullableStringType
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function refreshTypedValue($value)
     {

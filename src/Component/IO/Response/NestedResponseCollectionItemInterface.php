@@ -27,5 +27,3 @@ interface NestedResponseCollectionItemInterface extends KeyedCollectionItemInter
      */
     public function __toString();
 }
-
-?>

@@ -32,5 +32,3 @@ abstract class AbstractOpenSSLEncryptionConfiguration implements OpenSSLEncrypti
         return $this->method;
     }
 }
-
-?>

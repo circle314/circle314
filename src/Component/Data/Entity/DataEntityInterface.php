@@ -4,9 +4,8 @@ namespace Circle314\Component\Data\Entity;
 
 use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
 use Circle314\Concept\Identification\IdentifiableInterface;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
-interface DataEntityInterface extends IdentifiableInterface, TransitionalDataEntityInterface
+interface DataEntityInterface extends IdentifiableInterface
 {
     /**
      * The class name of the DataEntity.

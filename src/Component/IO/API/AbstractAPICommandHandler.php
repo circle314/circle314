@@ -9,6 +9,7 @@ abstract class AbstractAPICommandHandler extends AbstractCommandHandler implemen
     #region Constructor
     /**
      * AbstractAPICommandHandler constructor.
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     public function __construct()
     {
@@ -17,5 +18,3 @@ abstract class AbstractAPICommandHandler extends AbstractCommandHandler implemen
     }
     #endregion
 }
-
-?>

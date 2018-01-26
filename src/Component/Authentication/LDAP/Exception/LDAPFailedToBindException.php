@@ -9,6 +9,7 @@ use \Exception;
  * @package Circle314\Component\Authentication
  * @deprecated 0.7
  */
-final class LDAPFailedToBindException extends Exception {}
+final class LDAPFailedToBindException extends Exception
+{
 
-?>
+}

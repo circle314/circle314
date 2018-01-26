@@ -12,5 +12,3 @@ interface JSONEncodingHandlerInterface extends EncodingHandlerInterface
      */
     public function __construct(JSONEncodingConfigurationInterface $configuration);
 }
-
-?>

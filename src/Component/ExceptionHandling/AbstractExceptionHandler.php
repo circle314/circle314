@@ -33,6 +33,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandlerInterface
 
     /**
      * @param ExceptionHandlingFunctionInterface $exceptionHandlingFunction
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      */
     public function registerExceptionHandlingFunction(ExceptionHandlingFunctionInterface $exceptionHandlingFunction)
     {

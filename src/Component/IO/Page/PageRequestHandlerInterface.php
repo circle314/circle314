@@ -8,5 +8,3 @@ interface PageRequestHandlerInterface extends RequestHandlerInterface
 {
 
 }
-
-?>

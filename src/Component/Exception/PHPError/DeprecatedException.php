@@ -8,5 +8,3 @@ class DeprecatedException extends ErrorException
 {
 
 }
-
-?>

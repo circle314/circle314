@@ -15,5 +15,3 @@ abstract class AbstractAPICommand extends AbstractCommand implements APICommandI
         parent::__construct($superGlobalRepository);
     }
 }
-
-?>

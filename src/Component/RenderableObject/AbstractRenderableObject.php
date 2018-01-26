@@ -39,5 +39,3 @@ abstract class AbstractRenderableObject implements RenderableObjectInterface
     }
     #endregion
 }
-
-?>

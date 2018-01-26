@@ -9,5 +9,3 @@ final class NativeHTMLRenderer extends AbstractHTMLRenderer
     protected function preRender() {}
     protected function postRender() {}
 }
-
-?>

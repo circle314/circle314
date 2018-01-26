@@ -2,16 +2,13 @@
 
 namespace Circle314\Component\Data\Accessor\Database\PostgreSQL;
 
+use Circle314\Component\Data\Entity\DataEntityInterface;
 use \Exception;
 use \PDO;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
-use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalSelectOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalUpdateOperationException;
-use Circle314\Component\Data\Persistence\PersistenceConstants;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Component\Data\Accessor\Database\AbstractDatabaseAccessor;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
 /**
  * Class PostgreSQLDatabaseAccessor
@@ -70,28 +67,13 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalDeleteOperationException
      */
-    public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->deleteQueriesAllowed()) {
-                throw new IllegalDeleteOperationException(
-                    'SQL DELETE queries forbidden on table '
-                    . $tableName
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
+        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
 
-        /** @var TransitionalDataEntityInterface $dataEntity */
         if(!$dataEntity->fieldsMarkedAsIdentifiers()->count()) {
             throw new IllegalDeleteOperationException('Cannot generate an SQL DELETE query without identifiers');
         }
@@ -106,30 +88,13 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param null $schemaName
-     * @param null $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalInsertOperationException
-     * @throws \Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException
      */
-    public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->insertQueriesAllowed())
-            {
-                throw new IllegalInsertOperationException(
-                    'SQL INSERT queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
+        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
 
-        /** @var TransitionalDataEntityInterface $dataEntity */
         if(!$dataEntity->fieldsMarkedForUpdate()->count())
         {
             throw new IllegalInsertOperationException('Cannot generate an SQL INSERT query without any updated fields');
@@ -165,28 +130,12 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
-     * @throws IllegalSelectOperationException
+     * @inheritdoc
      */
-    public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->selectQueriesAllowed()) {
-                throw new IllegalSelectOperationException(
-                    'SQL SELECT queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
+        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
 
-        /** @var TransitionalDataEntityInterface $dataEntity */
         $query =
             'SELECT * FROM '
             . $tableName
@@ -198,29 +147,13 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalUpdateOperationException
      */
-    public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->updateQueriesAllowed())
-            {
-                throw new IllegalUpdateOperationException(
-                    'SQL UPDATE queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
+        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
 
-        /** @var TransitionalDataEntityInterface $dataEntity */
         if(!$dataEntity->fieldsMarkedForUpdate()->count())
         {
             throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any updated fields');

@@ -43,5 +43,3 @@ abstract class AbstractCommand implements CommandInterface
     abstract protected function executeCommand();
     #endregion
 }
-
-?>

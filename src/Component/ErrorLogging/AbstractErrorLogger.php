@@ -23,6 +23,10 @@ abstract class AbstractErrorLogger implements ErrorLoggerInterface
     #endregion
 
     #region Public Methods
+    /**
+     * @param ErrorLogEntryInterface $errorLogEntry
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     */
     public function addErrorLogEntry(ErrorLogEntryInterface $errorLogEntry)
     {
         $this->errorLogEntryCollection()->addCollectionItem($errorLogEntry);
@@ -71,5 +75,3 @@ abstract class AbstractErrorLogger implements ErrorLoggerInterface
     }
     #endregion
 }
-
-?>

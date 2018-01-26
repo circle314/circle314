@@ -31,5 +31,3 @@ interface LDAPAuthenticationConfigurationInterface extends AuthenticationConfigu
      */
     public function getServer();
 }
-
-?>

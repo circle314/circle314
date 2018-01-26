@@ -29,5 +29,3 @@ interface SuperGlobalRepositoryInterface extends ParameterSetInterface
     public function session();
     public function setSession();
 }
-
-?>

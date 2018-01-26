@@ -9,5 +9,3 @@ interface OpenSSLEncryptionConfigurationInterface extends EncryptionConfiguratio
     public function getKey();
     public function getMethod();
 }
-
-?>

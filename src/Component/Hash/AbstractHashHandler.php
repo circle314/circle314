@@ -45,5 +45,3 @@ abstract class AbstractHashHandler implements HashHandlerInterface
     }
     #endregion
 }
-
-?>

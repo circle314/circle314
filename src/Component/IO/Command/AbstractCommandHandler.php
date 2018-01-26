@@ -62,5 +62,3 @@ abstract class AbstractCommandHandler implements CommandHandlerInterface
     abstract protected function postProcessCommandCode(CommandInterface $command);
     #endregion
 }
-
-?>

@@ -8,5 +8,3 @@ class UserNoticeException extends ErrorException
 {
 
 }
-
-?>

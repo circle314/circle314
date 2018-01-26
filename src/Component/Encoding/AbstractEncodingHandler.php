@@ -18,5 +18,3 @@ abstract class AbstractEncodingHandler implements EncodingHandlerInterface
     abstract protected function applyConfiguration(EncodingConfigurationInterface $encodingConfiguration);
     #endregion
 }
-
-?>

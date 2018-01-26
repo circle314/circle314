@@ -8,5 +8,3 @@ class NativeNestedResponseCollection extends AbstractNestedResponseCollection
 {
 
 }
-
-?>

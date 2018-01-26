@@ -33,7 +33,6 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
     /**
      * @param $ID
      * @return \Circle314\Component\Type\TypeInterface\TypeInterface
-     * @throws CollectionIDNotFoundException
      */
     public function getRenderedContent($ID)
     {
@@ -46,6 +45,8 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
      * @param $ID
      * @param $renderedContent
      * @throws CollectionIDNotFoundException
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     public function setRenderedContent($ID, $renderedContent)
     {
@@ -59,5 +60,3 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
     }
     #endregion
 }
-
-?>

@@ -12,5 +12,3 @@ interface ErrorLoggerConfigurationInterface
     public function logErrors();
     public function logErrorsMaxLen();
 }
-
-?>

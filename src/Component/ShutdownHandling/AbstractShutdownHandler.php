@@ -30,6 +30,7 @@ abstract class AbstractShutdownHandler implements ShutdownHandlerInterface
 
     /**
      * @param ShutdownHandlingFunctionInterface $shutdownHandlingFunction
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      */
     public function registerShutdownHandlingFunction(ShutdownHandlingFunctionInterface $shutdownHandlingFunction)
     {

@@ -8,5 +8,3 @@ class ParseException extends ErrorException
 {
 
 }
-
-?>

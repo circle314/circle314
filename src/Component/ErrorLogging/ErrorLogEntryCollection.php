@@ -19,5 +19,3 @@ class ErrorLogEntryCollection extends AbstractUnkeyedCollection
     }
     #endregion
 }
-
-?>

@@ -8,5 +8,3 @@ interface PageResponseInterface extends ResponseInterface
 {
 
 }
-
-?>

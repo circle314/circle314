@@ -28,5 +28,3 @@ interface NestedRenderableObjectCollectionItemInterface extends KeyedCollectionI
      */
     public function __toString();
 }
-
-?>

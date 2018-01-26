@@ -18,6 +18,10 @@ abstract class AbstractDataEntity implements DataEntityInterface
     #endregion
 
     #region Constructor
+    /**
+     * AbstractDataEntity constructor.
+     * @throws CollectionIDDuplicateException
+     */
     public function __construct()
     {
         $this->fields = $this->newDVOCollection();
@@ -57,7 +61,6 @@ abstract class AbstractDataEntity implements DataEntityInterface
 
     final public function fieldsMarkedForOrdering()
     {
-        /** @var ArrayIterator $fieldsMarkedForOrdering */
         $fieldsMarkedForOrdering = $this->newDVOCollection();
         /** @var DVOInterface $field */
         foreach($this->fields as $field) {
@@ -65,6 +68,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
                 $fieldsMarkedForOrdering->addCollectionItem($field);
             }
         }
+        /** @var ArrayIterator $fieldsMarkedForOrdering */
         $fieldsMarkedForOrdering->uasort(function($a, $b) {
             /** @var DVOInterface $a */
             /** @var DVOInterface $b */

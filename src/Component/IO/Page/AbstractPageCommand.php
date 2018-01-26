@@ -15,5 +15,3 @@ abstract class AbstractPageCommand extends AbstractCommand implements PageComman
         parent::__construct($superGlobalRepository);
     }
 }
-
-?>

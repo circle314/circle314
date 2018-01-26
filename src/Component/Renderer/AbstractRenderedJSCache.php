@@ -30,6 +30,10 @@ abstract class AbstractRenderedJSCache implements RenderedJSCacheInterface
         $this->cache->clearCollection();
     }
 
+    /**
+     * @param $renderedScript
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     */
     final public function cacheRenderedScript($renderedScript)
     {
         $this->cache()->addCollectionItem($renderedScript);
@@ -40,5 +44,3 @@ abstract class AbstractRenderedJSCache implements RenderedJSCacheInterface
         return $this->cache;
     }
 }
-
-?>

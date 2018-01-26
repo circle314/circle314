@@ -25,5 +25,3 @@ abstract class AbstractPageRequestHandler extends AbstractRequestHandler impleme
     }
     #endregion
 }
-
-?>

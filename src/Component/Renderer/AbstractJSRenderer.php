@@ -16,7 +16,8 @@ abstract class AbstractJSRenderer extends AbstractRenderer implements JSRenderer
     /**
      * AbstractJSRenderer constructor.
      * @param JSTemplateFileLocatorInterface $JSTemplateFileLocator
-     * @param RenderedJSCacheInterface $renderedJSCache\
+     * @param RenderedJSCacheInterface $renderedJSCache
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     final public function __construct(
         JSTemplateFileLocatorInterface  $JSTemplateFileLocator,
@@ -30,8 +31,11 @@ abstract class AbstractJSRenderer extends AbstractRenderer implements JSRenderer
 
     /**
      * @param RenderableObjectInterface $JSRenderableObject
-     * @return string
+     * @return mixed|string
      * @throws FileNotFoundException
+     * @throws \Circle314\Component\Exception\IncompatibleSubtypeException
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     protected function renderContent(RenderableObjectInterface $JSRenderableObject)
     {
@@ -53,6 +57,10 @@ abstract class AbstractJSRenderer extends AbstractRenderer implements JSRenderer
         );
     }
 
+    /**
+     * @param JSRenderableObjectInterface $JSRenderableObject
+     * @throws \Circle314\Component\Exception\IncompatibleSubtypeException
+     */
     public function cache(JSRenderableObjectInterface $JSRenderableObject)
     {
         $this->renderedJSCache()->cacheRenderedScript(
@@ -72,5 +80,3 @@ abstract class AbstractJSRenderer extends AbstractRenderer implements JSRenderer
         return $this->renderedJSCache()->retrieveCache();
     }
 }
-
-?>

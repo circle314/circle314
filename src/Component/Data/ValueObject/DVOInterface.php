@@ -6,9 +6,8 @@ use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\KeyedCollectionItemInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 use Circle314\Concept\Value\ValueInterface;
-use Circle314\Transitional\TransitionalDVOInterface;
 
-interface DVOInterface extends KeyedCollectionItemInterface, ValueInterface, TransitionalDVOInterface
+interface DVOInterface extends KeyedCollectionItemInterface, ValueInterface
 {
     /**
      * Applies a default value.

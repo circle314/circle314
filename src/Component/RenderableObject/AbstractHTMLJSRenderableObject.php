@@ -6,5 +6,3 @@ abstract class AbstractHTMLJSRenderableObject extends AbstractRenderableObject i
 {
 
 }
-
-?>

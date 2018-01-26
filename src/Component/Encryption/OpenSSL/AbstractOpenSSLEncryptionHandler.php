@@ -68,5 +68,3 @@ abstract class AbstractOpenSSLEncryptionHandler extends AbstractEncryptionHandle
     }
     #endregion
 }
-
-?>

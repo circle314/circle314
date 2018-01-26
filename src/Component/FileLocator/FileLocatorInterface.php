@@ -35,5 +35,3 @@ interface FileLocatorInterface
      */
     public function getFilePath(RenderableObjectInterface $renderableObject);
 }
-
-?>

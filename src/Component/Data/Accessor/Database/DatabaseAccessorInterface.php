@@ -3,10 +3,9 @@
 namespace Circle314\Component\Data\Accessor\Database;
 
 use Circle314\Component\Data\Accessor\AccessorInterface;
+use Circle314\Component\Data\Entity\DataEntityInterface;
 use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
 /**
  * Interface IDatabaseAccessor
@@ -43,49 +42,42 @@ interface DatabaseAccessorInterface extends AccessorInterface
     public function errorInfo();
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @param string $schemaName
      * @param string $tableName
      * @return string
      */
-    public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @param string $schemaName
      * @param string $tableName
      * @return string
      */
-    public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return DVOCollectionInterface
      */
-    public function generateParameters(TransitionalDataEntityInterface $dataEntity);
+    public function generateParameters(DataEntityInterface $dataEntity);
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @param string $schemaName
      * @param string $tableName
      * @return string
      */
-    public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @param string $schemaName
      * @param string $tableName
      * @return string
      */
-    public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @param string $readWrite
-     * @return string
-     */
-    public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite);
+    public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
 
     /**
      * @return integer

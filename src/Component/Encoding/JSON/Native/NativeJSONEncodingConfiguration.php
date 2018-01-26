@@ -8,5 +8,3 @@ class NativeJSONEncodingConfiguration extends AbstractJSONEncodingConfiguration
 {
 
 }
-
-?>

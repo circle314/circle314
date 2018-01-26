@@ -6,5 +6,3 @@ interface HTMLTemplateFileLocatorInterface extends RenderableObjectTemplateLocat
 {
 
 }
-
-?>

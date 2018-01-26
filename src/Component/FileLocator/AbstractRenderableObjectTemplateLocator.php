@@ -44,6 +44,8 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     /**
      * @param RenderableObjectInterface $renderableObject
      * @return string
+     * @throws IncompatibleSubtypeException
+     * @throws \ReflectionException
      */
     final public function getFileName(RenderableObjectInterface $renderableObject)
     {
@@ -56,6 +58,8 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     /**
      * @param RenderableObjectInterface $renderableObject
      * @return string
+     * @throws IncompatibleSubtypeException
+     * @throws \ReflectionException
      */
     final public function getFileLocation(RenderableObjectInterface $renderableObject)
     {
@@ -68,6 +72,8 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     /**
      * @param RenderableObjectInterface $renderableObject
      * @return string
+     * @throws IncompatibleSubtypeException
+     * @throws \ReflectionException
      */
     final public function getFilePath(RenderableObjectInterface $renderableObject) {
         $this->checkRenderableObjectInterface($renderableObject);
@@ -80,6 +86,8 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     /**
      * @param RenderableObjectInterface $renderableObject
      * @return bool
+     * @throws IncompatibleSubtypeException
+     * @throws \ReflectionException
      */
     final public function fileExists(RenderableObjectInterface $renderableObject) {
         $this->checkRenderableObjectInterface($renderableObject);
@@ -98,6 +106,10 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     #endregion
 
     #region Private Methods
+    /**
+     * @param RenderableObjectInterface $renderableObject
+     * @throws IncompatibleSubtypeException
+     */
     final private function checkRenderableObjectInterface(RenderableObjectInterface $renderableObject)
     {
         if(!is_a($renderableObject, $this->renderableObjectInterface)){
@@ -108,5 +120,3 @@ abstract class AbstractRenderableObjectTemplateLocator implements RenderableObje
     }
     #endregion
 }
-
-?>
