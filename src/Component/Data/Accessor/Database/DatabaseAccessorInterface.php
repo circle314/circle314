@@ -84,6 +84,7 @@ interface DatabaseAccessorInterface extends AccessorInterface
      * @param DatabaseTableSchemaInterface $databaseTableSchema
      * @param string $readWrite
      * @return string
+     * @deprecated 0.6
      */
     public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite);
 

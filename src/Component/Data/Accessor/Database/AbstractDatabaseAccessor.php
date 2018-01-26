@@ -116,7 +116,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
      * @param string $readWrite
      * @return string
      * @throws DatabaseDataPersistenceException
-     * @deprecated
+     * @deprecated 0.6
      */
     final public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
     {
