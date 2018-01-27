@@ -77,6 +77,20 @@ Also important to note is that `Operators` are configured to either accept or re
 a `null` value are `EqualToOperator` and `NotEqualToOperator`. To determine whether an `Operator` accepts `null` values
 or not, you can call the function `OperatorInterface::acceptsNullValues():bool)`.
 
+#### Locking for update when retrieving Data Entities
+
+It is now possible to create locks `FOR UPDATE` when submitting a `DataEntity` to a `Repository` under a `get()` operation.
+The syntax is:
+
+    $filteringDataEntity = $dataEntityRepository->createBlank();
+    $filteringDataEntity->ID()->addFilterRule(new EqualToOperator(), 5);
+    $filteringDataEntity->lockForUpdate();
+    $dataEntity = $dataEntityRepository->retrieveCollection($dataEntity);
+
+This is equivalent to writing a SQL statement in the form:
+
+    SELECT ... FOR UPDATE
+    
 ### Deprecated Components
 
 The following components are now deprecated and will be removed in a future version, likely 0.8
