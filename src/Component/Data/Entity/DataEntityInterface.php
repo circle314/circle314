@@ -75,6 +75,17 @@ interface DataEntityInterface extends IdentifiableInterface
     public function hasUpdatedValues(): bool;
 
     /**
+     * When the DataEntity is used as a filter for get operations, applies a lock to the persistence
+     * mechanism at the most granular level it can (e.g. row-level for database)
+     */
+    public function isLockedForUpdate(): bool;
+
+    /**
+     * Marks the Data Entity as locked for update.
+     */
+    public function lockForUpdate(): void;
+
+    /**
      * Marks the DataEntity as having been persisted.
      */
     public function markFieldsAsPersisted();

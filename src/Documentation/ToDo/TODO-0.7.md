@@ -12,8 +12,8 @@ for future functionality improvements).*
 
 It should be possible to declare a row-level lock when using the `DataEntityRepositoryInterface` methods
 `retrieve`, `retrieveID`, and `retrieveCollection`. This is probably better placed in the `Data\Persistence`
-classes, so it has to be determined where this functionality will be accessible from, and where it will
-be defined.
+classes, so it has to be determined where this functionality will be implemented, how it will be passed,
+and where it will be defined.
 
 ## Introduce OO sources and targets in Persistence Strategies
 

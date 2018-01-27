@@ -149,6 +149,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
             . $tableName
             . $this->generateWhereClauses($dataEntity)
             . $this->generateOrderByClauses($dataEntity)
+            . $this->generateLockingClause($dataEntity)
             . ';'
         ;
         return $query;
@@ -236,6 +237,11 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
             default:
                 throw new Exception('Unknown Filter Rule "' . get_class($filterRule) . '" supplied');
         }
+    }
+
+    final protected function generateLockingClause(DataEntityInterface $dataEntity): string
+    {
+        return $dataEntity->isLockedForUpdate() ? ' FOR UPDATE' : '';
     }
     #endregion
 }

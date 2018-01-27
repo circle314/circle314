@@ -15,6 +15,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
     #region Properties
     /** @var NativeDVOCollection */
     protected $fields;
+    protected $isLockedForUpdate = false;
     #endregion
 
     #region Constructor
@@ -156,12 +157,31 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $this->fieldsMarkedForUpdate()->count() > 0;
     }
 
+    /**
+     * @inheritdoc
+     * @since 0.7
+     */
+    final public function isLockedForUpdate(): bool
+    {
+        return $this->isLockedForUpdate;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 0.7
+     */
+    final public function lockForUpdate(): void
+    {
+        $this->isLockedForUpdate = true;
+    }
+
     final public function markFieldsAsPersisted()
     {
         /** @var DVOInterface $field */
         foreach($this->fields as $field) {
             $field->markAsPersisted();
         }
+        $this->isLockedForUpdate = false;
     }
     #endregion
 
