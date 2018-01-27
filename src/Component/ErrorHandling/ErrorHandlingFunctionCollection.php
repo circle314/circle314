@@ -13,6 +13,9 @@ use Circle314\Component\Collection\AbstractUnkeyedCollection;
 class ErrorHandlingFunctionCollection extends AbstractUnkeyedCollection
 {
     #region Constructor
+    /**
+     * ErrorHandlingFunctionCollection constructor.
+     */
     public function __construct()
     {
         $this->setCollectionClass(ErrorHandlingFunctionInterface::class);

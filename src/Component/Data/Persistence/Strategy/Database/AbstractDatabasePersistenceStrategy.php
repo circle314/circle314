@@ -71,12 +71,12 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      */
     final public function save(DataEntityInterface $dataEntity)
     {
-        if($dataEntity->fieldsMarkedForUpdate()->count() === 0) {
+        if($dataEntity->hasUpdatedValues() === false) {
             return new NativeNullDatabaseResponse();
         }
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
-        if($dataEntity->fieldsMarkedAsIdentifiers()->count()) {
+        if($dataEntity->hasFilteringRules()) {
             if(!$this->updateOperationsEnabled()) {
                 throw new IllegalUpdateOperationException('SQL update operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
             }

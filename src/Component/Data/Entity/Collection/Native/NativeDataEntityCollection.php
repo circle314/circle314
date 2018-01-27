@@ -11,11 +11,17 @@ use Circle314\Component\Data\Entity\DataEntityInterface;
  */
 class NativeDataEntityCollection extends AbstractDataEntityCollection
 {
-    public function __construct(Array $models = [])
+    #region Constructor
+    /**
+     * NativeDataEntityCollection constructor.
+     * @param array $dataEntities
+     */
+    public function __construct(Array $dataEntities = [])
     {
         if(!$this->collectionClass()) {
             $this->setCollectionClass(DataEntityInterface::class);
         }
-        parent::__construct($models);
+        parent::__construct($dataEntities);
     }
+    #endregion
 }

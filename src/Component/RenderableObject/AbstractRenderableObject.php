@@ -15,7 +15,7 @@ abstract class AbstractRenderableObject implements RenderableObjectInterface
 
     #region Public Methods
     /**
-     * @return NestedRenderableObjectCollectionInterface
+     * @return NativeNestedRenderableObjectCollection|NestedRenderableObjectCollectionInterface
      */
     final public function &nestedRenderableObjectCollection()
     {

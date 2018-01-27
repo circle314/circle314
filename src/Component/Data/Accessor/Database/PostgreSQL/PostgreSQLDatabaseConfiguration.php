@@ -19,9 +19,9 @@ class PostgreSQLDatabaseConfiguration extends AbstractDatabaseConfiguration
         return '"';
     }
 
-    final public function identifierParameterPrefix()
+    final public function filterParameterPrefix()
     {
-        return ':id_';
+        return ':fi_';
     }
 
     /**

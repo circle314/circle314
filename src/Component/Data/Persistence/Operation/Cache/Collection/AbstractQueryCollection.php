@@ -7,6 +7,11 @@ use Circle314\Component\Data\Persistence\Operation\Cache\QueryInterface;
 
 abstract class AbstractQueryCollection extends AbstractKeyedCollection implements QueryCollectionInterface
 {
+    #region Constructor
+    /**
+     * AbstractQueryCollection constructor.
+     * @param array $array
+     */
     public function __construct(Array $array = [])
     {
         if(is_null($this->collectionClass())) {
@@ -14,4 +19,5 @@ abstract class AbstractQueryCollection extends AbstractKeyedCollection implement
         }
         parent::__construct($array);
     }
+    #endregion
 }

@@ -21,6 +21,8 @@ abstract class AbstractDataEntity implements DataEntityInterface
     /**
      * AbstractDataEntity constructor.
      * @throws CollectionIDDuplicateException
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
      */
     public function __construct()
     {
@@ -47,6 +49,31 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $this->fields;
     }
 
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     * @since 0.7
+     * @internal
+     */
+    final public function fieldsMarkedForFiltering()
+    {
+        $fieldsMarkedForFiltering = $this->newDVOCollection();
+        /** @var DVOInterface $field */
+        foreach($this->fields as $field) {
+            if($field->hasFilterRules()) {
+                $fieldsMarkedForFiltering->addCollectionItem($field);
+            }
+        }
+        return $fieldsMarkedForFiltering;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     * @deprecated 0.7
+     */
     final public function fieldsMarkedAsIdentifiers()
     {
         $fieldsMarkedForIdentification = $this->newDVOCollection();
@@ -59,6 +86,11 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $fieldsMarkedForIdentification;
     }
 
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
     final public function fieldsMarkedForOrdering()
     {
         $fieldsMarkedForOrdering = $this->newDVOCollection();
@@ -77,6 +109,11 @@ abstract class AbstractDataEntity implements DataEntityInterface
         return $fieldsMarkedForOrdering;
     }
 
+    /**
+     * @return DVOCollectionInterface|NativeDVOCollection
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
     final public function fieldsMarkedForUpdate()
     {
         $fieldsMarkedForUpdate = $this->newDVOCollection();
@@ -87,6 +124,36 @@ abstract class AbstractDataEntity implements DataEntityInterface
             }
         }
         return $fieldsMarkedForUpdate;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
+    final public function hasFilteringRules(): bool
+    {
+        return $this->fieldsMarkedForFiltering()->count() > 0;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
+    final public function hasOrderingRules(): bool
+    {
+        return $this->fieldsMarkedForOrdering()->count() > 0;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
+     */
+    final public function hasUpdatedValues(): bool
+    {
+        return $this->fieldsMarkedForUpdate()->count() > 0;
     }
 
     final public function markFieldsAsPersisted()
@@ -114,7 +181,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
     /**
      * Returns a native DVOCollection object.
      *
-     * @return DVOCollectionInterface
+     * @return NativeDVOCollection
      */
     final protected function newDVOCollection()
     {

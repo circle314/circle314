@@ -7,6 +7,12 @@ use Circle314\Component\Data\ValueObject\DVOInterface;
 
 class NativeDVOCollection extends AbstractDVOCollection
 {
+    #region Constructor
+    /**
+     * NativeDVOCollection constructor.
+     * @param array $array
+     * @param bool $overrideSetCollectionClass
+     */
     public function __construct(Array $array = [], $overrideSetCollectionClass = true)
     {
         if(!$overrideSetCollectionClass) {
@@ -14,4 +20,5 @@ class NativeDVOCollection extends AbstractDVOCollection
         }
         parent::__construct($array);
     }
+    #endregion
 }

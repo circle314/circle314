@@ -2,7 +2,7 @@
 
 namespace Circle314\Component\Data\Persistence\Operation\Call;
 
-use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
+use Circle314\Component\Collection\KeyedCollectionInterface;
 
 interface CallInterface
 {
@@ -23,7 +23,7 @@ interface CallInterface
     /**
      * The parameters used when the Call query is executed.
      *
-     * @return DVOCollectionInterface
+     * @return KeyedCollectionInterface
      */
     public function parameters();
 

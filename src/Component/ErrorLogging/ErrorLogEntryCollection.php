@@ -12,6 +12,9 @@ use Circle314\Component\Collection\AbstractUnkeyedCollection;
 class ErrorLogEntryCollection extends AbstractUnkeyedCollection
 {
     #region Constructor
+    /**
+     * ErrorLogEntryCollection constructor.
+     */
     public function __construct()
     {
         $this->setCollectionClass(ErrorLogEntryInterface::class);

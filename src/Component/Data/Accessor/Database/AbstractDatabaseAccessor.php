@@ -3,10 +3,12 @@
 namespace Circle314\Component\Data\Accessor\Database;
 
 use \PDO;
+use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Collection\Native\NativeKeyedCollection;
+use Circle314\Component\Collection\CollectionConstants;
 use Circle314\Component\Data\Entity\DataEntityInterface;
 use Circle314\Component\Data\ValueObject\DVOInterface;
-use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
-use Circle314\Component\Data\ValueObject\Collection\Native\NativeDVOCollection;
+use Circle314\Component\Data\ValueObject\FilterRule\FilterRuleInterface;
 use Circle314\Component\Type\TypeInterface\BooleanTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTimeTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTypeInterface;
@@ -92,19 +94,28 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 
     /**
      * @param DataEntityInterface $dataEntity
-     * @return DVOCollectionInterface
+     * @return KeyedCollectionInterface
      */
     final public function generateParameters(DataEntityInterface $dataEntity)
     {
-        $parameters = new NativeDVOCollection();
-        foreach ($dataEntity->fieldsMarkedAsIdentifiers() as $column) {
-            if(!is_null($column->identifiedValue()->getValue())) {
-                $parameters->saveID($this->configuration()->identifierParameterPrefix() . $column->fieldName(), $column);
+        $parameters = new NativeKeyedCollection();
+        foreach($dataEntity->fieldsMarkedForFiltering() as $column)
+        {
+            /**
+             * @var string $filterIndex
+             * @var FilterRuleInterface $filterRule
+             */
+            foreach($column->filterRules() as $filterIndex => $filterRule) {
+                if($filterRule->typedValue()->getValue() !== null) {
+                    $parameters->saveID($this->filterParameterName($column, $filterIndex), $filterRule->typedValue());
+                }
             }
         }
+
         foreach ($dataEntity->fieldsMarkedForUpdate() as $column) {
-            $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column);
+            $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column->typedValue());
         }
+
         return $parameters;
     }
 
@@ -206,6 +217,17 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
         return $schema . $table;
     }
 
+    final protected function filterParameterName(DVOInterface $column, string $filterIndex): string
+    {
+        $filterIndex = str_replace(CollectionConstants::_COLLECTION_KEY_PREFIX, '', $filterIndex);
+        $filterParameterName = $this->configuration()->filterParameterPrefix()
+            . $column->fieldName()
+            . '__ix'
+            . $filterIndex
+        ;
+        return $filterParameterName;
+    }
+
     /**
      * @param DataEntityInterface $dataEntity
      * @return string
@@ -213,7 +235,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     final protected function generateOrderByClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
-        if($dataEntity->fieldsMarkedForOrdering()->count())
+        if($dataEntity->hasOrderingRules())
         {
             $query .= ' ORDER BY ';
             $orderByClauses = [];
@@ -252,27 +274,15 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     final protected function generateWhereClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
-        if($dataEntity->fieldsMarkedAsIdentifiers()->count())
+        if($dataEntity->hasFilteringRules())
         {
             $query .= ' WHERE ';
             $whereClauses = [];
-            /** @var DVOInterface $column */
-            foreach($dataEntity->fieldsMarkedAsIdentifiers() as $column)
+            foreach($dataEntity->fieldsMarkedForFiltering() as $column)
             {
-                $whereClauses[] =
-                    $this->configuration->openingIdentityDelimiter()
-                    . $column->fieldName()
-                    . $this->configuration->closingIdentityDelimiter()
-                    . (
-                        is_null($column->identifiedValue()->getValue())
-                        ? ' IS NULL'
-                        : (
-                            '='
-                            . $this->configuration()->identifierParameterPrefix()
-                            . $column->fieldName()
-                        )
-                    )
-                ;
+                foreach($column->filterRules() as $filterIndex => $filterRule) {
+                    $whereClauses[] = $this->generateClauseFromFilterRule($column, $filterRule, $filterIndex);
+                }
             }
             $query .= implode(' AND ', $whereClauses);
         }
@@ -328,11 +338,23 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
     #endregion
 
-    #region Abstract Methods
+    #region Abstract Public Methods
     abstract public function connect();
     abstract public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
     abstract public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
     abstract public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
     abstract public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
+    #endregion
+
+    #region Abstract Protected Methods
+    /**
+     * Generates a SQL clauses from a Filter Rule.
+     *
+     * @param DVOInterface $column
+     * @param FilterRuleInterface $filterRule
+     * @param string $filterIndex
+     * @return string
+     */
+    abstract protected function generateClauseFromFilterRule(DVOInterface $column, FilterRuleInterface $filterRule, string $filterIndex): string;
     #endregion
 }

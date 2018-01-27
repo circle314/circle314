@@ -14,6 +14,9 @@ use Circle314\Component\Collection\AbstractUnkeyedCollection;
 class ExceptionHandlingFunctionCollection extends AbstractUnkeyedCollection
 {
     #region Constructor
+    /**
+     * ExceptionHandlingFunctionCollection constructor.
+     */
     public function __construct()
     {
         $this->setCollectionClass(ExceptionHandlingFunctionInterface::class);

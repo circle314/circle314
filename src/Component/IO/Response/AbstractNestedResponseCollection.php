@@ -16,7 +16,7 @@ abstract class AbstractNestedResponseCollection extends AbstractKeyedCollection 
     #region Constructor
     /**
      * AbstractNestedResponseCollection constructor.
-     * @param NestedResponseCollectionItemInterface[] $nestedResponses
+     * @param array $nestedResponses
      */
     public function __construct(Array $nestedResponses)
     {

@@ -20,7 +20,7 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
     #region Constructor
     /**
      * AbstractNestedRenderableObjectCollection constructor.
-     * @param NestedRenderableObjectCollectionItemInterface[] $nestedResponses
+     * @param array $nestedResponses
      */
     public function __construct(Array $nestedResponses)
     {

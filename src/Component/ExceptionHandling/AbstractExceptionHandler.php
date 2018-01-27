@@ -12,6 +12,9 @@ abstract class AbstractExceptionHandler implements ExceptionHandlerInterface
     #endregion
 
     #region Constructor
+    /**
+     * AbstractExceptionHandler constructor.
+     */
     public function __construct()
     {
         $this->exceptionHandlingFunctionCollection   = new ExceptionHandlingFunctionCollection();
