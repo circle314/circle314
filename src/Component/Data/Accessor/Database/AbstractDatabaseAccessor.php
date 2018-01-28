@@ -7,6 +7,7 @@ use Circle314\Component\Collection\KeyedCollectionInterface;
 use Circle314\Component\Collection\Native\NativeKeyedCollection;
 use Circle314\Component\Collection\CollectionConstants;
 use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\Persistence\Object\Database\DatabaseObjectInterface;
 use Circle314\Component\Data\ValueObject\DVOInterface;
 use Circle314\Component\Data\ValueObject\FilterRule\FilterRuleInterface;
 use Circle314\Component\Type\TypeInterface\BooleanTypeInterface;
@@ -203,20 +204,6 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     #endregion
 
     #region Protected Methods
-    final protected function delimitedFullyQualifiedTableName($schemaName, $tableName)
-    {
-        $schema = $this->configuration()->openingIdentityDelimiter()
-            . $schemaName
-            . $this->configuration()->closingIdentityDelimiter()
-            . '.'
-        ;
-        $table = $this->configuration()->openingIdentityDelimiter()
-            . $tableName
-            . $this->configuration()->closingIdentityDelimiter()
-        ;
-        return $schema . $table;
-    }
-
     final protected function filterParameterName(DVOInterface $column, string $filterIndex): string
     {
         $filterIndex = str_replace(CollectionConstants::_COLLECTION_KEY_PREFIX, '', $filterIndex);
@@ -340,10 +327,10 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 
     #region Abstract Public Methods
     abstract public function connect();
-    abstract public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
-    abstract public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
-    abstract public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
-    abstract public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName);
+    abstract public function generateDeleteQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateInsertQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateSelectQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateUpdateQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
     #endregion
 
     #region Abstract Protected Methods

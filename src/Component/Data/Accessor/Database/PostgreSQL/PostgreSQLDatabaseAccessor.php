@@ -9,6 +9,7 @@ use Circle314\Component\Data\Operator\Native\GreaterThanOrEqualToOperator;
 use Circle314\Component\Data\Operator\Native\LessThanOperator;
 use Circle314\Component\Data\Operator\Native\LessThanOrEqualToOperator;
 use Circle314\Component\Data\Operator\Native\NotEqualToOperator;
+use Circle314\Component\Data\Persistence\Object\Database\DatabaseObjectInterface;
 use Circle314\Component\Data\ValueObject\DVOInterface;
 use Circle314\Component\Data\ValueObject\FilterRule\FilterRuleInterface;
 use \Exception;
@@ -78,17 +79,15 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
      * @inheritdoc
      * @throws IllegalDeleteOperationException
      */
-    public function generateDeleteQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
+    public function generateDeleteQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-
         if($dataEntity->hasFilteringRules() === false) {
             throw new IllegalDeleteOperationException('Cannot generate an SQL DELETE query without and filtering rules');
         }
 
         $query =
             'DELETE FROM '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . $this->generateWhereClauses($dataEntity)
             . ';'
         ;
@@ -99,10 +98,8 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
      * @inheritdoc
      * @throws IllegalInsertOperationException
      */
-    public function generateInsertQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
+    public function generateInsertQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-
         if(!$dataEntity->hasUpdatedValues())
         {
             throw new IllegalInsertOperationException('Cannot generate an SQL INSERT query without any updated fields');
@@ -110,7 +107,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
 
         $query =
             'INSERT INTO '
-            . $tableName
+            . $databaseObject->resolvedName($this)
         ;
         $columnNames = [];
         $boundValueNames = [];
@@ -140,13 +137,11 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     /**
      * @inheritdoc
      */
-    public function generateSelectQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
+    public function generateSelectQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-
         $query =
             'SELECT * FROM '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . $this->generateWhereClauses($dataEntity)
             . $this->generateOrderByClauses($dataEntity)
             . $this->generateLockingClause($dataEntity)
@@ -159,10 +154,8 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
      * @inheritdoc
      * @throws IllegalUpdateOperationException
      */
-    public function generateUpdateQuery(DataEntityInterface $dataEntity, string $schemaName, string $tableName)
+    public function generateUpdateQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-
         if(!$dataEntity->hasUpdatedValues())
         {
             throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any updated fields');
@@ -175,7 +168,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
 
         $query =
             'UPDATE '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . ' SET '
         ;
         $updateFields = [];

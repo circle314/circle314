@@ -4,6 +4,7 @@ namespace Circle314\Component\Data\Persistence\Strategy\Database;
 
 use Circle314\Component\Data\Accessor\Database\DatabaseAccessorInterface;
 use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\Persistence\Object\Database\DatabaseObjectInterface;
 use Circle314\Component\Data\Persistence\Operation\Call\Native\NativeCall;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\DatabaseResponseInterface;
 use Circle314\Component\Data\Persistence\Operation\Response\Database\Native\NativeNullDatabaseResponse;
@@ -16,6 +17,7 @@ use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalUpdateOperati
 /**
  * Class AbstractDatabasePersistenceStrategy
  * @package Circle314\Component\Data\Persistence\Strategy
+ * @method DatabaseAccessorInterface accessor()
  */
 abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceStrategy
 {
@@ -28,15 +30,15 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
     final public function delete(DataEntityInterface $dataEntity)
     {
         if(!$this->deleteOperationsEnabled()) {
-            throw new IllegalDeleteOperationException('SQL delete operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
+            throw new IllegalDeleteOperationException('SQL delete operations forbidden on  ' . $this->persistenceTarget()->resolvedName($this->accessor()));
         }
 
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
         $call = new NativeCall(
             $accessor->ID(),
-            $this->targetSchema() . '.' . $this->targetTable(),
-            $accessor->generateDeleteQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
+            $this->persistenceTarget()->resolvedName($this->accessor()),
+            $accessor->generateDeleteQuery($dataEntity, $this->persistenceTarget()),
             $accessor->generateParameters($dataEntity)
         );
         return $this->operationRepository()->response($call, $accessor);
@@ -50,15 +52,15 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
     final public function get(DataEntityInterface $dataEntity)
     {
         if(!$this->selectOperationsEnabled()) {
-            throw new IllegalSelectOperationException('SQL select operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
+            throw new IllegalSelectOperationException('SQL select operations forbidden on  ' . $this->persistenceSource()->resolvedName($this->accessor()));
         }
 
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
         $call = new NativeCall(
             $accessor->ID(),
-            $this->sourceSchema() . '.' . $this->sourceTable(),
-            $accessor->generateSelectQuery($dataEntity, $this->sourceSchema(), $this->sourceTable()),
+            $this->persistenceSource()->resolvedName($this->accessor()),
+            $accessor->generateSelectQuery($dataEntity, $this->persistenceSource()),
             $accessor->generateParameters($dataEntity)
         );
         return $this->operationRepository()->response($call, $accessor);
@@ -78,22 +80,22 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
         $accessor = $this->accessor();
         if($dataEntity->hasFilteringRules()) {
             if(!$this->updateOperationsEnabled()) {
-                throw new IllegalUpdateOperationException('SQL update operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
+                throw new IllegalUpdateOperationException('SQL update operations forbidden on  ' . $this->persistenceTarget()->resolvedName($this->accessor()));
             }
             $call = new NativeCall(
                 $accessor->ID(),
-                $this->targetSchema() . '.' . $this->targetTable(),
-                $accessor->generateUpdateQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
+                $this->persistenceTarget()->resolvedName($this->accessor()),
+                $accessor->generateUpdateQuery($dataEntity, $this->persistenceTarget()),
                 $accessor->generateParameters($dataEntity)
             );
         } else {
             if(!$this->insertOperationsEnabled()) {
-                throw new IllegalInsertOperationException('SQL insert operations forbidden on  ' . $this->targetSchema() . '.' . $this->targetTable());
+                throw new IllegalInsertOperationException('SQL insert operations forbidden on  ' . $this->persistenceTarget()->resolvedName($this->accessor()));
             }
             $call = new NativeCall(
                 $accessor->ID(),
-                $this->targetSchema() . '.' . $this->targetTable(),
-                $accessor->generateInsertQuery($dataEntity, $this->targetSchema(), $this->targetTable()),
+                $this->persistenceTarget()->resolvedName($this->accessor()),
+                $accessor->generateInsertQuery($dataEntity, $this->persistenceTarget()),
                 $accessor->generateParameters($dataEntity)
             );
         }
@@ -105,31 +107,19 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
 
     #region Abstract Methods
     /**
-     * The source schema used in select operations.
+     * The source database object used in select operations.
      *
-     * @return null|string
+     * @return DatabaseObjectInterface
+     * @since 0.7
      */
-    abstract protected function sourceSchema(): ?string;
+    abstract protected function persistenceSource(): DatabaseObjectInterface;
 
     /**
-     * The source table used in select operations.
+     * The target database object used in delete, insert, and update operations.
      *
-     * @return null|string
+     * @return DatabaseObjectInterface
+     * @since 0.7
      */
-    abstract protected function sourceTable(): ?string;
-
-    /**
-     * The target schema used in delete, insert, and update operations.
-     *
-     * @return null|string
-     */
-    abstract protected function targetSchema(): ?string;
-
-    /**
-     * The target table used in delete, insert, and update operations.
-     *
-     * @return null|string
-     */
-    abstract protected function targetTable(): ?string;
+    abstract protected function persistenceTarget(): DatabaseObjectInterface;
     #endregion
 }
