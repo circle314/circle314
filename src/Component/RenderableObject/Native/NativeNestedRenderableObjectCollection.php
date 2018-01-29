@@ -8,5 +8,3 @@ class NativeNestedRenderableObjectCollection extends AbstractNestedRenderableObj
 {
 
 }
-
-?>

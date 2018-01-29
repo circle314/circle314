@@ -8,5 +8,3 @@ class NativeErrorLoggerConfiguration extends AbstractErrorLoggerConfiguration
 {
 
 }
-
-?>

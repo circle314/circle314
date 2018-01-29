@@ -4,6 +4,11 @@ namespace Circle314\Component\Authentication\LDAP;
 
 use Circle314\Component\Authentication\AuthenticationHandlerInterface;
 
+/**
+ * Interface LDAPAuthenticationHandlerInterface
+ * @package Circle314\Component\Authentication\LDAP
+ * @deprecated 0.7
+ */
 interface LDAPAuthenticationHandlerInterface extends AuthenticationHandlerInterface
 {
     /**
@@ -14,5 +19,3 @@ interface LDAPAuthenticationHandlerInterface extends AuthenticationHandlerInterf
 
     public function authenticate($username, $password);
 }
-
-?>

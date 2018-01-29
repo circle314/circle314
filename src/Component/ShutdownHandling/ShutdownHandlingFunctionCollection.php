@@ -14,6 +14,9 @@ use Circle314\Component\Collection\AbstractUnkeyedCollection;
 class ShutdownHandlingFunctionCollection extends AbstractUnkeyedCollection
 {
     #region Constructor
+    /**
+     * ShutdownHandlingFunctionCollection constructor.
+     */
     public function __construct()
     {
         $this->setCollectionClass(ShutdownHandlingFunctionInterface::class);

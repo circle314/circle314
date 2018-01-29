@@ -15,5 +15,3 @@ abstract class AbstractPageResponse extends AbstractResponse implements PageResp
         parent::__construct($superGlobalRepository);
     }
 }
-
-?>

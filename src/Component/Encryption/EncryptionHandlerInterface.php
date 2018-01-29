@@ -7,5 +7,3 @@ interface EncryptionHandlerInterface
     public function encrypt($value);
     public function decrypt($data);
 }
-
-?>

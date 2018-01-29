@@ -8,5 +8,3 @@ interface APICommandInterface extends CommandInterface
 {
 
 }
-
-?>

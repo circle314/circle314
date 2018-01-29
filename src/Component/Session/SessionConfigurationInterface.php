@@ -21,5 +21,3 @@ interface SessionConfigurationInterface
     public function sessionVariableNameSalt();
 
 }
-
-?>

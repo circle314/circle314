@@ -29,6 +29,11 @@ abstract class AbstractRenderer implements RendererInterface
         $this->renderableObjectTemplateLocator = $renderableObjectTemplateLocator;
     }
 
+    /**
+     * @param RenderableObjectInterface $renderableObject
+     * @return mixed|string
+     * @throws IncompatibleSubtypeException
+     */
     final public function render(RenderableObjectInterface $renderableObject)
     {
         if(is_subclass_of($renderableObject, $this->renderableObjectInterface)){
@@ -98,5 +103,3 @@ abstract class AbstractRenderer implements RendererInterface
     abstract protected function postRender();
     #endregion
 }
-
-?>

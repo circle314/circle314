@@ -6,5 +6,3 @@ interface HashHandlerInterface
 {
     public function hash($data);
 }
-
-?>

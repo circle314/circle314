@@ -8,5 +8,3 @@ class NativeOpenSSLEncryptionConfiguration extends AbstractOpenSSLEncryptionConf
 {
 
 }
-
-?>

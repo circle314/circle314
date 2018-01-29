@@ -9,5 +9,3 @@ final class NativeHTMLJSRenderer extends AbstractHTMLJSRenderer
     protected function preRender() {}
     protected function postRender() {}
 }
-
-?>

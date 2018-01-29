@@ -27,6 +27,11 @@ abstract class AbstractHTMLJSRenderer implements HTMLJSRendererInterface
         $this->JSRenderer           = $JSRenderer;
     }
 
+    /**
+     * @param RenderableObjectInterface $renderableObject
+     * @return string
+     * @throws IncompatibleSubtypeException
+     */
     final public function render(RenderableObjectInterface $renderableObject)
     {
         if(is_subclass_of($renderableObject, $this->renderableObjectInterface)){
@@ -91,5 +96,3 @@ abstract class AbstractHTMLJSRenderer implements HTMLJSRendererInterface
     #endregion
 
 }
-
-?>

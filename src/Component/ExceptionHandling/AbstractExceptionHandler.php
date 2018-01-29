@@ -12,6 +12,9 @@ abstract class AbstractExceptionHandler implements ExceptionHandlerInterface
     #endregion
 
     #region Constructor
+    /**
+     * AbstractExceptionHandler constructor.
+     */
     public function __construct()
     {
         $this->exceptionHandlingFunctionCollection   = new ExceptionHandlingFunctionCollection();
@@ -33,6 +36,7 @@ abstract class AbstractExceptionHandler implements ExceptionHandlerInterface
 
     /**
      * @param ExceptionHandlingFunctionInterface $exceptionHandlingFunction
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      */
     public function registerExceptionHandlingFunction(ExceptionHandlingFunctionInterface $exceptionHandlingFunction)
     {

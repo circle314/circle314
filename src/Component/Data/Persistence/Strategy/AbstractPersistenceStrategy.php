@@ -3,8 +3,8 @@
 namespace Circle314\Component\Data\Persistence\Strategy;
 
 use Circle314\Component\Data\Accessor\AccessorInterface;
+use Circle314\Component\Data\Entity\DataEntityInterface;
 use Circle314\Component\Data\Persistence\Operation\Repository\OperationRepositoryInterface;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
 abstract class AbstractPersistenceStrategy implements PersistenceStrategyInterface
 {
@@ -45,10 +45,10 @@ abstract class AbstractPersistenceStrategy implements PersistenceStrategyInterfa
     #endregion
 
     #region Abstract Methods
-    abstract public function delete(TransitionalDataEntityInterface $dataEntity);
-    abstract public function get(TransitionalDataEntityInterface $dataEntity);
+    abstract public function delete(DataEntityInterface $dataEntity);
+    abstract public function get(DataEntityInterface $dataEntity);
     abstract public function isLessVolatileThan($volatility);
-    abstract public function save(TransitionalDataEntityInterface $dataEntity);
+    abstract public function save(DataEntityInterface $dataEntity);
 
     /**
      * Checks whether delete operations are enabled for this strategy.

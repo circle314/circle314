@@ -2,6 +2,11 @@
 
 namespace Circle314\Component\ParameterSet\SuperGlobal;
 
+/**
+ * Class AbstractSuperGlobalRepository
+ * @package Circle314\Component\ParameterSet
+ * @deprecated 0.7
+ */
 abstract class AbstractSuperGlobalRepository implements SuperGlobalRepositoryInterface
 {
     /** @var CookieSuperGlobal */
@@ -103,5 +108,3 @@ abstract class AbstractSuperGlobalRepository implements SuperGlobalRepositoryInt
         return $this->_SESSION;
     }
 }
-
-?>

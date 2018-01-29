@@ -2,6 +2,8 @@
 
 namespace Circle314\Component\Data\Persistence\Operation\Repository\Database;
 
+use Circle314\Component\Collection\CollectionConstants;
+use Circle314\Component\Type\TypeInterface\TypeInterface;
 use \PDOException;
 use \PDOStatement;
 use Circle314\Component\Data\Accessor\AccessorInterface;
@@ -26,21 +28,16 @@ abstract class AbstractDatabaseOperationRepository extends AbstractOperationRepo
         $PDOStatement = $query->PDOStatement();
 
         // Generate response
-        foreach($call->parameters() as $parameter) {
-            if($parameter->isMarkedAsIdentifier()) {
-                $PDOStatement->bindValue(
-                    $accessor->configuration()->identifierParameterPrefix() . $parameter->fieldName(),
-                    $accessor->getPDOParamValue($parameter->identifiedValue()),
-                    $accessor->getPDOParamType($parameter->identifiedValue())
-                );
-            }
-            if($parameter->isMarkedAsUpdated()) {
-                $PDOStatement->bindValue(
-                    $accessor->configuration()->writeParameterPrefix() . $parameter->fieldName(),
-                    $accessor->getPDOParamValue($parameter->typedValue()),
-                    $accessor->getPDOParamType($parameter->typedValue())
-                );
-            }
+        /**
+         * @var string $parameterIndex
+         * @var TypeInterface $parameterTypedValue
+         */
+        foreach($call->parameters() as $parameterIndex => $parameterTypedValue) {
+            $PDOStatement->bindValue(
+                str_replace(CollectionConstants::_COLLECTION_KEY_PREFIX, '', $parameterIndex),
+                $accessor->getPDOParamValue($parameterTypedValue),
+                $accessor->getPDOParamType($parameterTypedValue)
+            );
         }
 
         try {

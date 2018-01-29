@@ -6,5 +6,3 @@ abstract class AbstractHTMLRenderableObject extends AbstractRenderableObject imp
 {
 
 }
-
-?>

@@ -7,8 +7,9 @@ use Circle314\Component\Authentication\AbstractAuthenticationHandler;
 use Circle314\Component\Authentication\LDAP\Exception\LDAPFailedToBindException;
 
 /**
- * Class LDAPAuthentication
+ * Class AbstractLDAPAuthenticationHandler
  * @package Circle314\Component\Authentication
+ * @deprecated 0.7
  */
 abstract class AbstractLDAPAuthenticationHandler extends AbstractAuthenticationHandler implements LDAPAuthenticationHandlerInterface
 {
@@ -84,5 +85,3 @@ abstract class AbstractLDAPAuthenticationHandler extends AbstractAuthenticationH
     }
     #endregion
 }
-
-?>

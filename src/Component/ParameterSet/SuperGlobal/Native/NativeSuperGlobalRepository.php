@@ -12,6 +12,11 @@ use Circle314\Component\ParameterSet\SuperGlobal\ServerSuperGlobal;
 use Circle314\Component\ParameterSet\SuperGlobal\SessionSuperGlobal;
 use Circle314\Component\ParameterSet\SuperGlobal\SuperGlobalRepositoryInterface;
 
+/**
+ * Class NativeSuperGlobalRepository
+ * @package Circle314\Component\ParameterSet
+ * @deprecated 0.7
+ */
 class NativeSuperGlobalRepository implements SuperGlobalRepositoryInterface {
     /** @var CookieSuperGlobal */
     private $_COOKIE;
@@ -112,5 +117,3 @@ class NativeSuperGlobalRepository implements SuperGlobalRepositoryInterface {
         return $this->_SESSION;
     }
 }
-
-?>

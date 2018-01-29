@@ -9,5 +9,3 @@ interface NestedRenderableObjectCollectionInterface extends CollectionInterface
     public function getRenderedContent($ID);
     public function setRenderedContent($ID, $renderedContent);
 }
-
-?>

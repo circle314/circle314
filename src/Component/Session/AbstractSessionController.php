@@ -174,5 +174,3 @@ class AbstractSessionController implements SessionControllerInterface
     }
     #endregion
 }
-
-?>

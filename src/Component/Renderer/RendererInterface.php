@@ -12,5 +12,3 @@ interface RendererInterface
      */
     public function render(RenderableObjectInterface $renderableObject);
 }
-
-?>

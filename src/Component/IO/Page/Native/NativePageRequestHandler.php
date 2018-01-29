@@ -10,5 +10,3 @@ class NativePageRequestHandler extends AbstractPageRequestHandler {
     final protected function postHandleCommandCode() { }
     final protected function postHandleResponseCode() { }
 }
-
-?>

@@ -22,6 +22,29 @@ use Circle314\Component\Exception\PHPError\UserDeprecatedException;
 
 class NativeExceptionCastingErrorHandlingFunction extends AbstractErrorHandlingFunction
 {
+    /**
+     * @param $err_severity
+     * @param $err_msg
+     * @param $err_file
+     * @param $err_line
+     * @param array $err_context
+     * @throws CompileErrorException
+     * @throws CompileWarningException
+     * @throws CoreErrorException
+     * @throws CoreWarningException
+     * @throws DeprecatedException
+     * @throws ErrorException
+     * @throws Exception
+     * @throws NoticeException
+     * @throws ParseException
+     * @throws RecoverableErrorException
+     * @throws StrictException
+     * @throws UserDeprecatedException
+     * @throws UserErrorException
+     * @throws UserNoticeException
+     * @throws UserWarningException
+     * @throws WarningException
+     */
     final public function handleError($err_severity, $err_msg, $err_file, $err_line, Array $err_context)
     {
         $err_msg =
@@ -72,5 +95,3 @@ class NativeExceptionCastingErrorHandlingFunction extends AbstractErrorHandlingF
         }
     }
 }
-
-?>

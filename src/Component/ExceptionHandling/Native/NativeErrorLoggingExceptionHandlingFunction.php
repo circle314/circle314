@@ -60,5 +60,3 @@ class NativeErrorLoggingExceptionHandlingFunction extends AbstractExceptionHandl
     }
     #endregion
 }
-
-?>

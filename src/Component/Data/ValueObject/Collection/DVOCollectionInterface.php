@@ -3,17 +3,16 @@
 namespace Circle314\Component\Data\ValueObject\Collection;
 
 use Circle314\Component\Collection\KeyedCollectionInterface;
-use Circle314\Transitional\TransitionalDVOCollectionInterface;
-use Circle314\Transitional\TransitionalDVOInterface;
+use Circle314\Component\Data\ValueObject\DVOInterface;
 
 /**
  * Interface DVOCollectionInterface
  * @package Circle314\Component\Data\ValueObject\Collection
- * @method TransitionalDVOInterface getID($ID)
- * @method TransitionalDVOInterface[] getArrayCopy()
- * @method TransitionalDVOInterface current()
+ * @method DVOInterface getID($ID)
+ * @method DVOInterface[] getArrayCopy()
+ * @method DVOInterface current()
  */
-interface DVOCollectionInterface extends KeyedCollectionInterface, TransitionalDVOCollectionInterface
+interface DVOCollectionInterface extends KeyedCollectionInterface
 {
 
 }

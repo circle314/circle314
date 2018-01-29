@@ -16,5 +16,3 @@ abstract class AbstractEncryptionHandler implements EncryptionHandlerInterface
      */
     abstract protected function applyConfiguration(EncryptionConfigurationInterface $encryptionConfiguration);
 }
-
-?>

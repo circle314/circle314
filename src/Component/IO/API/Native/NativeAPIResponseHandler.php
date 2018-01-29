@@ -14,6 +14,11 @@ class NativeAPIResponseHandler extends AbstractAPIResponseHandler
     #endregion
 
     #region Constructor
+    /**
+     * NativeAPIResponseHandler constructor.
+     * @param EncodingHandlerInterface $encodingHandler
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
+     */
     public function __construct(
         EncodingHandlerInterface        $encodingHandler
     ) {
@@ -42,5 +47,3 @@ class NativeAPIResponseHandler extends AbstractAPIResponseHandler
     }
     #endregion
 }
-
-?>

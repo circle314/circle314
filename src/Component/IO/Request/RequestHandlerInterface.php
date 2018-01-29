@@ -14,5 +14,3 @@ interface RequestHandlerInterface
      */
     public function handleRequest(CommandInterface $command, ResponseInterface $response);
 }
-
-?>

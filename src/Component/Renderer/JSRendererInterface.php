@@ -10,5 +10,3 @@ interface JSRendererInterface extends RendererInterface
     public function renderedJSCache();
     public function retrieveRenderedJSCache();
 }
-
-?>

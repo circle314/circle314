@@ -8,5 +8,3 @@ final class NativeJSTemplateFileLocatorConfiguration extends AbstractFileLocator
 {
 
 }
-
-?>

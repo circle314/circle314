@@ -6,5 +6,3 @@ interface CommandInterface
 {
     public function processCommand();
 }
-
-?>

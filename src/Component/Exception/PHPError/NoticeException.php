@@ -8,5 +8,3 @@ class NoticeException extends ErrorException
 {
 
 }
-
-?>

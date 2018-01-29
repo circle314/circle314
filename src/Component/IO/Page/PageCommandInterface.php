@@ -8,5 +8,3 @@ interface PageCommandInterface extends CommandInterface
 {
 
 }
-
-?>

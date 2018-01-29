@@ -10,5 +10,3 @@ class NativeAPIRequestHandler extends AbstractAPIRequestHandler {
     final protected function postHandleCommandCode() { }
     final protected function postHandleResponseCode() { }
 }
-
-?>

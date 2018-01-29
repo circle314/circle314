@@ -8,5 +8,3 @@ interface APIResponseHandlerInterface extends ResponseHandlerInterface
 {
 
 }
-
-?>

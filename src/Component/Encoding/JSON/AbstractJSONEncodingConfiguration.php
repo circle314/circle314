@@ -32,5 +32,3 @@ abstract class AbstractJSONEncodingConfiguration implements JSONEncodingConfigur
         return $this->options;
     }
 }
-
-?>

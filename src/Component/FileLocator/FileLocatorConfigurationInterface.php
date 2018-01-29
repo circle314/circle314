@@ -18,5 +18,3 @@ interface FileLocatorConfigurationInterface
      */
     public function getRootDirectory();
 }
-
-?>

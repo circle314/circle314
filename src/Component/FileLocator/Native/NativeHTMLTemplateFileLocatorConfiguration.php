@@ -8,5 +8,3 @@ final class NativeHTMLTemplateFileLocatorConfiguration extends AbstractFileLocat
 {
 
 }
-
-?>

@@ -6,5 +6,3 @@ interface ErrorHandlerInterface extends ErrorHandlingInterface
 {
     public function registerErrorHandlingFunction(ErrorHandlingFunctionInterface $errorHandlingFunction);
 }
-
-?>

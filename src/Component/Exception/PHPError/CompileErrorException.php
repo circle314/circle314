@@ -8,5 +8,3 @@ class CompileErrorException extends ErrorException
 {
 
 }
-
-?>

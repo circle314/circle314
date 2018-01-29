@@ -7,6 +7,11 @@ use Circle314\Component\Data\Persistence\Operation\Cache\EndPointInterface;
 
 abstract class AbstractEndPointCollection extends AbstractKeyedCollection implements EndPointCollectionInterface
 {
+    #region Constructor
+    /**
+     * AbstractEndPointCollection constructor.
+     * @param array $array
+     */
     public function __construct(Array $array = [])
     {
         if(is_null($this->collectionClass())) {
@@ -14,4 +19,5 @@ abstract class AbstractEndPointCollection extends AbstractKeyedCollection implem
         }
         parent::__construct($array);
     }
+    #endregion
 }

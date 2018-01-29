@@ -36,5 +36,3 @@ abstract class AbstractFileLocatorConfiguration implements FileLocatorConfigurat
         return $this->rootDirectory;
     }
 }
-
-?>

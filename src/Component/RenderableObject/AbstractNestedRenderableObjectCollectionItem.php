@@ -20,6 +20,7 @@ abstract class AbstractNestedRenderableObjectCollectionItem extends AbstractKeye
      * AbstractNestedRenderableObjectCollectionItem constructor.
      * @param $ID
      * @param RenderableObjectInterface $renderableObject
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     public function __construct($ID, RenderableObjectInterface $renderableObject)
     {
@@ -69,5 +70,3 @@ abstract class AbstractNestedRenderableObjectCollectionItem extends AbstractKeye
         return (string)$this->renderedContent;
     }
 }
-
-?>

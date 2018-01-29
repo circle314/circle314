@@ -13,5 +13,3 @@ interface SessionControllerInterface
      */
     public function validateSession();
 }
-
-?>

@@ -74,5 +74,3 @@ abstract class AbstractResponseHandler implements ResponseHandlerInterface
     abstract protected function postProcessResponseCode(ResponseInterface $response);
     #endregion
 }
-
-?>

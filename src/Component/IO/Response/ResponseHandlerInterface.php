@@ -16,5 +16,3 @@ interface ResponseHandlerInterface
      */
     public function generateResponse(ResponseInterface $response);
 }
-
-?>

@@ -20,5 +20,3 @@ abstract class AbstractErrorLogEntry implements ErrorLogEntryInterface
     abstract public function getAsHTML();
     abstract public function getAsText();
 }
-
-?>

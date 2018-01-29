@@ -25,5 +25,3 @@ abstract class AbstractAPIRequestHandler extends AbstractRequestHandler implemen
     }
     #endregion
 }
-
-?>

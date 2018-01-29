@@ -6,5 +6,3 @@ interface HTMLJSRendererInterface extends RendererInterface
 {
     public function retrieveRenderedJSCache();
 }
-
-?>

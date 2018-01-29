@@ -26,14 +26,14 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     public function closingIdentityDelimiter();
 
     /**
+     * @return mixed
+     */
+    public function filterParameterPrefix();
+
+    /**
      * @return string
      */
     public function getDatabaseName();
-
-    /**
-     * @return mixed
-     */
-    public function identifierParameterPrefix();
 
     /**
      * @return string

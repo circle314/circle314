@@ -8,5 +8,3 @@ class StrictException extends ErrorException
 {
 
 }
-
-?>

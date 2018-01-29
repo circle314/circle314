@@ -9,6 +9,7 @@ abstract class AbstractPageCommandHandler extends AbstractCommandHandler impleme
     #region Constructor
     /**
      * AbstractPageCommandHandler constructor.
+     * @throws \Circle314\Component\Exception\IncompleteConstructionException
      */
     public function __construct()
     {
@@ -17,5 +18,3 @@ abstract class AbstractPageCommandHandler extends AbstractCommandHandler impleme
     }
     #endregion
 }
-
-?>

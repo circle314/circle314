@@ -6,5 +6,3 @@ interface HashConfigurationInterface
 {
     public function algorithm();
 }
-
-?>

@@ -2,8 +2,13 @@
 
 namespace Circle314\Component\Data\ValueObject;
 
+use Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException;
+use Circle314\Component\Data\ValueObject\FilterRule\Native\NativeFilterRule;
+use Circle314\Component\Data\ValueObject\FilterRule\Native\NativeFilterRuleCollection;
 use \Exception;
 use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Data\Operator\Native\EqualToOperator;
+use Circle314\Component\Data\Operator\OperatorInterface;
 use Circle314\Component\Data\ValueObject\Configuration\DVOConfigurationInterface;
 use Circle314\Component\Data\ValueObject\Configuration\Native\NativeDVOConfiguration;
 use Circle314\Component\Data\ValueObject\Exception\DVOOrderingException;
@@ -21,6 +26,9 @@ abstract class AbstractDVO implements DVOInterface
 
     /** @var string */
     private $fieldName;
+
+    /** @var NativeFilterRuleCollection */
+    private $filterRules;
 
     /** @var TypeInterface */
     private $identifiedValue;
@@ -45,6 +53,11 @@ abstract class AbstractDVO implements DVOInterface
     #endregion
 
     #region Constructor
+    /**
+     * AbstractDVO constructor.
+     * @param $fieldName
+     * @param DVOConfigurationInterface|null $dvoConfiguration
+     */
     public function __construct($fieldName, DVOConfigurationInterface $dvoConfiguration = null)
     {
         $this->fieldName = $fieldName;
@@ -54,10 +67,24 @@ abstract class AbstractDVO implements DVOInterface
             $dvoConfiguration->setWriteable();
         }
         $this->configuration = $dvoConfiguration;
+        $this->filterRules = new NativeFilterRuleCollection();
     }
     #endregion
 
     #region Public Methods
+    /**
+     * @inheritdoc
+     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
+     * @since 0.7
+     */
+    final public function addFilterRule(OperatorInterface $operator, $value): void
+    {
+        $passedValue = ($value === null ? null : $this->refreshTypedValue($value));
+        $this->filterRules->addCollectionItem(
+            new NativeFilterRule($operator, $passedValue)
+        );
+    }
+
     /**
      * @throws Exception
      * @throws TypeValidationException
@@ -78,6 +105,11 @@ abstract class AbstractDVO implements DVOInterface
         return $this->fieldName;
     }
 
+    public function filterRules()
+    {
+        return $this->filterRules;
+    }
+
     public function getValue()
     {
         if(is_null($this->typedValue())) {
@@ -92,6 +124,11 @@ abstract class AbstractDVO implements DVOInterface
         return ($this->getDefaultValue() !== NullConstants::NO_DEFAULT_VALUE);
     }
 
+    final public function hasFilterRules(): bool
+    {
+        return $this->filterRules->count() !== 0;
+    }
+
     /**
      * @return string
      */
@@ -102,6 +139,7 @@ abstract class AbstractDVO implements DVOInterface
 
     /**
      * @return TypeInterface
+     * @deprecated 0.7
      */
     final public function identifiedValue()
     {
@@ -109,23 +147,24 @@ abstract class AbstractDVO implements DVOInterface
     }
 
     /**
-     * @throws TypeValidationException
      * @inheritdoc
+     * @throws CollectionExpectedClassMismatchException
      */
-    final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER): void
+    final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER, OperatorInterface $operator = null): void
     {
         try {
-            if($value === NullConstants::NON_EXISTENT_PARAMETER) {
-                $this->identifiedValue = $this->value;
-            } else {
-                $this->identifiedValue = $this->refreshTypedValue($value);
-            }
-            $this->markAsIdentifier();
-        } catch (TypeValidationException $e) {
-            throw new TypeValidationException('Could not cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
+            $passedValue = ($value === NullConstants::NON_EXISTENT_PARAMETER) ? $this->value->getValue() : $value;
+            $this->addFilterRule(new EqualToOperator(), $passedValue);
+        } catch (CollectionExpectedClassMismatchException $e) {
+            // There should never be a CollectionExpectedClassMismatchException, as we're calling final functions
+            return;
         }
     }
 
+    /**
+     * @return bool
+     * @deprecated 0.7
+     */
     final public function isMarkedAsIdentifier(): bool
     {
         return $this->markedAsIdentifier;
@@ -153,7 +192,7 @@ abstract class AbstractDVO implements DVOInterface
 
     final public function markAsPersisted()
     {
-        $this->unmarkAsIdentifier();
+        $this->filterRules->clearCollection();
         $this->unmarkAsOrdering();
         $this->unmarkAsUpdated();
     }
@@ -259,14 +298,6 @@ abstract class AbstractDVO implements DVOInterface
 
     #region Protected Methods
     /**
-     * Flags the field as an identifier.
-     */
-    final protected function markAsIdentifier(): void
-    {
-        $this->markedAsIdentifier = true;
-    }
-
-    /**
      * Flags the field as an ordering field, with a given priority.
      *
      * @param int $orderingPriority The priority in which this ordering will be applied, given there may be ordering from other fields in the downstream query.
@@ -282,14 +313,6 @@ abstract class AbstractDVO implements DVOInterface
     final protected function markAsUpdated(): void
     {
         $this->markedAsUpdated = true;
-    }
-
-    /**
-     * Removes the identifier flag from the field.
-     */
-    final protected function unmarkAsIdentifier(): void
-    {
-        $this->markedAsIdentifier = false;
     }
 
     /**

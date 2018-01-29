@@ -27,7 +27,7 @@ abstract class AbstractResponse implements ResponseInterface
 
     #region Public Methods
     /**
-     * @return NestedResponseCollectionInterface
+     * @return NativeNestedResponseCollection|NestedResponseCollectionInterface
      */
     final public function &nestedResponseCollection()
     {
@@ -73,5 +73,3 @@ abstract class AbstractResponse implements ResponseInterface
     abstract protected function deliverResponse();
     #endregion
 }
-
-?>

@@ -6,5 +6,3 @@ abstract class AbstractJSRenderableObject extends AbstractRenderableObject imple
 {
 
 }
-
-?>

@@ -18,5 +18,3 @@ interface RenderableObjectInterface
      */
     public function renderFromFilePath(StringType $filePath);
 }
-
-?>

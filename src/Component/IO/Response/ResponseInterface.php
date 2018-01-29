@@ -8,5 +8,3 @@ interface ResponseInterface
     public function &nestedResponseCollection();
     public function processResponse();
 }
-
-?>

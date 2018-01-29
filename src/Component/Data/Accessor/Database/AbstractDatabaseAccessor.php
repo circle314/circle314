@@ -3,19 +3,19 @@
 namespace Circle314\Component\Data\Accessor\Database;
 
 use \PDO;
-use Circle314\Component\Data\Persistence\PersistenceConstants;
-use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
-use Circle314\Component\Data\ValueObject\Collection\Native\NativeDVOCollection;
-use Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
+use Circle314\Component\Collection\KeyedCollectionInterface;
+use Circle314\Component\Collection\Native\NativeKeyedCollection;
+use Circle314\Component\Collection\CollectionConstants;
+use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\Persistence\Object\Database\DatabaseObjectInterface;
+use Circle314\Component\Data\ValueObject\DVOInterface;
+use Circle314\Component\Data\ValueObject\FilterRule\FilterRuleInterface;
 use Circle314\Component\Type\TypeInterface\BooleanTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTimeTypeInterface;
 use Circle314\Component\Type\TypeInterface\DateTypeInterface;
 use Circle314\Component\Type\TypeInterface\IntegerTypeInterface;
 use Circle314\Component\Type\TypeInterface\TypeInterface;
 use Circle314\Concept\Ordering\OrderingConstants;
-use Circle314\Transitional\TransitionalDataEntityInterface;
-use Circle314\Transitional\TransitionalDVOInterface;
 
 abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
 {
@@ -94,62 +94,30 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @return DVOCollectionInterface
+     * @param DataEntityInterface $dataEntity
+     * @return KeyedCollectionInterface
      */
-    final public function generateParameters(TransitionalDataEntityInterface $dataEntity)
+    final public function generateParameters(DataEntityInterface $dataEntity)
     {
-        $parameters = new NativeDVOCollection();
-        foreach ($dataEntity->fieldsMarkedAsIdentifiers() as $column) {
-            if(!is_null($column->identifiedValue()->getValue())) {
-                $parameters->saveID($this->configuration()->identifierParameterPrefix() . $column->fieldName(), $column);
+        $parameters = new NativeKeyedCollection();
+        foreach($dataEntity->fieldsMarkedForFiltering() as $column)
+        {
+            /**
+             * @var string $filterIndex
+             * @var FilterRuleInterface $filterRule
+             */
+            foreach($column->filterRules() as $filterIndex => $filterRule) {
+                if($filterRule->isNullValue() === false) {
+                    $parameters->saveID($this->filterParameterName($column, $filterIndex), $filterRule->typedValue());
+                }
             }
         }
-        foreach ($dataEntity->fieldsMarkedForUpdate() as $column) {
-            $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column);
-        }
-        return $parameters;
-    }
 
-    /**
-     * @param DatabaseTableSchemaInterface $databaseTableSchema
-     * @param string $readWrite
-     * @return string
-     * @throws DatabaseDataPersistenceException
-     * @deprecated 0.6
-     */
-    final public function getFullyQualifiedTableName(DatabaseTableSchemaInterface $databaseTableSchema, $readWrite)
-    {
-        switch($readWrite)
-        {
-            case PersistenceConstants::READ:
-                $tableName = $databaseTableSchema->tableNameForReads();
-                break;
-            case PersistenceConstants::WRITE:
-                $tableName = $databaseTableSchema->tableNameForWrites();
-                break;
-            default:
-                throw new DatabaseDataPersistenceException('Calls to ' . __METHOD__ . ' must have context of either READ or WRITE');
+        foreach ($dataEntity->fieldsMarkedForUpdate() as $column) {
+            $parameters->saveID($this->configuration()->writeParameterPrefix() . $column->fieldName(), $column->typedValue());
         }
-        $database = $this->configuration()->supportsCrossDatabaseReferences()
-            ? (
-                $this->configuration()->openingIdentityDelimiter()
-                . $databaseTableSchema->databaseName()
-                . $this->configuration()->closingIdentityDelimiter()
-                . '.'
-            )
-            : ''
-        ;
-        $schema = $this->configuration()->openingIdentityDelimiter()
-            . $databaseTableSchema->databaseSchemaName()
-            . $this->configuration()->closingIdentityDelimiter()
-            . '.'
-        ;
-        $table = $this->configuration()->openingIdentityDelimiter()
-            . $tableName
-            . $this->configuration()->closingIdentityDelimiter()
-        ;
-        return $database . $schema . $table;
+
+        return $parameters;
     }
 
     /**
@@ -236,28 +204,25 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     #endregion
 
     #region Protected Methods
-    final protected function delimitedFullyQualifiedTableName($schemaName, $tableName)
+    final protected function filterParameterName(DVOInterface $column, string $filterIndex): string
     {
-        $schema = $this->configuration()->openingIdentityDelimiter()
-            . $schemaName
-            . $this->configuration()->closingIdentityDelimiter()
-            . '.'
+        $filterIndex = str_replace(CollectionConstants::_COLLECTION_KEY_PREFIX, '', $filterIndex);
+        $filterParameterName = $this->configuration()->filterParameterPrefix()
+            . $column->fieldName()
+            . '__ix'
+            . $filterIndex
         ;
-        $table = $this->configuration()->openingIdentityDelimiter()
-            . $tableName
-            . $this->configuration()->closingIdentityDelimiter()
-        ;
-        return $schema . $table;
+        return $filterParameterName;
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateOrderByClauses(TransitionalDataEntityInterface $dataEntity)
+    final protected function generateOrderByClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
-        if($dataEntity->fieldsMarkedForOrdering()->count())
+        if($dataEntity->hasOrderingRules())
         {
             $query .= ' ORDER BY ';
             $orderByClauses = [];
@@ -290,33 +255,21 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
+     * @param DataEntityInterface $dataEntity
      * @return string
      */
-    final protected function generateWhereClauses(TransitionalDataEntityInterface $dataEntity)
+    final protected function generateWhereClauses(DataEntityInterface $dataEntity)
     {
         $query = '';
-        if($dataEntity->fieldsMarkedAsIdentifiers()->count())
+        if($dataEntity->hasFilteringRules())
         {
             $query .= ' WHERE ';
             $whereClauses = [];
-            /** @var TransitionalDVOInterface $column */
-            foreach($dataEntity->fieldsMarkedAsIdentifiers() as $column)
+            foreach($dataEntity->fieldsMarkedForFiltering() as $column)
             {
-                $whereClauses[] =
-                    $this->configuration->openingIdentityDelimiter()
-                    . $column->fieldName()
-                    . $this->configuration->closingIdentityDelimiter()
-                    . (
-                        is_null($column->identifiedValue()->getValue())
-                        ? ' IS NULL'
-                        : (
-                            '='
-                            . $this->configuration()->identifierParameterPrefix()
-                            . $column->fieldName()
-                        )
-                    )
-                ;
+                foreach($column->filterRules() as $filterIndex => $filterRule) {
+                    $whereClauses[] = $this->generateClauseFromFilterRule($column, $filterRule, $filterIndex);
+                }
             }
             $query .= implode(' AND ', $whereClauses);
         }
@@ -372,11 +325,26 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     }
     #endregion
 
-    #region Abstract Methods
+    #region Abstract Public Methods
     abstract public function connect();
-    abstract public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
-    abstract public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null);
+    abstract public function generateDeleteQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateInsertQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateSelectQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    abstract public function generateUpdateQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject);
+    #endregion
+
+    #region Abstract Protected Methods
+    /**
+     * Generates a SQL clauses from a Filter Rule.
+     *
+     * @param DVOInterface $column
+     * @param FilterRuleInterface $filterRule
+     * @param string $filterIndex
+     * @return string
+     */
+    abstract protected function generateClauseFromFilterRule(DVOInterface $column, FilterRuleInterface $filterRule, string $filterIndex): string;
+
+    abstract protected function generateLockingClause(DataEntityInterface $dataEntity): string;
+    abstract protected function generateSkipLockClause(DataEntityInterface $dataEntity): string;
     #endregion
 }

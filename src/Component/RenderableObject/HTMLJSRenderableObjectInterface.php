@@ -6,5 +6,3 @@ interface HTMLJSRenderableObjectInterface extends RenderableObjectInterface, HTM
 {
 
 }
-
-?>

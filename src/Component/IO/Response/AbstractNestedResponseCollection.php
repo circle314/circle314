@@ -16,7 +16,7 @@ abstract class AbstractNestedResponseCollection extends AbstractKeyedCollection 
     #region Constructor
     /**
      * AbstractNestedResponseCollection constructor.
-     * @param NestedResponseCollectionItemInterface[] $nestedResponses
+     * @param array $nestedResponses
      */
     public function __construct(Array $nestedResponses)
     {
@@ -42,6 +42,8 @@ abstract class AbstractNestedResponseCollection extends AbstractKeyedCollection 
      * @param $ID
      * @param $generatedResponse
      * @throws CollectionIDNotFoundException
+     * @throws \Circle314\Component\Type\Exception\TypeValidationException
+     * @throws \Circle314\Component\Type\Exception\ValueOutOfBoundsException
      */
     public function setGeneratedResponse($ID, $generatedResponse)
     {
@@ -55,5 +57,3 @@ abstract class AbstractNestedResponseCollection extends AbstractKeyedCollection 
     }
     #endregion
 }
-
-?>

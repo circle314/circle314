@@ -16,5 +16,3 @@ class NativeErrorLogEntry extends AbstractErrorLogEntry
         return str_replace(PHP_EOL, "\n", $this->errorMessage());
     }
 }
-
-?>

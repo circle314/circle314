@@ -4,7 +4,8 @@ namespace Circle314\Component\Authentication\LDAP;
 
 /**
  * Class AbstractLDAPAuthenticationConfiguration
- * @package Circle314\Component\AuthenticationHandler\LDAP
+ * @package Circle314\Component\Authentication
+ * @deprecated 0.7
  */
 abstract class AbstractLDAPAuthenticationConfiguration implements LDAPAuthenticationConfigurationInterface
 {
@@ -37,6 +38,7 @@ abstract class AbstractLDAPAuthenticationConfiguration implements LDAPAuthentica
 
     /**
      * @return string
+     * @deprecated 0.7
      */
     public function getBaseDN() {
         return $this->baseDN;
@@ -106,5 +108,3 @@ abstract class AbstractLDAPAuthenticationConfiguration implements LDAPAuthentica
     }
     #endregion
 }
-
-?>

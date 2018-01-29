@@ -9,5 +9,3 @@ interface ErrorLogEntryInterface extends CollectionItemInterface
     public function getAsHTML();
     public function getAsText();
 }
-
-?>

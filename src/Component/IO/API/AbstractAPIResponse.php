@@ -15,5 +15,3 @@ abstract class AbstractAPIResponse extends AbstractResponse implements APIRespon
         parent::__construct($superGlobalRepository);
     }
 }
-
-?>

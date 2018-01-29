@@ -2,16 +2,22 @@
 
 namespace Circle314\Component\Data\Accessor\Database\PostgreSQL;
 
+use Circle314\Component\Data\Entity\DataEntityInterface;
+use Circle314\Component\Data\Operator\Native\EqualToOperator;
+use Circle314\Component\Data\Operator\Native\GreaterThanOperator;
+use Circle314\Component\Data\Operator\Native\GreaterThanOrEqualToOperator;
+use Circle314\Component\Data\Operator\Native\LessThanOperator;
+use Circle314\Component\Data\Operator\Native\LessThanOrEqualToOperator;
+use Circle314\Component\Data\Operator\Native\NotEqualToOperator;
+use Circle314\Component\Data\Persistence\Object\Database\DatabaseObjectInterface;
+use Circle314\Component\Data\ValueObject\DVOInterface;
+use Circle314\Component\Data\ValueObject\FilterRule\FilterRuleInterface;
 use \Exception;
 use \PDO;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalDeleteOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalInsertOperationException;
-use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalSelectOperationException;
 use Circle314\Component\Data\Persistence\Strategy\Exception\IllegalUpdateOperationException;
-use Circle314\Component\Data\Persistence\PersistenceConstants;
-use Circle314\Component\Schema\Database\DatabaseTableSchemaInterface;
 use Circle314\Component\Data\Accessor\Database\AbstractDatabaseAccessor;
-use Circle314\Transitional\TransitionalDataEntityInterface;
 
 /**
  * Class PostgreSQLDatabaseAccessor
@@ -70,35 +76,18 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalDeleteOperationException
      */
-    public function generateDeleteQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateDeleteQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->deleteQueriesAllowed()) {
-                throw new IllegalDeleteOperationException(
-                    'SQL DELETE queries forbidden on table '
-                    . $tableName
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
-
-        /** @var TransitionalDataEntityInterface $dataEntity */
-        if(!$dataEntity->fieldsMarkedAsIdentifiers()->count()) {
-            throw new IllegalDeleteOperationException('Cannot generate an SQL DELETE query without identifiers');
+        if($dataEntity->hasFilteringRules() === false) {
+            throw new IllegalDeleteOperationException('Cannot generate an SQL DELETE query without and filtering rules');
         }
 
         $query =
             'DELETE FROM '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . $this->generateWhereClauses($dataEntity)
             . ';'
         ;
@@ -106,38 +95,19 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param null $schemaName
-     * @param null $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalInsertOperationException
-     * @throws \Circle314\Component\Data\Mediator\Database\Exception\DatabaseDataPersistenceException
      */
-    public function generateInsertQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateInsertQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->insertQueriesAllowed())
-            {
-                throw new IllegalInsertOperationException(
-                    'SQL INSERT queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
-
-        /** @var TransitionalDataEntityInterface $dataEntity */
-        if(!$dataEntity->fieldsMarkedForUpdate()->count())
+        if(!$dataEntity->hasUpdatedValues())
         {
             throw new IllegalInsertOperationException('Cannot generate an SQL INSERT query without any updated fields');
         }
 
         $query =
             'INSERT INTO '
-            . $tableName
+            . $databaseObject->resolvedName($this)
         ;
         $columnNames = [];
         $boundValueNames = [];
@@ -165,75 +135,40 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
-     * @throws IllegalSelectOperationException
+     * @inheritdoc
      */
-    public function generateSelectQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateSelectQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->selectQueriesAllowed()) {
-                throw new IllegalSelectOperationException(
-                    'SQL SELECT queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::READ);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
-
-        /** @var TransitionalDataEntityInterface $dataEntity */
         $query =
             'SELECT * FROM '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . $this->generateWhereClauses($dataEntity)
             . $this->generateOrderByClauses($dataEntity)
+            . $this->generateLockingClause($dataEntity)
             . ';'
         ;
         return $query;
     }
 
     /**
-     * @param TransitionalDataEntityInterface $dataEntity
-     * @param string $schemaName
-     * @param string $tableName
-     * @return string
+     * @inheritdoc
      * @throws IllegalUpdateOperationException
      */
-    public function generateUpdateQuery(TransitionalDataEntityInterface $dataEntity, $schemaName = null, $tableName = null)
+    public function generateUpdateQuery(DataEntityInterface $dataEntity, DatabaseObjectInterface $databaseObject)
     {
-        if(is_null($tableName)) {
-            /** @var DatabaseTableSchemaInterface $dataEntity */
-            if(!$dataEntity->updateQueriesAllowed())
-            {
-                throw new IllegalUpdateOperationException(
-                    'SQL UPDATE queries forbidden on table '
-                    . $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE)
-                );
-            }
-            $tableName = $this->getFullyQualifiedTableName($dataEntity, PersistenceConstants::WRITE);
-        } else {
-            $tableName = $this->delimitedFullyQualifiedTableName($schemaName, $tableName);
-        }
-
-        /** @var TransitionalDataEntityInterface $dataEntity */
-        if(!$dataEntity->fieldsMarkedForUpdate()->count())
+        if(!$dataEntity->hasUpdatedValues())
         {
             throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any updated fields');
         }
 
-        if(!$dataEntity->fieldsMarkedAsIdentifiers()->count())
+        if(!$dataEntity->hasFilteringRules())
         {
-            throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any identifier fields');
+            throw new IllegalUpdateOperationException('Cannot generate an SQL UPDATE query without any filtering rules');
         }
 
         $query =
             'UPDATE '
-            . $tableName
+            . $databaseObject->resolvedName($this)
             . ' SET '
         ;
         $updateFields = [];
@@ -252,6 +187,59 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
         $query .= $this->generateWhereClauses($dataEntity);
         $query .= ' RETURNING *';
         return $query;
+    }
+    #endregion
+
+    #region Protected Methods
+    /**
+     * @inheritdoc
+     * @throws Exception
+     */
+    protected function generateClauseFromFilterRule(DVOInterface $column, FilterRuleInterface $filterRule, string $filterIndex): string
+    {
+        $columnName = $this->configuration()->openingIdentityDelimiter()
+            . $column->fieldName()
+            . $this->configuration()->closingIdentityDelimiter()
+        ;
+
+        switch(get_class($filterRule->operator())) {
+            case EqualToOperator::class:
+                return ($filterRule->isNullValue())
+                    ? $columnName . ' IS NULL'
+                    : $columnName . '=' . $this->filterParameterName($column, $filterIndex)
+                    ;
+                break;
+            case GreaterThanOperator::class:
+                return $columnName . '>' . $this->filterParameterName($column, $filterIndex);
+                break;
+            case GreaterThanOrEqualToOperator::class:
+                return $columnName . '>=' . $this->filterParameterName($column, $filterIndex);
+                break;
+            case LessThanOperator::class:
+                return $columnName . '<' . $this->filterParameterName($column, $filterIndex);
+                break;
+            case LessThanOrEqualToOperator::class:
+                return $columnName . '<=' . $this->filterParameterName($column, $filterIndex);
+                break;
+            case NotEqualToOperator::class:
+                return ($filterRule->isNullValue())
+                    ? $columnName . ' IS NOT NULL'
+                    : $columnName . '!=' . $this->filterParameterName($column, $filterIndex)
+                    ;
+                break;
+            default:
+                throw new Exception('Unknown Filter Rule "' . get_class($filterRule) . '" supplied');
+        }
+    }
+
+    final protected function generateLockingClause(DataEntityInterface $dataEntity): string
+    {
+        return $dataEntity->isLockedForUpdate() ? ' FOR UPDATE' : '';
+    }
+
+    final protected function generateSkipLockClause(DataEntityInterface $dataEntity): string
+    {
+        return $dataEntity->isLockedDataSkipped() ? ' SKIP LOCKED' : '';
     }
     #endregion
 }
