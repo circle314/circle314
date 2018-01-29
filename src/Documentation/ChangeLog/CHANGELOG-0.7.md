@@ -109,6 +109,25 @@ It is important to note that PostgreSQL does not allow locking on views that uti
 (aka OLAP functions), and will throw an `Exception` if you attempt to use a `retrieve*()` after using
 a `lockForUpdate()` on one of these views.
 
+#### Skipping locked data
+
+Is it now possible to skip locked data when submitting a `DataEntity` to a `Repository` under a `get()` operation.
+The syntax is:
+
+    $filteringDataEntity = $dataEntityRepository->createBlank();
+    $filteringDataEntity->ID()->addFilterRule(new EqualToOperator(), 5);
+    $filteringDataEntity->skipLockedData();
+    $dataEntity = $dataEntityRepository->retrieveCollection($dataEntity);
+
+This is equivalent to writing a SQL statement in the form:
+
+    SELECT ... SKIP LOCKED
+
+This functionality can be used in conjunction with the locking for update functionality described above.
+
+It is important to note that this is currently only implemented for PostrgeSQL. MySQL has no equivalent
+command in it's flavour of SQL syntax, so future implementation on that platform is highly unlikely.
+
 ### Deprecated Components
 
 The following components are now deprecated and will be removed in a future version, likely 0.8

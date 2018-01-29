@@ -13,6 +13,14 @@ use Circle314\Component\Type\TypeInterface\TypeInterface;
 interface FilterRuleInterface
 {
     /**
+     * Reports whether the Filter Rule value is null.
+     *
+     * @return bool
+     * @since 0.7
+     */
+    public function isNullValue(): bool;
+
+    /**
      * The operator of the Filter Rule.
      *
      * @return OperatorInterface
@@ -23,8 +31,8 @@ interface FilterRuleInterface
     /**
      * The value that is operated on.
      *
-     * @return TypeInterface
+     * @return null|TypeInterface
      * @since 0.7
      */
-    public function typedValue(): TypeInterface;
+    public function typedValue(): ?TypeInterface;
 }

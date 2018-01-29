@@ -15,6 +15,11 @@ It should be possible to declare a row-level lock when using the `DataEntityRepo
 classes, so it has to be determined where this functionality will be implemented, how it will be passed,
 and where it will be defined.
 
+## Skipping locked data
+
+Database platforms that support skipping locked rows should have equivalent functionality when supplying
+a `DataEntity` as a filter to a `Repository`. 
+
 ## Introduce OO sources and targets in Persistence Strategies
 
 Currently, `AbstractDatabasePersistenceStrategy` extends `AbstractPersistenceStrategy` to implement the `get()`,

@@ -27,11 +27,13 @@ abstract class AbstractFilterRule implements FilterRuleInterface
      */
     public function __construct(
         OperatorInterface $operator,
-        TypeInterface $typedValue
+        ?TypeInterface $typedValue
     ) {
         if(
-            $operator->acceptsNullValues() === false &&
-            $typedValue->getValue() === null
+            $operator->acceptsNullValues() === false && (
+                $typedValue === null ||
+                $typedValue->getValue() === null
+            )
         ) {
             throw new Exception('Attempted to create FilterRule with null value, when Operator "' . get_class($operator) . '" doesn\'t accept null values');
         }
@@ -41,12 +43,17 @@ abstract class AbstractFilterRule implements FilterRuleInterface
     #endregion
 
     #region Public Methods
+    public function isNullValue(): bool
+    {
+        return $this->typedValue === null;
+    }
+
     public function operator(): OperatorInterface
     {
         return $this->operator;
     }
 
-    public function typedValue(): TypeInterface
+    public function typedValue(): ?TypeInterface
     {
         return $this->typedValue;
     }

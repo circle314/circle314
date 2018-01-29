@@ -75,13 +75,20 @@ interface DataEntityInterface extends IdentifiableInterface
     public function hasUpdatedValues(): bool;
 
     /**
-     * When the DataEntity is used as a filter for get operations, applies a lock to the persistence
-     * mechanism at the most granular level it can (e.g. row-level for database)
+     * Whether or not locked data is skipped when the DataEntity is used as a filter for get operations.
+     * This is useful for when the persistence object is being utilised like a queue.
+     */
+    public function isLockedDataSkipped(): bool;
+
+    /**
+     * Whether or not data will be locked when the DataEntity is used as a filter for get operations.
+     * This is useful for avoiding processing of the same data by two different threads.
      */
     public function isLockedForUpdate(): bool;
 
     /**
-     * Marks the Data Entity as locked for update.
+     * Marks the Data Entity as locked for update when used as a get filter.
+     * This is useful for avoiding processing of the same data by two different threads.
      */
     public function lockForUpdate(): void;
 
@@ -89,5 +96,11 @@ interface DataEntityInterface extends IdentifiableInterface
      * Marks the DataEntity as having been persisted.
      */
     public function markFieldsAsPersisted();
+
+    /**
+     * Adjust the Data Entity so that it skips locked data when used as a get filter.
+     * This is useful for when the persistence object is being utilised like a queue.
+     */
+    public function skipLockedData();
     #endregion
 }

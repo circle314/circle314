@@ -16,6 +16,7 @@ abstract class AbstractDataEntity implements DataEntityInterface
     /** @var NativeDVOCollection */
     protected $fields;
     protected $isLockedForUpdate = false;
+    protected $isLockedDataSkipped = false;
     #endregion
 
     #region Constructor
@@ -161,6 +162,15 @@ abstract class AbstractDataEntity implements DataEntityInterface
      * @inheritdoc
      * @since 0.7
      */
+    public function isLockedDataSkipped(): bool
+    {
+        return $this->isLockedDataSkipped;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 0.7
+     */
     final public function isLockedForUpdate(): bool
     {
         return $this->isLockedForUpdate;
@@ -182,6 +192,11 @@ abstract class AbstractDataEntity implements DataEntityInterface
             $field->markAsPersisted();
         }
         $this->isLockedForUpdate = false;
+    }
+
+    final public function skipLockedData(): void
+    {
+        $this->isLockedDataSkipped = true;
     }
     #endregion
 

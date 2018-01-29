@@ -204,7 +204,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
 
         switch(get_class($filterRule->operator())) {
             case EqualToOperator::class:
-                return is_null($filterRule->typedValue()->getValue())
+                return ($filterRule->isNullValue())
                     ? $columnName . ' IS NULL'
                     : $columnName . '=' . $this->filterParameterName($column, $filterIndex)
                     ;
@@ -222,7 +222,7 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
                 return $columnName . '<=' . $this->filterParameterName($column, $filterIndex);
                 break;
             case NotEqualToOperator::class:
-                return is_null($filterRule->typedValue()->getValue())
+                return ($filterRule->isNullValue())
                     ? $columnName . ' IS NOT NULL'
                     : $columnName . '!=' . $this->filterParameterName($column, $filterIndex)
                     ;
@@ -235,6 +235,11 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
     final protected function generateLockingClause(DataEntityInterface $dataEntity): string
     {
         return $dataEntity->isLockedForUpdate() ? ' FOR UPDATE' : '';
+    }
+
+    final protected function generateSkipLockClause(DataEntityInterface $dataEntity): string
+    {
+        return $dataEntity->isLockedDataSkipped() ? ' SKIP LOCKED' : '';
     }
     #endregion
 }

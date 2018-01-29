@@ -107,7 +107,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
              * @var FilterRuleInterface $filterRule
              */
             foreach($column->filterRules() as $filterIndex => $filterRule) {
-                if($filterRule->typedValue()->getValue() !== null) {
+                if($filterRule->isNullValue() === false) {
                     $parameters->saveID($this->filterParameterName($column, $filterIndex), $filterRule->typedValue());
                 }
             }
@@ -345,5 +345,6 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
     abstract protected function generateClauseFromFilterRule(DVOInterface $column, FilterRuleInterface $filterRule, string $filterIndex): string;
 
     abstract protected function generateLockingClause(DataEntityInterface $dataEntity): string;
+    abstract protected function generateSkipLockClause(DataEntityInterface $dataEntity): string;
     #endregion
 }

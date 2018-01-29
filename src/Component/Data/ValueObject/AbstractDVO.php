@@ -2,6 +2,7 @@
 
 namespace Circle314\Component\Data\ValueObject;
 
+use Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException;
 use Circle314\Component\Data\ValueObject\FilterRule\Native\NativeFilterRule;
 use Circle314\Component\Data\ValueObject\FilterRule\Native\NativeFilterRuleCollection;
 use \Exception;
@@ -78,8 +79,9 @@ abstract class AbstractDVO implements DVOInterface
      */
     final public function addFilterRule(OperatorInterface $operator, $value): void
     {
+        $passedValue = ($value === null ? null : $this->refreshTypedValue($value));
         $this->filterRules->addCollectionItem(
-            new NativeFilterRule($operator, $this->refreshTypedValue($value))
+            new NativeFilterRule($operator, $passedValue)
         );
     }
 
@@ -146,19 +148,16 @@ abstract class AbstractDVO implements DVOInterface
 
     /**
      * @inheritdoc
-     * @throws TypeValidationException
-     * @throws ValueOutOfBoundsException
+     * @throws CollectionExpectedClassMismatchException
      */
     final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER, OperatorInterface $operator = null): void
     {
         try {
-            if($value === NullConstants::NON_EXISTENT_PARAMETER) {
-                $this->addFilterRule(new EqualToOperator(), $this->value);
-            } else {
-                $this->addFilterRule(new EqualToOperator(), $this->refreshTypedValue($value));
-            }
-        } catch (TypeValidationException $e) {
-            throw new TypeValidationException('Could not cast value ' . var_export($value, true) . ' to new typed value for DVO "' . $this->fieldName() . '" in ' . static::class);
+            $passedValue = ($value === NullConstants::NON_EXISTENT_PARAMETER) ? $this->value->getValue() : $value;
+            $this->addFilterRule(new EqualToOperator(), $passedValue);
+        } catch (CollectionExpectedClassMismatchException $e) {
+            // There should never be a CollectionExpectedClassMismatchException, as we're calling final functions
+            return;
         }
     }
 
