@@ -49,6 +49,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
             // Attempt to connect
             $dsn = 'mysql:host=' .
                 $this->configuration()->getServerIP() .
+                ';port=' . $this->configuration()->getServerPort() .
                 ($this->configuration()->getDatabaseName() ? ';dbname=' . $this->configuration()->getDatabaseName() : '')
             ;
             $this->setPDO(

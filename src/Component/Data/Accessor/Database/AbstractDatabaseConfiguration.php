@@ -27,6 +27,9 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     /** @var string */
     private $serverIP = null;
 
+    /** @var int */
+    private $serverPort = null;
+
     /** @var string */
     private $username = null;
     #endregion
@@ -35,14 +38,16 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     /**
      * @param mixed $uniqueAccessorName A unique name for your connection. e.g. "My MySQL database connection"
      * @param string $serverIP
+     * @param int $serverPort
      * @param string $databaseName
      * @param string $username
      * @param string $password
      */
-    final public function __construct($uniqueAccessorName, $serverIP, $databaseName, $username, $password) {
+    final public function __construct($uniqueAccessorName, $serverIP, $serverPort, $databaseName, $username, $password) {
         $this
             ->setID($uniqueAccessorName)
             ->setServerIP($serverIP)
+            ->setServerPort($serverPort)
             ->setDatabaseName($databaseName)
             ->setUsername($username)
             ->setPassword($password);
@@ -81,6 +86,13 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
      */
     public function getServerIP() {
         return $this->serverIP;
+    }
+
+    /**
+     * @return int
+     */
+    public function getServerPort() {
+        return $this->serverPort;
     }
 
     /**
@@ -147,6 +159,15 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
      */
     private function setServerIP($serverIP) {
         $this->serverIP = $serverIP;
+        return $this;
+    }
+
+    /**
+     * @param int $serverPort
+     * @return $this
+     */
+    private function setServerPort($serverPort) {
+        $this->serverPort = $serverPort;
         return $this;
     }
 
