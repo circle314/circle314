@@ -49,15 +49,15 @@ class PostgreSQLDatabaseAccessor extends AbstractDatabaseAccessor
         if($this->PDO() === null) {
             // Attempt to connect
             $dsn = 'pgsql:host=' .
-                $this->configuration()->getServerIP() .
-                ';port=' . $this->configuration()->getServerPort() .
-                ($this->configuration()->getDatabaseName() ? ';dbname=' . $this->configuration()->getDatabaseName() : '')
+                $this->configuration()->serverIP() .
+                ';port=' . $this->configuration()->serverPort() .
+                ($this->configuration()->databaseName() ? ';dbname=' . $this->configuration()->databaseName() : '')
             ;
             $this->setPDO(
                 new PDO(
                     $dsn,
-                    $this->configuration()->getUsername(),
-                    $this->configuration()->getPassword(),
+                    $this->configuration()->username(),
+                    $this->configuration()->password(),
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_ORACLE_NULLS => PDO::NULL_NATURAL,

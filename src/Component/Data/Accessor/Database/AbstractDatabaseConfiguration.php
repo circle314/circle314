@@ -2,106 +2,54 @@
 
 namespace Circle314\Component\Data\Accessor\Database;
 
+use \Exception;
+use Circle314\Component\Collection\AbstractKeyedCollection;
+use Circle314\Component\Collection\KeyedCollectionInterface;
+
 /**
  * Class AbstractDatabaseConfiguration
  * @package Circle314\Component\Data
  */
-abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInterface
+abstract class AbstractDatabaseConfiguration extends AbstractKeyedCollection implements DatabaseConfigurationInterface
 {
-    #region Private variables
-    /** @var string */
-    private $databaseName = null;
-
-    /** @var string */
-    private $dateFormat = null;
-
-    /** @var string */
-    private $dateTimeFormat = null;
-
-    /** @var mixed */
+    #region Properties
     private $ID;
-
-    /** @var string */
-    private $password = null;
-
-    /** @var string */
-    private $serverIP = null;
-
-    /** @var int */
-    private $serverPort = null;
-
-    /** @var string */
-    private $username = null;
     #endregion
 
-    #region Public methods
+    #region Constructor
     /**
      * @param mixed $uniqueAccessorName A unique name for your connection. e.g. "My MySQL database connection"
-     * @param string $serverIP
-     * @param int $serverPort
-     * @param string $databaseName
-     * @param string $username
-     * @param string $password
+     * @param array $configurationParameters The configuration parameters for the connection
+     * @throws Exception
      */
-    final public function __construct($uniqueAccessorName, $serverIP, $serverPort, $databaseName, $username, $password) {
-        $this
-            ->setID($uniqueAccessorName)
-            ->setServerIP($serverIP)
-            ->setServerPort($serverPort)
-            ->setDatabaseName($databaseName)
-            ->setUsername($username)
-            ->setPassword($password);
+    final public function __construct($uniqueAccessorName, array $configurationParameters = []) {
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_DATABASE_NAME, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_DATABASE_NAME . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_DATE_FORMAT, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_DATE_FORMAT . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_DATETIME_FORMAT, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_DATETIME_FORMAT . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_PASSWORD, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_PASSWORD . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_SERVER_IP, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_SERVER_IP . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_SERVER_PORT, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_SERVER_PORT . '"');
+        }
+        if(!array_key_exists(DatabaseConfigurationParameterConstants::_USERNAME, $configurationParameters)) {
+            throw new Exception('Database configuration missing key "' . DatabaseConfigurationParameterConstants::_USERNAME . '"');
+        }
+        $this->ID = $uniqueAccessorName;
+        parent::__construct($configurationParameters);
     }
+    #endregion
 
-    /**
-     * @return string
-     */
-    public function dateFormat() {
-        return $this->dateFormat;
-    }
-
-    /**
-     * @return string
-     */
-    public function dateTimeFormat() {
-        return $this->dateTimeFormat;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDatabaseName() {
-        return $this->databaseName;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPassword() {
-        return $this->password;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServerIP() {
-        return $this->serverIP;
-    }
-
-    /**
-     * @return int
-     */
-    public function getServerPort() {
-        return $this->serverPort;
-    }
-
-    /**
-     * @return string
-     */
-    public function getUsername() {
-        return $this->username;
-    }
-
+    #region Public Methods
     /**
      * @return mixed
      */
@@ -111,73 +59,59 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     }
 
     /**
-     * @param string $dateFormat
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    final public function setDateFormat($dateFormat) {
-        $this->dateFormat = $dateFormat;
-        return $this;
+    public function databaseName() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_DATABASE_NAME);
     }
 
     /**
-     * @param string $dateTimeFormat
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    final public function setDateTimeFormat($dateTimeFormat) {
-        $this->dateTimeFormat = $dateTimeFormat;
-        return $this;
-    }
-    #endregion
-
-    #region Private methods
-    /**
-     * @param string $databaseName
-     * @return $this
-     */
-    private function setDatabaseName($databaseName) {
-        $this->databaseName = $databaseName;
-        return $this;
-    }
-
-    private function setID($ID) {
-        $this->ID = $ID;
-        return $this;
+    public function dateFormat() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_DATE_FORMAT);
     }
 
     /**
-     * @param string $password
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    private function setPassword($password) {
-        $this->password = $password;
-        return $this;
+    public function dateTimeFormat() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_DATETIME_FORMAT);
     }
 
     /**
-     * @param string $serverIP
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    private function setServerIP($serverIP) {
-        $this->serverIP = $serverIP;
-        return $this;
+    public function password() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_PASSWORD);
     }
 
     /**
-     * @param int $serverPort
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    private function setServerPort($serverPort) {
-        $this->serverPort = $serverPort;
-        return $this;
+    public function serverIP() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_SERVER_IP);
     }
 
     /**
-     * @param string $username
-     * @return $this
+     * @return string
+     * @throws Exception
      */
-    private function setUsername($username) {
-        $this->username = $username;
-        return $this;
+    public function serverPort() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_SERVER_PORT);
+    }
+
+    /**
+     * @return string
+     * @throws Exception
+     */
+    public function username() {
+        return $this->getID(DatabaseConfigurationParameterConstants::_USERNAME);
     }
     #endregion
 
@@ -190,11 +124,21 @@ abstract class AbstractDatabaseConfiguration implements DatabaseConfigurationInt
     /**
      * @return string
      */
+    abstract public function filterParameterPrefix();
+
+    /**
+     * @return string
+     */
     abstract public function openingIdentityDelimiter();
 
     /**
      * @return bool
      */
     abstract public function supportsCrossDatabaseReferences();
+
+    /**
+     * @return bool
+     */
+    abstract public function writeParameterPrefix();
     #endregion
 }

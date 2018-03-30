@@ -13,17 +13,22 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     /**
      * @return string
      */
+    public function closingIdentityDelimiter();
+
+    /**
+     * @return string
+     */
+    public function databaseName();
+
+    /**
+     * @return string
+     */
     public function dateFormat();
 
     /**
      * @return string
      */
     public function dateTimeFormat();
-
-    /**
-     * @return string
-     */
-    public function closingIdentityDelimiter();
 
     /**
      * @return mixed
@@ -33,17 +38,32 @@ interface DatabaseConfigurationInterface extends IdentifiableInterface
     /**
      * @return string
      */
-    public function getDatabaseName();
+    public function openingIdentityDelimiter();
 
     /**
      * @return string
      */
-    public function openingIdentityDelimiter();
+    public function password();
+
+    /**
+     * @return string
+     */
+    public function serverIP();
+
+    /**
+     * @return string
+     */
+    public function serverPort();
 
     /**
      * @return bool
      */
     public function supportsCrossDatabaseReferences();
+
+    /**
+     * @return string
+     */
+    public function username();
 
     /**
      * @return mixed
