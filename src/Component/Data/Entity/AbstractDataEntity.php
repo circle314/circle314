@@ -3,6 +3,7 @@
 namespace Circle314\Component\Data\Entity;
 
 use \ArrayIterator;
+use \Exception;
 use Circle314\Component\Collection\Exception\CollectionIDDuplicateException;
 use Circle314\Component\Data\ValueObject\Collection\DVOCollectionInterface;
 use Circle314\Component\Data\ValueObject\Collection\Native\NativeDVOCollection;
@@ -15,8 +16,11 @@ abstract class AbstractDataEntity implements DataEntityInterface
     #region Properties
     /** @var NativeDVOCollection */
     protected $fields;
+    protected $isLimited = false;
     protected $isLockedForUpdate = false;
     protected $isLockedDataSkipped = false;
+    protected $limit = null;
+    protected $offset = null;
     #endregion
 
     #region Constructor
@@ -160,6 +164,15 @@ abstract class AbstractDataEntity implements DataEntityInterface
 
     /**
      * @inheritdoc
+     * @return bool
+     */
+    final public function _isLimitedNumberOfResults(): bool
+    {
+        return $this->limit !== null;
+    }
+
+    /**
+     * @inheritdoc
      * @since 0.7
      */
     public function isLockedDataSkipped(): bool
@@ -174,6 +187,40 @@ abstract class AbstractDataEntity implements DataEntityInterface
     final public function isLockedForUpdate(): bool
     {
         return $this->isLockedForUpdate;
+    }
+
+    /**
+     * @inheritdoc
+     * @return int|null
+     */
+    final public function _limit(): ?int
+    {
+        return $this->limit;
+    }
+
+    /**
+     * @inheritdoc
+     * @return int
+     */
+    final public function _offset(): ?int
+    {
+        return $this->offset;
+    }
+
+    /**
+     * @inheritdoc
+     * @throws Exception
+     */
+    final public function limitNumberOfResults(int $limit, int $offset = 0): void
+    {
+        if($limit < 1) {
+            throw new Exception('Attempted to limit results to ' . $limit . ', which is less than 1');
+        }
+        if($offset < 0) {
+            throw new Exception('Attempted to offset results to ' . $offset . ', which is less than 0');
+        }
+        $this->limit = $limit;
+        $this->offset = $offset;
     }
 
     /**

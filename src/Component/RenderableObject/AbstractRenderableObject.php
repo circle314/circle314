@@ -32,6 +32,7 @@ abstract class AbstractRenderableObject implements RenderableObjectInterface
     final public function renderFromFilePath(StringType $filePath)
     {
         ob_start();
+        /** @noinspection PhpIncludeInspection */
         include($filePath->getValue());
         $returnValue = ob_get_contents();
         ob_end_clean();

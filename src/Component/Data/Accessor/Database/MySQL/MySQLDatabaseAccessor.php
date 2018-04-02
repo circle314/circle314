@@ -144,6 +144,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
             . $databaseObject->resolvedName($this)
             . $this->generateWhereClauses($dataEntity)
             . $this->generateOrderByClauses($dataEntity)
+            . $this->generateLimitClause($dataEntity)
             . $this->generateLockingClause($dataEntity)
             . ';'
         ;
@@ -228,6 +229,15 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
                 break;
             default:
                 throw new Exception('Unknown Filter Rule "' . get_class($filterRule) . '" supplied');
+        }
+    }
+
+    final protected function generateLimitClause(DataEntityInterface $dataEntity): string
+    {
+        if($dataEntity->_isLimitedNumberOfResults()) {
+            return 'LIMIT ' . $dataEntity->_limit() . ' OFFSET ' . $dataEntity->_offset();
+        } else {
+            return '';
         }
     }
 

@@ -75,6 +75,14 @@ interface DataEntityInterface extends IdentifiableInterface
     public function hasUpdatedValues(): bool;
 
     /**
+     * Whether ot not the returned results are limited to a certain number.
+     *
+     * @internal
+     * @return bool
+     */
+    public function _isLimitedNumberOfResults(): bool;
+
+    /**
      * Whether or not locked data is skipped when the DataEntity is used as a filter for get operations.
      * This is useful for when the persistence object is being utilised like a queue.
      */
@@ -85,6 +93,30 @@ interface DataEntityInterface extends IdentifiableInterface
      * This is useful for avoiding processing of the same data by two different threads.
      */
     public function isLockedForUpdate(): bool;
+
+    /**
+     * The number of results that a get operation is limited to
+     *
+     * @internal
+     * @return int
+     */
+    public function _limit(): ?int;
+
+    /**
+     * The offset of the number of results that a get operation is limited to
+     *
+     * @internal
+     * @return int
+     */
+    public function _offset(): ?int;
+
+    /**
+     * Limits the number of returned results
+     *
+     * @param int $limit The maximum number of returned results
+     * @param int $offset The offset to start at when limiting results
+     */
+    public function limitNumberOfResults(int $limit, int $offset = 0): void;
 
     /**
      * Marks the Data Entity as locked for update when used as a get filter.

@@ -3,7 +3,10 @@ CHANGE LOG FOR 0.8
 
 # Overview
 
-The 0.8 update involves removing the components deprecated in 0.8 (`Authentication` and `ParameterSet`),
+Version 0.8 is introducing an important concept of internal methods on classes. When a method is internal,
+it will be PHPDOC'd with the `@internal` tag, and will also be prefixed with the underscore (_) character.
+
+The 0.8 update also involves removing the components deprecated in 0.8 (`Authentication` and `ParameterSet`),
 and incorporating some necessary backwards incompatible changes.
 
 The Authentication and ParameterSet Components are not being replaced with new components. There are
@@ -41,7 +44,11 @@ own database accessor classes, you will not be impacted by the changes.
 
 ### New Components
 
-*None*
+#### LimitNumberOfResults on DataEntities used as query configurations
+`DataEntityInterface` now includes the methods `limitNumberOfResults(int $limit, int $offset = 0): void` to allow
+the user to attach limit/offset clauses when performing get operations.
+
+Note that there are several supporting internal
 
 ### New Functions
 
@@ -68,7 +75,18 @@ The following components are removed _(for migration strategies, see CHANGELOG-0
 
 ### Other Changes
 
-*None*
+#### Introduction of widespread internal methods
+Version 0.8 is introducing an important concept of internal methods on classes. When a method is internal,
+it will be PHPDOC'd with the `@internal` tag, and will also be prefixed with the underscore (_) character.
+
+This will be integrated piecemeal across the framework, with original methods being marked as `@deprecated`.
+Note that any methods marked as `@internal` should never be used by applications implementing the framework -
+if at some stage in the future, the PHP team implement [friend classes](https://wiki.php.net/rfc/friend-classes),
+then all of the `@internal` methods
+will have their scope altered appropriately (e.g. protected or private) with exposure only made to friend
+classes. It is advisable to avoid using the `@internal` methods until such time as it is clear which classes
+will have their functionality exposed via friendship.
+
 
 # Migrating from 0.7 to 0.8
 

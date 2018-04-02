@@ -33,6 +33,7 @@ abstract class AbstractNestedRenderableObjectCollection extends AbstractKeyedCol
     /**
      * @param $ID
      * @return \Circle314\Component\Type\TypeInterface\TypeInterface
+     * @throws CollectionIDNotFoundException
      */
     public function getRenderedContent($ID)
     {

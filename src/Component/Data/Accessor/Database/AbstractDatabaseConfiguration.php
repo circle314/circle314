@@ -4,7 +4,6 @@ namespace Circle314\Component\Data\Accessor\Database;
 
 use \Exception;
 use Circle314\Component\Collection\AbstractKeyedCollection;
-use Circle314\Component\Collection\KeyedCollectionInterface;
 
 /**
  * Class AbstractDatabaseConfiguration

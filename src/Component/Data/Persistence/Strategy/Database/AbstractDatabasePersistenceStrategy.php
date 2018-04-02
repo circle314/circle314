@@ -45,8 +45,9 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
     }
 
     /**
-     * @return DatabaseResponseInterface
-     * @throws IllegalDeleteOperationException
+     * @param DataEntityInterface $dataEntity
+     * @return \Circle314\Component\Data\Persistence\Operation\Response\ResponseInterface|mixed|null
+     * @throws IllegalSelectOperationException
      * @inheritdoc
      */
     final public function get(DataEntityInterface $dataEntity)
@@ -68,7 +69,8 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
 
     /**
      * @return DatabaseResponseInterface
-     * @throws IllegalDeleteOperationException
+     * @throws IllegalInsertOperationException
+     * @throws IllegalUpdateOperationException
      * @inheritdoc
      */
     final public function save(DataEntityInterface $dataEntity)

@@ -344,6 +344,7 @@ abstract class AbstractDatabaseAccessor implements DatabaseAccessorInterface
      */
     abstract protected function generateClauseFromFilterRule(DVOInterface $column, FilterRuleInterface $filterRule, string $filterIndex): string;
 
+    abstract protected function generateLimitClause(DataEntityInterface $dataEntity): string;
     abstract protected function generateLockingClause(DataEntityInterface $dataEntity): string;
     abstract protected function generateSkipLockClause(DataEntityInterface $dataEntity): string;
     #endregion

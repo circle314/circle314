@@ -73,16 +73,18 @@ abstract class AbstractDVO implements DVOInterface
 
     #region Public Methods
     /**
-     * @inheritdoc
-     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
-     * @since 0.7
+     * @param OperatorInterface $operator
+     * @param $value
+     * @throws Exception
+     * @throws CollectionExpectedClassMismatchException
+     * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      */
     final public function addFilterRule(OperatorInterface $operator, $value): void
     {
         $passedValue = ($value === null ? null : $this->refreshTypedValue($value));
-        $this->filterRules->addCollectionItem(
-            new NativeFilterRule($operator, $passedValue)
-        );
+        $filterRule = new NativeFilterRule($operator, $passedValue);
+        $this->filterRules->addCollectionItem($filterRule);
     }
 
     /**
@@ -148,13 +150,14 @@ abstract class AbstractDVO implements DVOInterface
 
     /**
      * @inheritdoc
-     * @throws CollectionExpectedClassMismatchException
+     * @throws Exception
      */
     final public function identifyValue($value = NullConstants::NON_EXISTENT_PARAMETER, OperatorInterface $operator = null): void
     {
         try {
             $passedValue = ($value === NullConstants::NON_EXISTENT_PARAMETER) ? $this->value->getValue() : $value;
-            $this->addFilterRule(new EqualToOperator(), $passedValue);
+            $equalToOperation = new EqualToOperator();
+            $this->addFilterRule($equalToOperation, $passedValue);
         } catch (CollectionExpectedClassMismatchException $e) {
             // There should never be a CollectionExpectedClassMismatchException, as we're calling final functions
             return;
@@ -259,7 +262,10 @@ abstract class AbstractDVO implements DVOInterface
     }
 
     /**
+     * @param array $array
+     * @param bool $defaultFallback
      * @throws TypeValidationException
+     * @throws ValueOutOfBoundsException
      * @inheritdoc
      */
     final public function setValueFromArray(Array $array, $defaultFallback = false)
