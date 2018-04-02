@@ -235,7 +235,7 @@ class MySQLDatabaseAccessor extends AbstractDatabaseAccessor
     final protected function generateLimitClause(DataEntityInterface $dataEntity): string
     {
         if($dataEntity->_isLimitedNumberOfResults()) {
-            return 'LIMIT ' . $dataEntity->_limit() . ' OFFSET ' . $dataEntity->_offset();
+            return ' LIMIT ' . $dataEntity->_limit() . ' OFFSET ' . $dataEntity->_offset();
         } else {
             return '';
         }
