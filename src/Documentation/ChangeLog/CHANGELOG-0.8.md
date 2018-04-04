@@ -14,6 +14,17 @@ notes at the bottom of this document on what to do to migrate effectively away f
 
 ### Backward Incompatible Changes
 
+For the following backwards incompatible changes, see _Migrating from 0.7 to 0.8_ below for
+strategies on how to migrate over.
+
+#### AbstractConstants
+The static function `hasConstant($constantValue)` was deprecated in 0.7 and is now removed.
+
+Additionally, a `final private function __construct()` has been added to `AbstractConstants`
+to ensure that extensions of the class can never be instantiated. This was always the intention,
+though that wasn't clear and meant that developers needed to add their own final private
+constructors in to prevent instantiable extensions.
+
 #### DatabaseConfiguration classes constructor change
 
 In the namespace `Circle314\Component\Data\Accessor\Database`, the class `AbstractDatabaseConfiguration`
@@ -21,8 +32,6 @@ used to take 5 arguments: `$uniqueAccessorName`, `$serverIP`, `$databaseName`, `
 It now takes 2 arguments, in this order: `string $uniqueAccessorName`, `Array $configurationParameters`.
 The configuration parameters are a keyed array, with the available keys listed in the new class
 `DatabaseConfigurationParameterConstants` in the same namespace.
-
-See ***Migrating from 0.7 to 0.8*** below for instruction on how to migrate to the new format.
 
 #### DatabaseConfiguration classes getter changes
 
@@ -44,15 +53,17 @@ own database accessor classes, you will not be impacted by the changes.
 
 ### New Components
 
+*None*
+
+### New Functions
+
 #### LimitNumberOfResults on DataEntities used as query configurations
+
 `DataEntityInterface` now includes the methods `limitNumberOfResults(int $limit, int $offset = 0): void` to allow
 the user to attach limit/offset clauses when performing get operations.
 
 Note that there are several supporting internal
 
-### New Functions
-
-*None*
 
 ### Deprecated Components
 
@@ -71,7 +82,8 @@ The following components are removed _(for migration strategies, see CHANGELOG-0
 
 ### Removed Functions
 
-*None*
+`AbstractConstants::hasConstant($constantValue)` was deprecated in 0.7 and is now removed
+_(for migration strategies, see Migrating from 0.7 to 0.8 below)_.
 
 ### Other Changes
 
@@ -89,6 +101,25 @@ will have their functionality exposed via friendship.
 
 
 # Migrating from 0.7 to 0.8
+
+### Making your Constants classes compatible with the new AbstractConstants class
+
+There have been two major changes with the `AbstractConstants` class that require changes in code developed
+on Circle314. Locate all classes in your code that extend `AbstractConstants` and perform the following changes:
+
+#### Change calls to hasConstant() to hasConstantValue()
+
+Any call to the static function `hasConstant($constantValue)` should be replaced with a call to
+`hasConstantValue($constantValue)`, which has exactly identical functionality. This change was simply a
+cosmetic change to the static function name.
+
+#### Remove constructors, or break inheritance
+
+Any constructors on your extended classes will need to be removed, as `AbstractConstants` has a
+`final private function __construct()` now. If you are unable for some reason to remove the constructor,
+then you will need to break inheritance (i.e. remove the `extends AbstractConstants` directive) and if
+you call `hasConstantKey()` or `hasConstantValue()` anywhere in your code, you will also need to copy
+the public static methods of the `AbstractConstants` class to your class.
 
 ### Updating Database Configurations
 

@@ -9,11 +9,27 @@ to SOLID principles, and adherence to various PHP PSRs, it is still very much in
 Recent changes made to the framework have "broken" functionality in projects it has been used in, and there are still
 quite a few changes to be made to interfaces of near-complete modules.
 
-Also, some modules are slated for removal or entire revamp, including Authentication, FileLocation, IO,
-Modelling (deprecated), ParameterSet, Rendering, Schema (deprecated), and Session.
+Also, some modules are slated for removal or entire revamp, including:
 
-Modules that are safe to use at the moment include Collection, Concept, Data, Encoding, Encryption, ErrorHandling,
-ExceptionHandling, Hash, and Type.
+ - FileLocator (revamp)
+ - IO (future removal)
+ - RenderableObject (revamp)
+ - Rendering (revamp)
+ - Session (future removal)
+ 
+Modules that are safe to use at the moment include
+
+ - Collection
+ - Constant
+ - Concept
+ - Data
+ - Encoding
+ - Encryption
+ - ErrorHandling
+ - ExceptionHandling
+ - Hash
+ - ShutdownHandler
+ - Type
 
 If you wish to use this library, feel free to, it's publicly available for a reason. The documentation is currently quote
 lacking, but only because the guts of the code base are still under work. I am happy to explain how to best utilise this

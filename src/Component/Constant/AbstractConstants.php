@@ -6,20 +6,15 @@ use \ReflectionClass;
 
 abstract class AbstractConstants
 {
-    #region Public Static Methods
-    /**
-     * @param $constantValue
-     * @return bool
-     * @throws \ReflectionException
-     * @deprecated 0.7
-     * @see hasConstantValue()
-     */
-    public static function hasConstant($constantValue)
+    #region Constructor
+    final private function __construct()
     {
-        $thisClass = new ReflectionClass(static::class);
-        return in_array($constantValue, $thisClass->getConstants());
+        // Prevents instantiation of any Constants class,
+        // as this class should only ever be used statically
     }
+    #endregion
 
+    #region Public Static Methods
     /**
      * Checks whether the class has the given constant key
      *
