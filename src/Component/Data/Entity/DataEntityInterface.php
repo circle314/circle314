@@ -32,14 +32,6 @@ interface DataEntityInterface extends IdentifiableInterface
     public function fieldsMarkedForFiltering();
 
     /**
-     * The DataValueObjects of the DatEntity that have been marked as identifiers
-     *
-     * @return DVOCollectionInterface
-     * @deprecated 0.7
-     */
-    public function fieldsMarkedAsIdentifiers();
-
-    /**
      * The DataValueObjects of the DatEntity that have been marked for ordering
      *
      * @return DVOCollectionInterface

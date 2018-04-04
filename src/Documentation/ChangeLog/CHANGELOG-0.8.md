@@ -85,6 +85,19 @@ The following components are removed _(for migration strategies, see CHANGELOG-0
 `AbstractConstants::hasConstant($constantValue)` was deprecated in 0.7 and is now removed
 _(for migration strategies, see Migrating from 0.7 to 0.8 below)_.
 
+The following methods (which should have been marked `@internal`) have all been removed, in lieu of
+filtering via operators (which is covered in the 0.7 change log). If you have any references to them in
+your code, you will need to carefully review and rewrite or remove your code. **Please note that the
+`AbstractDVO` function `identifyValue()` is not amongst the removed functions, despite the similarity
+in name**:
+
+ - `Circle314\Component\Data\Entity\AbstractDataEntity::fieldsMarkedAsIdentifiers()`
+ - `Circle314\Component\Data\Entity\DataEntityInterface::fieldsMarkedAsIdentifiers()`
+ - `Circle314\Component\Data\ValueObject\AbstractDVO::identifiedValue()`
+ - `Circle314\Component\Data\ValueObject\AbstractDVO::isMarkedAsIdentifier()`
+ - `Circle314\Component\Data\ValueObject\DVOInterface::identifiedValue()`
+ - `Circle314\Component\Data\ValueObject\DVOInterface::isMarkedAsIdentifier()`
+ 
 ### Other Changes
 
 #### Introduction of widespread internal methods
@@ -102,6 +115,19 @@ will have their functionality exposed via friendship.
 
 # Migrating from 0.7 to 0.8
 
+### Ensure you are not using any of the removed internal functions
+
+The following functions were internal (despite not being marked `@internal`) and have now been removed. You
+will need yo review your code for any calls to those functions and either remove the code, or emulate/borrow from
+the code in the function `Circle314\Component\Data\Accessor\Database\AbstractDatabaseAccessor::generateFilteringClauses()`:
+
+ - `Circle314\Component\Data\Entity\AbstractDataEntity::fieldsMarkedAsIdentifiers()`
+ - `Circle314\Component\Data\Entity\DataEntityInterface::fieldsMarkedAsIdentifiers()`
+ - `Circle314\Component\Data\ValueObject\AbstractDVO::identifiedValue()`
+ - `Circle314\Component\Data\ValueObject\AbstractDVO::isMarkedAsIdentifier()`
+ - `Circle314\Component\Data\ValueObject\DVOInterface::identifiedValue()`
+ - `Circle314\Component\Data\ValueObject\DVOInterface::isMarkedAsIdentifier()`
+ 
 ### Making your Constants classes compatible with the new AbstractConstants class
 
 There have been two major changes with the `AbstractConstants` class that require changes in code developed

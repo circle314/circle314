@@ -78,24 +78,6 @@ abstract class AbstractDataEntity implements DataEntityInterface
      * @inheritdoc
      * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
      * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
-     * @deprecated 0.7
-     */
-    final public function fieldsMarkedAsIdentifiers()
-    {
-        $fieldsMarkedForIdentification = $this->newDVOCollection();
-        /** @var DVOInterface $field */
-        foreach($this->fields as $field) {
-            if($field->isMarkedAsIdentifier()) {
-                $fieldsMarkedForIdentification->addCollectionItem($field);
-            }
-        }
-        return $fieldsMarkedForIdentification;
-    }
-
-    /**
-     * @inheritdoc
-     * @throws \Circle314\Component\Collection\Exception\CollectionExpectedClassMismatchException
-     * @throws \Circle314\Component\Collection\Exception\CollectionItemUnidentifiableException
      */
     final public function fieldsMarkedForOrdering()
     {

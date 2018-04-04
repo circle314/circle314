@@ -66,28 +66,12 @@ interface DVOInterface extends KeyedCollectionItemInterface, ValueInterface
     public function ID();
 
     /**
-     * Gets the identifying value, provided the field is used as an identifier.
-     *
-     * @return TypeInterface
-     * @deprecated 0.7
-     */
-    public function identifiedValue();
-
-    /**
      * Creates a simple filter rule of "equals $value"
      *
      * @param $value
      * @return mixed
      */
     public function identifyValue($value);
-
-    /**
-     * Checks whether this field has been marked as an identifier.
-     *
-     * @return bool
-     * @deprecated 0.7
-     */
-    public function isMarkedAsIdentifier(): bool;
 
     /**
      * Checks whether this field has been updated.

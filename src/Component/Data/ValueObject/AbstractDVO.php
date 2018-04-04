@@ -30,12 +30,6 @@ abstract class AbstractDVO implements DVOInterface
     /** @var NativeFilterRuleCollection */
     private $filterRules;
 
-    /** @var TypeInterface */
-    private $identifiedValue;
-
-    /** @var bool */
-    private $markedAsIdentifier = false;
-
     /** @var bool */
     private $markedAsOrdering = false;
 
@@ -140,15 +134,6 @@ abstract class AbstractDVO implements DVOInterface
     }
 
     /**
-     * @return TypeInterface
-     * @deprecated 0.7
-     */
-    final public function identifiedValue()
-    {
-        return $this->identifiedValue;
-    }
-
-    /**
      * @inheritdoc
      * @throws Exception
      */
@@ -162,15 +147,6 @@ abstract class AbstractDVO implements DVOInterface
             // There should never be a CollectionExpectedClassMismatchException, as we're calling final functions
             return;
         }
-    }
-
-    /**
-     * @return bool
-     * @deprecated 0.7
-     */
-    final public function isMarkedAsIdentifier(): bool
-    {
-        return $this->markedAsIdentifier;
     }
 
     final public function isMarkedForOrdering(): bool
