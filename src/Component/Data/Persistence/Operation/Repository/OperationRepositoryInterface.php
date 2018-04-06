@@ -8,6 +8,11 @@ use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 interface OperationRepositoryInterface
 {
     /**
+     * Flushes all results from the operation cache.
+     */
+    public function flushCache(): void;
+
+    /**
      * Gets the Response from the OperationRepository.
      *
      * @param CallInterface $call The Call that generates the Response.

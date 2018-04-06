@@ -3,6 +3,7 @@
 namespace Circle314\Component\Data\Persistence\Operation\Cache\Strategy\Database;
 
 use Circle314\Component\Data\Accessor\AccessorInterface;
+use Circle314\Component\Data\Persistence\Operation\Cache\Collection\EndPointCollectionInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Collection\Native\NativeEndPointCollection;
 use Circle314\Component\Data\Persistence\Operation\Cache\Database\DatabaseQueryInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Database\Native\NativeDatabaseQuery;
@@ -12,7 +13,10 @@ use Circle314\Component\Data\Persistence\Operation\Call\CallInterface;
 
 class AbstractDatabaseOperationCachingStrategy implements OperationCachingStrategyInterface
 {
-    public function newCache()
+    /**
+     * @return EndPointCollectionInterface
+     */
+    public function newCache(): EndPointCollectionInterface
     {
         return new NativeEndPointCollection();
     }

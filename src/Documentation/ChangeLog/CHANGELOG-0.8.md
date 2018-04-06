@@ -57,6 +57,21 @@ own database accessor classes, you will not be impacted by the changes.
 
 ### New Functions
 
+#### Flushing cache now possible on Repository objects
+
+The `AbstractOperationRepository` and `AbstractDataEntityRepository` classes now both implement the method
+`flushCache(): void`, which flushes all results from the their respective caches when called. This allows users to manage
+memory problems associated with operations that generate an excessive amount of cached results. An example of this
+is generating thousands of individual insert results, each of which would have their operation cached, and also the
+resultant data entity.
+
+Note this has incurred the following new methods on interfaces. Given that the methods are implemented in their
+respective abstract classes, this should incur no changes for users:
+
+ - `Circle314\Component\Data\Persistence\Operation\Cache\OperationCacheInterface::flushCache(): void`
+ - `Circle314\Component\Data\Persistence\Operation\Repository\OperationRepositoryInterface::flushCache(): void`
+ - `Circle314\Component\Data\Entity\Repository\DataEntityRepositoryInterface::flushCache(): void`
+
 #### LimitNumberOfResults on DataEntities used as query configurations
 
 `DataEntityInterface` now includes the methods `limitNumberOfResults(int $limit, int $offset = 0): void` to allow

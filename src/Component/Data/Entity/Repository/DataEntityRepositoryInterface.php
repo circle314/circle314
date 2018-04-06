@@ -38,6 +38,11 @@ interface DataEntityRepositoryInterface
     public function delete(DataEntityInterface $dataEntity);
 
     /**
+     * Flushes the cache of the repository
+     */
+    public function flushCache(): void;
+
+    /**
      * Removes a DataEntity from the repository, but not the persistence mechanism.
      *
      * @param DataEntityInterface $dataEntity

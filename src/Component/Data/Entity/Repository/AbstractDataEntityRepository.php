@@ -55,6 +55,11 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         $this->forget($dataEntity);
     }
 
+    final public function flushCache(): void
+    {
+        $this->cache->clearCollection();
+    }
+
     public function forget(DataEntityInterface $dataEntity)
     {
         $this->cache()->deleteID($dataEntity->ID());

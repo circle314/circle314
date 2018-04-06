@@ -15,7 +15,7 @@ interface OperationCachingStrategyInterface
      *
      * @return EndPointCollectionInterface
      */
-    public function newCache();
+    public function newCache(): EndPointCollectionInterface;
 
     /**
      * Creates a new EndPoint for a Call.

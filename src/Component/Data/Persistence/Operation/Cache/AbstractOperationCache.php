@@ -2,7 +2,6 @@
 
 namespace Circle314\Component\Data\Persistence\Operation\Cache;
 
-use Circle314\Component\Collection\Native\NativeKeyedCollection;
 use Circle314\Component\Data\Accessor\AccessorInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Collection\EndPointCollectionInterface;
 use Circle314\Component\Data\Persistence\Operation\Cache\Strategy\OperationCachingStrategyInterface;
@@ -14,7 +13,7 @@ use Circle314\Component\Hash\HashHandlerInterface;
 abstract class AbstractOperationCache implements OperationCacheInterface
 {
     #region Properties
-    /** @var NativeKeyedCollection */
+    /** @var EndPointCollectionInterface */
     private $cache;
 
     /** @var EncodingHandlerInterface */
@@ -33,7 +32,7 @@ abstract class AbstractOperationCache implements OperationCacheInterface
         $this->operationCachingStrategy = $operationCachingStrategy;
         $this->encodingHandler = $encodingHandler;
         $this->hashHandler = $hashHandler;
-        $this->cache = $this->operationCachingStrategy->newCache();
+        $this->flushCache();
     }
     #endregion
 
@@ -57,6 +56,11 @@ abstract class AbstractOperationCache implements OperationCacheInterface
             $this->cache->saveID($ID, $this->operationCachingStrategy->newEndPoint($ID, $call, $accessor));
         }
         return $this->cache->getID($ID);
+    }
+
+    final public function flushCache(): void
+    {
+        $this->cache = $this->operationCachingStrategy->newCache();
     }
 
     public function getCachedResponse(CallInterface $call, AccessorInterface $accessor)

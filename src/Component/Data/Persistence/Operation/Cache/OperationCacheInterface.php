@@ -36,6 +36,11 @@ interface OperationCacheInterface
     public function endPoint(CallInterface $call, AccessorInterface $accessor);
 
     /**
+     * Flushes the cache
+     */
+    public function flushCache(): void;
+
+    /**
      * Gets a cached Response.
      *
      * @param CallInterface $call The Call that generates the Response.

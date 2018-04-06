@@ -26,6 +26,11 @@ abstract class AbstractOperationRepository implements OperationRepositoryInterfa
     #endregion
 
     #region Public Methods
+    final public function flushCache(): void
+    {
+        $this->operationCache->flushCache();
+    }
+
     public function response(CallInterface $call, AccessorInterface $accessor)
     {
         $this->operationCache->invalidateDependantResponses($call, $accessor);
