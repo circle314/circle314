@@ -166,19 +166,19 @@ abstract class AbstractDataEntityRepository implements DataEntityRepositoryInter
         return $cachedDataEntity;
     }
 
-    public function save(DataEntityInterface $dataEntity)
+    public function save(DataEntityInterface $dataEntity, bool $forceOperation = false)
     {
-        $response = $this->persistenceStrategy->save($dataEntity);
+        $response = $this->persistenceStrategy->save($dataEntity, $forceOperation);
         if($response->result()) {
             $this->factory()->deserialize($response->result()[0], $dataEntity);
             $this->cache()->saveID($dataEntity->ID(), $dataEntity);
         }
     }
 
-    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection)
+    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection, bool $forceOperation = false)
     {
         foreach($dataEntityCollection as $dataEntity) {
-            $this->save($dataEntity);
+            $this->save($dataEntity, $forceOperation);
         }
     }
     #endregion

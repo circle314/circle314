@@ -49,15 +49,23 @@ own database accessor classes, you will not be impacted by the changes.
  
 ### Changed Functions
 
-In the `PersistenceStrategyInterface`, the method `save(DataEntityInterface $dataEntity)` has had it's signature changed to
-`save(DataEntityInterface $dataEntity, bool $forceOperation = false)`. The is backwards compatible unless you have rolled your
-classes using `PersistenceStrategyInterface` or `AbstractPersistenceStrategy`. New usage of the method allows the caller to
-provide a boolean value of `true` in order to force a save operation. This is useful for two known reasons:
-
- 1. You wish to ensure that the persistence system's data matches the application
- 2. The initial retrieval of data included fields that are auto-allocated by the persistence system, but no fields have
- been updated between retrieval and persistence (before this change, this would have resulted in a silent save operation
- that did nothing)
+In the `DataEntityRepositoryInterface`, the methods `save(...)` and `saveCollection(...)` have had their signatures changed to
+include a second parameter`bool $forceOperation = false`. The is backwards compatible unless you have rolled your classes using
+`DataEntityRepositoryInterface` or `AbstractDataEntityRepository` and overwritten the native `save()` and `saveCollection`
+method definitions. If you are not overwriting those methods, then there will be no negative impact to your code. New usage
+of the methods allows the caller to provide a boolean value of `true` in order to force a save operation. This is useful for
+two known reasons:
+ 1. You want to ensure that the persistence system's data matches your application data, as it may have been altered by a
+ non-authoritative third-party application
+ 2. Between retrieval from the source system and persistence in the target system, no fields have changed their value, but the
+ target system allocates it's own values and therefore the data must undergo a forced save operation to ensure correct data
+ population (without setting `$forceOperation` to `true`, any save operation on a `DataEntity` that has no updated fields
+ results in an immediate return without actually saving to the target system)
+ 
+This change also applies to the `save(...)` method on the `PersistenceStrategyInterface`, so if you have rolled your own
+extensions from `PersistenceStrategyInterface` or `AbstractPersistenceStrategy`, then you will need to cater for this in
+your method definition. Note that extensions of the class `AbstractDatabasePersistenceStrategy` are unaffected, as the change
+is already catered for at that level.
 
 ### New Components
 

@@ -85,13 +85,15 @@ interface DataEntityRepositoryInterface
      * Saves a DataEntity.
      *
      * @param DataEntityInterface $dataEntity
+     * @param bool $forceOperation
      */
-    public function save(DataEntityInterface $dataEntity);
+    public function save(DataEntityInterface $dataEntity, bool $forceOperation = false);
 
     /**
      * Saves a DataEntityCollection.
      *
      * @param DataEntityCollectionInterface $dataEntityCollection
+     * @param bool $forceOperation
      */
-    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection);
+    public function saveCollection(DataEntityCollectionInterface $dataEntityCollection, bool $forceOperation = false);
 }
