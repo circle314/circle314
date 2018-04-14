@@ -47,8 +47,19 @@ The new public method `serverPort()` has also been introduced.
 These method changes are all already incorporated into the `DatabaseAccessor` code, so unless you have rolled your
 own database accessor classes, you will not be impacted by the changes.
  
+### Bug Fixes
+
+#### DataEntityRepositories can now retrieve collections that have multiple entities with null IDs
+There has been a silent bug in the `retrieveCollection(DataEntityInterface)` method on `AbstractDataEntityRepository`,
+that meant that in any collection, only one `DataEntity` with `ID()` that when cast to string had the value `''` could
+be stored. This was a major bug as the collection would overwrite one potentially unique entity with another.
+
+This fix comes out of the Collection component being upgraded from v0.1 to v0.2.
+
+
 ### Changed Functions
 
+#### Save operations on DataEntityRepositories can now be forced
 In the `DataEntityRepositoryInterface`, the methods `save(...)` and `saveCollection(...)` have had their signatures changed to
 include a second parameter`bool $forceOperation = false`. The is backwards compatible unless you have rolled your classes using
 `DataEntityRepositoryInterface` or `AbstractDataEntityRepository` and overwritten the native `save()` and `saveCollection`
@@ -62,10 +73,12 @@ two known reasons:
  population (without setting `$forceOperation` to `true`, any save operation on a `DataEntity` that has no updated fields
  results in an immediate return without actually saving to the target system)
  
-This change also applies to the `save(...)` method on the `PersistenceStrategyInterface`, so if you have rolled your own
-extensions from `PersistenceStrategyInterface` or `AbstractPersistenceStrategy`, then you will need to cater for this in
-your method definition. Note that extensions of the class `AbstractDatabasePersistenceStrategy` are unaffected, as the change
-is already catered for at that level.
+#### Save operations on PersistenceStrategies can now be forced
+Like the above change, the `save(...)` method on the `PersistenceStrategyInterface` can also be forced by passing `true`
+as the second parameter. So, if you have rolled your own extensions from `PersistenceStrategyInterface` or
+`AbstractPersistenceStrategy`, then you will need to cater for this in your method definition. Note that extensions of the 
+class `AbstractDatabasePersistenceStrategy` are unaffected, as the change is already catered for at that level.
+
 
 ### New Components
 

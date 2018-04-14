@@ -12,7 +12,7 @@
     },
     "require": {
         "php": ">=7.1",
-        "circle314/collection": "^0.1",
+        "circle314/collection": "^0.2",
         "circle314/concept": "1.1.*",
         "circle314/type": "^0.1.2"
     },
