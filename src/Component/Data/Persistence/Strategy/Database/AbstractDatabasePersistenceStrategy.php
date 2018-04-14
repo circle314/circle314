@@ -81,6 +81,15 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
         ) {
             return new NativeNullDatabaseResponse();
         }
+
+        if($forceOperation === true) {
+            foreach($dataEntity->fields() as $field) {
+                if($field->isWriteable()) {
+                    $field->setValue($field->getValue());
+                }
+            }
+        }
+
         /** @var DatabaseAccessorInterface $accessor */
         $accessor = $this->accessor();
         if($dataEntity->hasFilteringRules()) {
