@@ -35,7 +35,8 @@ interface PersistenceStrategyInterface
      * Saves the DataEntity to the persistence mechanism.
      *
      * @param DataEntityInterface $dataEntity
+     * @param bool $forceOperation Whether or not to force the save operation. Handy for when you know fields have not been updated, but you want to ensure that the entity is persisted in it's current state
      * @return ResponseInterface
      */
-    public function save(DataEntityInterface $dataEntity);
+    public function save(DataEntityInterface $dataEntity, bool $forceOperation = false);
 }

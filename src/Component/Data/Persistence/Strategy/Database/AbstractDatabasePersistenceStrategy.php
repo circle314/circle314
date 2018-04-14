@@ -73,9 +73,12 @@ abstract class AbstractDatabasePersistenceStrategy extends AbstractPersistenceSt
      * @throws IllegalUpdateOperationException
      * @inheritdoc
      */
-    final public function save(DataEntityInterface $dataEntity)
+    final public function save(DataEntityInterface $dataEntity, bool $forceOperation = false)
     {
-        if($dataEntity->hasUpdatedValues() === false) {
+        if(
+            ($dataEntity->hasUpdatedValues() === false) &&
+            ($forceOperation === false)
+        ) {
             return new NativeNullDatabaseResponse();
         }
         /** @var DatabaseAccessorInterface $accessor */

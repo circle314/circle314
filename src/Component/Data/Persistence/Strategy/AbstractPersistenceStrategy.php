@@ -48,7 +48,7 @@ abstract class AbstractPersistenceStrategy implements PersistenceStrategyInterfa
     abstract public function delete(DataEntityInterface $dataEntity);
     abstract public function get(DataEntityInterface $dataEntity);
     abstract public function isLessVolatileThan($volatility);
-    abstract public function save(DataEntityInterface $dataEntity);
+    abstract public function save(DataEntityInterface $dataEntity, bool $forceOperation = false);
 
     /**
      * Checks whether delete operations are enabled for this strategy.

@@ -49,7 +49,15 @@ own database accessor classes, you will not be impacted by the changes.
  
 ### Changed Functions
 
-*None*
+In the `PersistenceStrategyInterface`, the method `save(DataEntityInterface $dataEntity)` has had it's signature changed to
+`save(DataEntityInterface $dataEntity, bool $forceOperation = false)`. The is backwards compatible unless you have rolled your
+classes using `PersistenceStrategyInterface` or `AbstractPersistenceStrategy`. New usage of the method allows the caller to
+provide a boolean value of `true` in order to force a save operation. This is useful for two known reasons:
+
+ 1. You wish to ensure that the persistence system's data matches the application
+ 2. The initial retrieval of data included fields that are auto-allocated by the persistence system, but no fields have
+ been updated between retrieval and persistence (before this change, this would have resulted in a silent save operation
+ that did nothing)
 
 ### New Components
 
